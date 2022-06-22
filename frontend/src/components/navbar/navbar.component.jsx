@@ -1,7 +1,7 @@
 import React from "react";
 import { Fragment } from "react";
 import { Link, Outlet } from "react-router-dom";
-import "./navbar.style.css";
+import "./navbar.style.scss";
 
 function Navbar() {
   return (
@@ -11,7 +11,7 @@ function Navbar() {
           <Link className="logo-container" to="/">
             Personal Workout Tracker
           </Link>
-          <Link className="nav-link" to="/trainer">
+          {/* <Link className="nav-link" to="/trainer">
             Trainer
           </Link>
           <Link className="nav-link" to="/workout">
@@ -19,7 +19,7 @@ function Navbar() {
           </Link>
           <Link className="nav-link" to="/about">
             About
-          </Link>
+          </Link> */}
         </div>
         <div className="auth-links-container">
           <Link className="nav-link sign-in" to="/sign-in">
