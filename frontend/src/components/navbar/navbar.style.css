@@ -20,6 +20,12 @@
 }
 
 .navigation .nav-links-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.navigation .auth-links-container {
   width: 50%;
   height: 100%;
   display: flex;
@@ -29,6 +35,8 @@
 .navigation .nav-link {
   padding: 10px 15px;
   cursor: pointer;
+  display: inline-block;
+  margin-left: 18px;
 }
 .navigation .nav-link:hover {
   color: #1f1f1f;
@@ -45,7 +53,6 @@
   background-color: #ffffff;
   border: #39afa8 solid 2px;
   border-radius: 12px;
-  margin-left: 28px;
 }
 .nav-link.register:hover {
   background-color: #a5d9c6;

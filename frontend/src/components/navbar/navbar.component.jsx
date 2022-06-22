@@ -7,10 +7,21 @@ function Navbar() {
   return (
     <Fragment>
       <div className="navigation">
-        <Link className="logo-container" to="/">
-          Personal Workout Tracker
-        </Link>
         <div className="nav-links-container">
+          <Link className="logo-container" to="/">
+            Personal Workout Tracker
+          </Link>
+          <Link className="nav-link" to="/trainer">
+            Trainer
+          </Link>
+          <Link className="nav-link" to="/workout">
+            Workout
+          </Link>
+          <Link className="nav-link" to="/about">
+            About
+          </Link>
+        </div>
+        <div className="auth-links-container">
           <Link className="nav-link sign-in" to="/sign-in">
             Sign In
           </Link>
