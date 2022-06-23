@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from "react";
 import "./login.style.scss";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../redux/features/userSlice";
 
 function SignIn() {
+  const dispatch = useDispatch();
   const [email, setemail] = useState("");
   const [pwd, setpwd] = useState("");
   const [error, seterror] = useState("");
 
   useEffect(() => {
-    // seterror("");
+    seterror("");
   }, [pwd, email]);
 
   const handelSubmit = async (e) => {
     e.preventDefault();
-    console.log(email, pwd);
+    setemail("");
+    setpwd("");
+    dispatch(loginUser({ email, password: pwd }));
   };
 
   return (

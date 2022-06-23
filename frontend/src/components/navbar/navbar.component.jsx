@@ -1,9 +1,20 @@
-import React from "react";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logoutUser } from "../../redux/features/userSlice";
+import AvatarLogo from "../avatar/avatar.component";
 import "./navbar.style.scss";
 
 function Navbar() {
+  const { isLoggedIn, user } = useSelector((state) => state.user);
+  const [dropdownToggle, setDropdownToggle] = useState(false);
+  const dispatch = useDispatch();
+
+  const toggleDropdown = () => {
+    if (dropdownToggle) setDropdownToggle(false);
+    else setDropdownToggle(true);
+  };
+
   return (
     <Fragment>
       <div className="navigation">
@@ -22,12 +33,40 @@ function Navbar() {
           </Link> */}
         </div>
         <div className="auth-links-container">
-          <Link className="nav-link sign-in" to="/sign-in">
-            Sign In
-          </Link>
-          <Link className="nav-link register" to="/register">
-            Register
-          </Link>
+          {isLoggedIn ? (
+            <div className="avatar">
+              <AvatarLogo onClick={toggleDropdown} />
+              {dropdownToggle ? (
+                <div className="dropdown-menu">
+                  <Link className="nav-link" to="/dashboard">
+                    Dashboard
+                  </Link>
+                  <Link className="nav-link" to="/my-account">
+                    My Account
+                  </Link>
+                  <span
+                    className="nav-link"
+                    onClick={() => {
+                      dispatch(logoutUser(user.authToken));
+                    }}
+                  >
+                    Sign Out
+                  </span>
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+          ) : (
+            <div>
+              <Link className="nav-link sign-in" to="/sign-in">
+                Sign In
+              </Link>
+              <Link className="nav-link register" to="/register">
+                Register
+              </Link>
+            </div>
+          )}
         </div>
       </div>
       <Outlet />
