@@ -4,28 +4,45 @@ import { login, logout } from "../../apis/requests";
 const initialState = {
   isLoading: false,
   isLoggedIn: false,
-  user: null,
+  data: null,
+  isError: false,
   error: "",
 };
 
-export const loginUser = createAsyncThunk("user/loginUser", async (user) => {
-  const res = await login(user);
-  const userdata = {
-    role: res.data.user.role,
-    name: {
-      firstName: res.data.user.firstName,
-      lastName: res.data.user.lastName,
-    },
-    avatar: res.data.user?.avatar,
-    authToken: res.data.authToken,
-  };
-  return userdata;
-});
+export const loginUser = createAsyncThunk(
+  "user/loginUser",
+  async (user, thunkapi) => {
+    try {
+      const res = await login(user);
+      const userdata = {
+        role: res.data.user.role,
+        name: {
+          firstName: res.data.user.firstName,
+          lastName: res.data.user.lastName,
+        },
+        avatar: res.data.user?.avatar,
+        authToken: res.data.authToken,
+      };
+      return userdata;
+    } catch (error) {
+      const errorMsg = error.response.data.error.message;
+      return thunkapi.rejectWithValue({ error: errorMsg });
+    }
+  }
+);
 
-export const logoutUser = createAsyncThunk("user/logoutUser", async (auth) => {
-  const res = await logout(auth);
-  return res;
-});
+export const logoutUser = createAsyncThunk(
+  "user/logoutUser",
+  async (auth, thunkapi) => {
+    try {
+      const res = await logout(auth);
+      return res.data;
+    } catch (error) {
+      const errorMsg = error.response.data.error.message;
+      return thunkapi.rejectWithValue({ error: errorMsg });
+    }
+  }
+);
 
 const userSlice = createSlice({
   name: "user",
@@ -37,14 +54,16 @@ const userSlice = createSlice({
     [loginUser.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.isLoggedIn = true;
-      state.user = action.payload;
+      state.data = action.payload;
+      state.isError = false;
       state.error = "";
     },
     [loginUser.rejected]: (state, action) => {
       state.isLoading = false;
       state.isLoggedIn = false;
-      state.user = null;
-      state.error = action.error.message;
+      state.data = null;
+      state.isError = true;
+      state.error = action.payload.error;
     },
     [logoutUser.pending]: (state) => {
       state.isLoading = true;
@@ -52,17 +71,18 @@ const userSlice = createSlice({
     [logoutUser.fulfilled]: (state) => {
       state.isLoading = false;
       state.isLoggedIn = false;
-      state.user = null;
+      state.data = null;
+      state.isError = false;
       state.error = "";
     },
     [logoutUser.rejected]: (state, action) => {
       state.isLoading = false;
       state.isLoggedIn = false;
-      state.user = null;
-      state.error = action.error.message;
+      state.data = null;
+      state.isError = true;
+      state.error = action.payload.error;
     },
   },
 });
 
 export default userSlice.reducer;
-// export const { logoutUser } = userSlice.actions;

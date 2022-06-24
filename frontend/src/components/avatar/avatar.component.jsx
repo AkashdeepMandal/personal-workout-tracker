@@ -4,10 +4,10 @@ import Avatar from "react-avatar";
 
 function AvatarLogo(props) {
   const { onClick } = props;
-  const { user } = useSelector((state) => state.user);
+  const { data } = useSelector((state) => state.user);
   return (
     <Avatar
-      name={`${user.name.firstName} ${user.name.lastName}`}
+      name={`${data.name.firstName} ${data.name.lastName}`}
       size="40px"
       textSizeRatio={3}
       textMarginRatio={0.1}

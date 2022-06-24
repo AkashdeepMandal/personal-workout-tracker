@@ -1,31 +1,39 @@
 import React, { useState, useEffect } from "react";
 import "./login.style.scss";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../redux/features/userSlice";
 
 function SignIn() {
+  const { error, isError, isLoggedIn } = useSelector((state) => state.user);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [email, setemail] = useState("");
   const [pwd, setpwd] = useState("");
-  const [error, seterror] = useState("");
+  const [errorMsg, seterrorMsg] = useState(false);
 
   useEffect(() => {
-    seterror("");
-  }, [pwd, email]);
+    if (isError) {
+      seterrorMsg(true);
+    } else if (isLoggedIn) {
+      navigate("/");
+    }
+    // eslint-disable-next-line
+  }, [isError, isLoggedIn]);
 
   const handelSubmit = async (e) => {
     e.preventDefault();
-    setemail("");
-    setpwd("");
     dispatch(loginUser({ email, password: pwd }));
+    setpwd("");
   };
 
   return (
     <div className="container-sign-in">
       <div className="sign-in">
         <h1>Sign In</h1>
-        <p className={error ? "errorMsg active" : "errorMsg"}>{error}</p>
+        <div className={`error-msg${errorMsg ? " active" : ""}`}>
+          <p>{error}</p>
+        </div>
         <form className="signin-form" onSubmit={handelSubmit}>
           <div className="field">
             <label htmlFor="email">Email</label>

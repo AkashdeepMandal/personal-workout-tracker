@@ -4,6 +4,23 @@
   place-items: center;
   height: calc(100vh - 60px);
 
+  .error-msg {
+    top: 0;
+    background-color: #f3caca;
+    padding: 6px 0;
+    text-align: center;
+    border-radius: 4px;
+    display: none;
+
+    &.active {
+      display: block;
+    }
+
+    p {
+      color: #8f1818;
+    }
+  }
+
   .sign-in {
     width: 40%;
     background-color: #ffffff;

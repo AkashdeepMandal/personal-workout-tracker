@@ -1,12 +1,13 @@
 import { Fragment, useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../../redux/features/userSlice";
-import AvatarLogo from "../avatar/avatar.component";
+import AvatarLogo from "../../components/avatar/avatar.component";
 import "./navbar.style.scss";
 
 function Navbar() {
-  const { isLoggedIn, user } = useSelector((state) => state.user);
+  const navigate = useNavigate();
+  const { isLoggedIn, data } = useSelector((state) => state.user);
   const [dropdownToggle, setDropdownToggle] = useState(false);
   const dispatch = useDispatch();
 
@@ -47,7 +48,9 @@ function Navbar() {
                   <span
                     className="nav-link"
                     onClick={() => {
-                      dispatch(logoutUser(user.authToken));
+                      dispatch(logoutUser(data.authToken));
+                      setDropdownToggle(false);
+                      navigate("/");
                     }}
                   >
                     Sign Out
