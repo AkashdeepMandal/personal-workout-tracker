@@ -6,6 +6,10 @@ export const login = async (user) => {
   return await axios.post(baseURL + "/user/login", user);
 };
 
+export const register = async (user) => {
+  return await axios.post(baseURL + "/user/create", user);
+};
+
 export const logout = async (auth) => {
   return await axios.post(
     baseURL + "/user/logout",
@@ -17,3 +21,5 @@ export const logout = async (auth) => {
     }
   );
 };
+
+// export const uploadPrfPic = async();

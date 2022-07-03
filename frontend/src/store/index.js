@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./features/userSlice";
+import mobileToggleSlice from "./slices/mobileToggleSlice";
+import userReducer from "./slices/userSlice";
 
 const store = configureStore({
   reducer: {
     user: userReducer,
+    mobileToggle: mobileToggleSlice,
   },
 });
 
