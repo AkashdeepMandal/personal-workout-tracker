@@ -2,30 +2,32 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const Workout = require("./workout");
+const Plan = require("./plan");
 
 const userSchema = new mongoose.Schema(
   {
     role: {
       type: String,
-      require: true,
+      required: true,
     },
     firstName: {
       type: String,
-      require: true,
+      required: true,
       trim: true,
       lowercase: true,
     },
     lastName: {
       type: String,
-      require: true,
+      required: true,
       trim: true,
       lowercase: true,
     },
     dob: {
       type: Date,
-      require: true,
+      required: true,
     },
-    gender: { type: String, require: true },
+    gender: { type: String, required: true },
     email: {
       type: String,
       unique: true,
@@ -43,6 +45,7 @@ const userSchema = new mongoose.Schema(
     },
     address: {
       type: String,
+      require: true,
       Trim: true,
     },
     password: {
@@ -102,11 +105,22 @@ userSchema.statics.findUserByCredential = async (email, password) => {
   return user;
 };
 
-// while saveing the password
+// while saving the password
 userSchema.pre("save", async function (next) {
   const user = this;
   if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 10);
+  }
+  next();
+});
+
+// remove based on user role
+userSchema.pre("remove", async function (next) {
+  const user = this;
+  if (user.role === "trainer") {
+    await Plan.deleteMany({ trainer: user._id });
+  } else if (user.role === "trainee") {
+    await Plan.deleteMany({ trainee: user._id });
   }
   next();
 });

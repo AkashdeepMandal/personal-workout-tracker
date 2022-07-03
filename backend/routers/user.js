@@ -4,10 +4,11 @@ const User = require("../models/user");
 
 const router = express.Router();
 
+// General User routes
 // Create new user
 router.post("/api/user/create", async (req, res, next) => {
-  const newUser = new User(req.body);
   try {
+    const newUser = new User({ ...req.body, role: "trainee" });
     const user = await newUser.save();
     const authToken = await newUser.generateAuthToken();
     res.status(201).send({ user, authToken });
@@ -32,7 +33,42 @@ router.post("/api/user/login", async (req, res, next) => {
   }
 });
 
-module.exports = router;
+// get details
+router.get("/api/user/details", auth, async (req, res, next) => {
+  try {
+    res.send(req.user);
+  } catch (error) {
+    error.status = 400;
+    next(error);
+  }
+});
+
+// update user details
+router.patch("/api/user/edit", auth, async (req, res, next) => {
+  const updates = Object.keys(req.body);
+  const allowedUpdates = [
+    "firstName",
+    "lastName",
+    "dob",
+    "contactNumber",
+    "address",
+    "password",
+  ];
+  const isValidOptions = updates.every((update) =>
+    allowedUpdates.includes(update)
+  );
+
+  if (!isValidOptions) throw new Error("Invalid updates!");
+  try {
+    updates.forEach((update) => (req.user[update] = req.body[update]));
+    await req.user.save();
+
+    res.send(req.user);
+  } catch (error) {
+    error.status = 400;
+    next(error);
+  }
+});
 
 // logout Users
 router.post("/api/user/logout", auth, async (req, res, next) => {
@@ -47,3 +83,5 @@ router.post("/api/user/logout", auth, async (req, res, next) => {
     next(error);
   }
 });
+
+module.exports = router;
