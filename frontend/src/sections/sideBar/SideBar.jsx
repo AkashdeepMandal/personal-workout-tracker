@@ -43,6 +43,7 @@ function SideBar(props) {
         flexShrink: { sm: 0 },
         boxShadow: "0 -12px 12px #ccc",
         maxHeight: `calc(100vh - ${container}px)`,
+        overflowY: "scroll",
       }}
       aria-label="mailbox folders"
     >
@@ -65,7 +66,7 @@ function SideBar(props) {
             fontSize: { xs: "12px", sm: "16px" },
           }}
         >
-          {`${user.firstName} ${user.lastName}`}
+          {isLoggedIn ? `${user.firstName} ${user.lastName}` : "User"}
         </Typography>
       </Stack>
       <Divider variant="middle" />
@@ -103,9 +104,10 @@ function SideBar(props) {
         </ListItem>
       </SideBarNav>
       <Divider variant="middle" />
-      {isLoggedIn && user.role === "admin" && <AdminSideBarNavOption />}
+      {/* {isLoggedIn && user.role === "admin" && <AdminSideBarNavOption />}
       {isLoggedIn && user.role === "trainer" && <TrainerSideBarNavOption />}
-      {isLoggedIn && user.role === "trainee" && <TraineeSideBarNavOption />}
+      {isLoggedIn && user.role === "trainee" && <TraineeSideBarNavOption />} */}
+      <AdminSideBarNavOption />
       <Divider variant="middle" />
       <SideBarNav
         sx={{ margin: { xs: "14px 6px 12px 6px", sm: "16px 14px 14px 14px" } }}

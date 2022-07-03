@@ -9,7 +9,6 @@ import {
 import {
   AppBar,
   Avatar,
-  Box,
   IconButton,
   Menu,
   MenuItem,
@@ -22,7 +21,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import { NavButton } from "../../components/styles/buttons";
 import { buildImage } from "../../utils/buildImage";
-import { logout } from "../../apis/requests";
+import { logout } from "../../apis/allUser";
 
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
@@ -48,7 +47,7 @@ const TopBar = () => {
   };
   return (
     <>
-      <AppBar position="sticky">
+      <AppBar position="sticky" sx={{ height: { xs: "50px", sm: "60px" } }}>
         <StyledToolbar>
           <Stack direction="row" alignItems="center" spacing={0.5}>
             {isLoggedIn && (

@@ -44,7 +44,13 @@ router.post("/api/user/login", async (req, res, next) => {
 // get details
 router.get("/api/user/details", auth, async (req, res, next) => {
   try {
-    res.send(req.user);
+    const userObject = req.user.toObject();
+    delete userObject.avatar;
+    delete userObject.tokens;
+    delete userObject.password;
+    delete userObject.__v;
+
+    res.send(userObject);
   } catch (error) {
     error.status = 400;
     next(error);
@@ -114,7 +120,7 @@ router.post(
       .toBuffer();
     req.user.avatar = imgBuffer;
     await req.user.save();
-    res.send();
+    res.send(req.user);
   },
   (error, req, res, next) => {
     res.status(400).send({ error: error.message });
