@@ -5,7 +5,6 @@ import Profile from "./pages/profile/profile";
 import SignIn from "./pages/signIn/signIn";
 import SignUp from "./pages/signUp/signUp";
 import Main from "./sections/mainContainer/Main";
-import SideBar from "./sections/sideBar/SideBar";
 import TopBar from "./sections/topBar/TopBar";
 
 function App() {

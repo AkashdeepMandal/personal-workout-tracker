@@ -1,75 +1,49 @@
-import React, { useState } from "react";
-import { Box, Container, OutlinedInput } from "@mui/material";
-import { useSelector } from "react-redux";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Box, Typography, Button, Grid, Stack } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "../../store/slices/userSlice";
+import { getUserDetails, uploadProfilePic } from "../../apis/allUser";
+import ProfileCard from "../../components/card/ProfileCard";
+import ChangePassWord from "../../components/form/changePassWord";
 
 function Profile({ drawerWidth }) {
-  const { isLoggedIn, data } = useSelector((state) => state.user);
-  const [selectedFile, setSelectedFile] = useState();
-  const [isSelected, setIsSelected] = useState(false);
-
-  const changeHandler = (event) => {
-    setSelectedFile(event.target.files[0]);
-    setIsSelected(true);
-  };
-
-  const handleSubmission = async () => {
-    const formData = new FormData();
-    formData.append("avatar", selectedFile);
-
-    // await axios
-    //   .post("localhost:5000/api/user/avatar/upload", formData, {
-    //     headers: {
-    //       Authorization: "Bearer " + data.authToken,
-    //       "Content-Type": "multipart/form-data",
-    //     },
-    //   })
-    //   .then((res) => console.log("success"))
-    //   .catch((error) => console.log(error));
-
-    await axios({
-      url: "http://localhost:5000/api/user/avatar/upload",
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${data.authToken}`,
-        "Content-Type": "multipart/form-data",
-        crossDomain: true,
-      },
-      data: formData,
-    })
-      .then((res) => console.log(res.data))
-      .catch((error) => console.log(error));
-  };
+  const { isLoggedIn, user } = useSelector((state) => state.user);
+  const [userDetails, setUserDetails] = useState(null);
+  useEffect(() => {
+    async function fetch() {
+      await getUserDetails(user.authToken)
+        .then((res) => setUserDetails(res.data))
+        .catch((error) => setUserDetails(null));
+    }
+    fetch();
+  }, []);
 
   return (
     <Box
       sx={{
         width: { sm: `calc(100% - ${drawerWidth}px)` },
         flexGrow: 1,
-        p: 3,
-        // height: "100vh",
-        backgroundColor: "green",
       }}
     >
-      <Box>
-        <input type="file" name="file" onChange={changeHandler} />
-      </Box>
-      {isSelected ? (
-        <div>
-          <p>Filename: {selectedFile.name}</p>
-          <p>Filetype: {selectedFile.type}</p>
-          <p>Size in bytes: {selectedFile.size}</p>
-          <p>
-            lastModifiedDate:{" "}
-            {selectedFile.lastModifiedDate.toLocaleDateString()}
-          </p>
-        </div>
-      ) : (
-        <p>Select a file to show details</p>
-      )}
-      <div>
-        <button onClick={handleSubmission}>Submit</button>
-      </div>
+      <Typography
+        variant="h4"
+        component="h1"
+        fontWeight={600}
+        sx={{ fontSize: { xs: "24px", sm: "28px" } }}
+      >
+        Account
+      </Typography>
+      <Grid container spacing={2} direction="row" py={4}>
+        <Grid item sm={4}>
+          <Stack direction="column" spacing={2}>
+            <ProfileCard />
+            <ChangePassWord />
+          </Stack>
+        </Grid>
+        <Grid item sm={8}>
+          <Box sx={{ backgroundColor: "red", height: "200px" }}>asfas</Box>
+        </Grid>
+      </Grid>
     </Box>
   );
 }

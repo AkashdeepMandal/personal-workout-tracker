@@ -31,7 +31,7 @@ import {
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import CloseIcon from "@mui/icons-material/Close";
-import { register } from "../../apis/requests";
+import { register } from "../../apis/allUser";
 
 function SignUp() {
   const { isLoggedIn } = useSelector((state) => state.user);

@@ -3,7 +3,6 @@ import { SideBarNav } from "../styles/navList";
 import { Link as NavLink } from "react-router-dom";
 
 import {
-  Divider,
   ListItemIcon,
   ListItem,
   ListItemButton,
