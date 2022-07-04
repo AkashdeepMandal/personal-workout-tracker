@@ -6,6 +6,8 @@ import SignIn from "./pages/signIn/signIn";
 import SignUp from "./pages/signUp/signUp";
 import Main from "./sections/mainContainer/Main";
 import TopBar from "./sections/topBar/TopBar";
+import CreateUser from "./pages/admin/create-user/CreateUser";
+import CreateWorkout from "./pages/admin/create-workout/CreateWorkout";
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
         <Route path="user/" element={<Main />}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="create-user" element={<CreateUser />} />
+          <Route path="create-workout" element={<CreateWorkout />} />
         </Route>
       </Route>
     </Routes>

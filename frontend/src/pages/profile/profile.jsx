@@ -6,12 +6,7 @@ import EditUserDetails from "../../components/form/editUserDetails";
 
 function Profile({ drawerWidth }) {
   return (
-    <Box
-      sx={{
-        width: { sm: `calc(100% - ${drawerWidth}px)` },
-        flexGrow: 1,
-      }}
-    >
+    <Box>
       <Typography
         variant="h4"
         component="h1"
