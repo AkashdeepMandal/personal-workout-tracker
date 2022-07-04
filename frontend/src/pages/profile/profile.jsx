@@ -1,23 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Box, Typography, Button, Grid, Stack } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { updateUser } from "../../store/slices/userSlice";
-import { getUserDetails, uploadProfilePic } from "../../apis/allUser";
+import React from "react";
+import { Box, Typography, Grid, Stack } from "@mui/material";
 import ProfileCard from "../../components/card/ProfileCard";
 import ChangePassWord from "../../components/form/changePassWord";
+import EditUserDetails from "../../components/form/editUserDetails";
 
 function Profile({ drawerWidth }) {
-  const { isLoggedIn, user } = useSelector((state) => state.user);
-  const [userDetails, setUserDetails] = useState(null);
-  useEffect(() => {
-    async function fetch() {
-      await getUserDetails(user.authToken)
-        .then((res) => setUserDetails(res.data))
-        .catch((error) => setUserDetails(null));
-    }
-    fetch();
-  }, []);
-
   return (
     <Box
       sx={{
@@ -41,7 +28,7 @@ function Profile({ drawerWidth }) {
           </Stack>
         </Grid>
         <Grid item sm={8}>
-          <Box sx={{ backgroundColor: "red", height: "200px" }}>asfas</Box>
+          <EditUserDetails />
         </Grid>
       </Grid>
     </Box>

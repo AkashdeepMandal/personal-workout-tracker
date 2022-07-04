@@ -104,10 +104,9 @@ function SideBar(props) {
         </ListItem>
       </SideBarNav>
       <Divider variant="middle" />
-      {/* {isLoggedIn && user.role === "admin" && <AdminSideBarNavOption />}
+      {isLoggedIn && user.role === "admin" && <AdminSideBarNavOption />}
       {isLoggedIn && user.role === "trainer" && <TrainerSideBarNavOption />}
-      {isLoggedIn && user.role === "trainee" && <TraineeSideBarNavOption />} */}
-      <AdminSideBarNavOption />
+      {isLoggedIn && user.role === "trainee" && <TraineeSideBarNavOption />}
       <Divider variant="middle" />
       <SideBarNav
         sx={{ margin: { xs: "14px 6px 12px 6px", sm: "16px 14px 14px 14px" } }}

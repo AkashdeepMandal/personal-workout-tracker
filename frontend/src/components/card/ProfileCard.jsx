@@ -42,7 +42,7 @@ function ProfileCard() {
   };
 
   return (
-    <Card sx={{ minWidth: 275, boxShadow: "0 0 12px #ccc" }}>
+    <Card sx={{ boxShadow: "0 0 12px #ccc" }}>
       <CardContent>
         <Stack
           direction="column"
@@ -79,8 +79,9 @@ function ProfileCard() {
           variant="text"
           component="label"
           sx={{ width: "100%", textTransform: "capitalize", fontWeight: 600 }}
+          disabled={isSelected ? true : false}
         >
-          Uplode Picture
+          Choose Picture
           <input type="file" onChange={changeHandler} hidden />
         </Button>
         <Button
@@ -90,7 +91,7 @@ function ProfileCard() {
           disabled={isSelected ? false : true}
           onClick={handleProfilePicSubmission}
         >
-          Submit Picture
+          Upload Picture
         </Button>
         {/* </Stack> */}
       </CardActions>
