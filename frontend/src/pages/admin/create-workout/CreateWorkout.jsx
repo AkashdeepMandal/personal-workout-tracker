@@ -87,31 +87,6 @@ function CreateWorkout() {
       }
       setAlartIsOpen(true);
     }
-
-    // await adminCreatWorkout(user.authToken, { ...value })
-    //   .then(async (res) => {
-    //     if (formData.has("logo")) {
-    //       await adminUploadWorkoutLogo(
-    //         user.authToken,
-    //         formData,
-    //         res.data._id
-    //       ).then((res) => {
-    //         setFormSuccess("New workout created");
-    //         props.resetForm();
-    //       });
-    //     } else {
-    //       setFormSuccess("New workout created");
-    //       props.resetForm();
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     if (error.response.data) {
-    //       setFormError(error.response.data.error.message);
-    //     } else {
-    //       setFormError("Please Check Network Connection");
-    //     }
-    //     setAlartIsOpen(true);
-    //   });
   };
 
   return (
@@ -216,8 +191,8 @@ function CreateWorkout() {
                       >
                         <Avatar
                           sx={{
-                            width: { xs: 32, sm: 80 },
-                            height: { xs: 32, sm: 80 },
+                            width: 80,
+                            height: 80,
                             bgcolor: "White",
                             color: "#212121",
                           }}

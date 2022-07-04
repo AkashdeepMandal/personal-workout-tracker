@@ -288,7 +288,56 @@ function CreateUser() {
                         )}
                       </Stack>
                     </Grid>
+
                     <Grid item xs={12} md={6}>
+                      <Stack spacing={1}>
+                        <InputLabel htmlFor="dob">Date of Birth*</InputLabel>
+                        <OutlinedInput
+                          fullWidth
+                          error={Boolean(touched.dob && errors.dob)}
+                          id="dob"
+                          type="date"
+                          value={values.dob}
+                          name="dob"
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          placeholder="2017-05-24"
+                          inputProps={{}}
+                        />
+                        {touched.dob && errors.dob && (
+                          <FormHelperText error id="helper-text-dob">
+                            {errors.dob}
+                          </FormHelperText>
+                        )}
+                      </Stack>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Stack spacing={1}>
+                        <InputLabel htmlFor="contactNumber">
+                          Contact Number*
+                        </InputLabel>
+                        <OutlinedInput
+                          fullWidth
+                          error={Boolean(
+                            touched.contactNumber && errors.contactNumber
+                          )}
+                          id="contactNumber"
+                          type="tel"
+                          value={values.contactNumber}
+                          name="contactNumber"
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          placeholder="+1 1111111111"
+                          inputProps={{}}
+                        />
+                        {touched.contactNumber && errors.contactNumber && (
+                          <FormHelperText error id="helper-text-contactNumber">
+                            {errors.contactNumber}
+                          </FormHelperText>
+                        )}
+                      </Stack>
+                    </Grid>
+                    <Grid item xs={12}>
                       <Stack spacing={1}>
                         <FormControl component="fieldset">
                           <FormLabel component="legend">Gender*</FormLabel>
@@ -327,50 +376,25 @@ function CreateUser() {
                         )}
                       </Stack>
                     </Grid>
-                    <Grid item xs={12} md={6}>
-                      <Stack spacing={1}>
-                        <InputLabel htmlFor="dob">Date of Birth*</InputLabel>
-                        <OutlinedInput
-                          fullWidth
-                          error={Boolean(touched.dob && errors.dob)}
-                          id="dob"
-                          type="date"
-                          value={values.dob}
-                          name="dob"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          placeholder="2017-05-24"
-                          inputProps={{}}
-                        />
-                        {touched.dob && errors.dob && (
-                          <FormHelperText error id="helper-text-dob">
-                            {errors.dob}
-                          </FormHelperText>
-                        )}
-                      </Stack>
-                    </Grid>
+
                     <Grid item xs={12}>
                       <Stack spacing={1}>
-                        <InputLabel htmlFor="contactNumber">
-                          Contact Number*
-                        </InputLabel>
+                        <InputLabel htmlFor="email">Email Address*</InputLabel>
                         <OutlinedInput
                           fullWidth
-                          error={Boolean(
-                            touched.contactNumber && errors.contactNumber
-                          )}
-                          id="contactNumber"
-                          type="tel"
-                          value={values.contactNumber}
-                          name="contactNumber"
+                          error={Boolean(touched.email && errors.email)}
+                          id="email"
+                          type="email"
+                          value={values.email}
+                          name="email"
                           onBlur={handleBlur}
                           onChange={handleChange}
-                          placeholder="+1 1111111111"
+                          placeholder="demo@example.com"
                           inputProps={{}}
                         />
-                        {touched.contactNumber && errors.contactNumber && (
-                          <FormHelperText error id="helper-text-contactNumber">
-                            {errors.contactNumber}
+                        {touched.email && errors.email && (
+                          <FormHelperText error id="helper-text-email">
+                            {errors.email}
                           </FormHelperText>
                         )}
                       </Stack>
@@ -395,28 +419,6 @@ function CreateUser() {
                         {touched.address && errors.address && (
                           <FormHelperText error id="helper-text-address">
                             {errors.address}
-                          </FormHelperText>
-                        )}
-                      </Stack>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Stack spacing={1}>
-                        <InputLabel htmlFor="email">Email Address*</InputLabel>
-                        <OutlinedInput
-                          fullWidth
-                          error={Boolean(touched.email && errors.email)}
-                          id="email"
-                          type="email"
-                          value={values.email}
-                          name="email"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          placeholder="demo@example.com"
-                          inputProps={{}}
-                        />
-                        {touched.email && errors.email && (
-                          <FormHelperText error id="helper-text-email">
-                            {errors.email}
                           </FormHelperText>
                         )}
                       </Stack>

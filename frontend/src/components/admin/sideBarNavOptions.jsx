@@ -41,7 +41,7 @@ function AdminSideBarNavOptions() {
         <ListItem disablePadding>
           <ListItemButton
             component={NavLink}
-            to="/user/create-user"
+            to="/admin/create-user"
             sx={{ py: 0, minHeight: 32 }}
           >
             <ListItemIcon>
@@ -56,7 +56,7 @@ function AdminSideBarNavOptions() {
         <ListItem disablePadding>
           <ListItemButton
             component={NavLink}
-            to="/user/view-user"
+            to="/admin/view-users"
             sx={{ py: 0, minHeight: 32 }}
           >
             <ListItemIcon>
@@ -71,7 +71,7 @@ function AdminSideBarNavOptions() {
         <ListItem disablePadding>
           <ListItemButton
             component={NavLink}
-            to="/user/view-user"
+            to="/admin/edit-users"
             sx={{ py: 0, minHeight: 32 }}
           >
             <ListItemIcon>
@@ -86,7 +86,7 @@ function AdminSideBarNavOptions() {
         <ListItem disablePadding>
           <ListItemButton
             component={NavLink}
-            to="/user/view-user"
+            to="/admin/delete-users"
             sx={{ py: 0, minHeight: 32 }}
           >
             <ListItemIcon>
@@ -120,7 +120,7 @@ function AdminSideBarNavOptions() {
         <ListItem disablePadding>
           <ListItemButton
             component={NavLink}
-            to="/user/create-workout"
+            to="/admin/create-workout"
             sx={{ py: 0, minHeight: 32 }}
           >
             <ListItemIcon>
@@ -135,7 +135,7 @@ function AdminSideBarNavOptions() {
         <ListItem disablePadding>
           <ListItemButton
             component={NavLink}
-            to="/user/view-workout"
+            to="/admin/view-workouts"
             sx={{ py: 0, minHeight: 32 }}
           >
             <ListItemIcon>
@@ -150,7 +150,7 @@ function AdminSideBarNavOptions() {
         <ListItem disablePadding>
           <ListItemButton
             component={NavLink}
-            to="/user/view-workout"
+            to="/admin/edit-workouts"
             sx={{ py: 0, minHeight: 32 }}
           >
             <ListItemIcon>
@@ -165,7 +165,7 @@ function AdminSideBarNavOptions() {
         <ListItem disablePadding>
           <ListItemButton
             component={NavLink}
-            to="/user/view-workout"
+            to="/admin/delete-workouts"
             sx={{ py: 0, minHeight: 32 }}
           >
             <ListItemIcon>

@@ -1,10 +1,14 @@
 import React from "react";
 import { Box, Typography, Grid, Stack } from "@mui/material";
-import ProfileCard from "../../components/card/ProfileCard";
-import ChangePassWord from "../../components/form/changePassWord";
-import EditUserDetails from "../../components/form/editUserDetails";
+import { useParams } from "react-router-dom";
 
-function Profile() {
+import EditProfilePicture from "./EditProfilePicure";
+import EditUserPassword from "./EditUserPassword";
+import AdminEditUserDetails from "./EditUserDetails";
+
+function EditUser() {
+  const { id } = useParams();
+
   return (
     <Box>
       <Typography
@@ -13,21 +17,21 @@ function Profile() {
         fontWeight={600}
         sx={{ fontSize: { xs: "24px", sm: "28px" } }}
       >
-        Account
+        Edit User Details
       </Typography>
       <Grid container spacing={2} direction="row" py={4}>
         <Grid item sm={4}>
           <Stack direction="column" spacing={2}>
-            <ProfileCard />
-            <ChangePassWord />
+            <EditProfilePicture id={id} />
+            <EditUserPassword id={id} />
           </Stack>
         </Grid>
         <Grid item sm={8}>
-          <EditUserDetails />
+          <AdminEditUserDetails id={id} />
         </Grid>
       </Grid>
     </Box>
   );
 }
 
-export default Profile;
+export default EditUser;
