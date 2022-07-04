@@ -3,6 +3,8 @@ const auth = require("../middleware/auth");
 const authAdmin = require("../middleware/authAdmin");
 const User = require("../models/user");
 const Workout = require("../models/workout");
+const mutler = require("multer");
+const sharp = require("sharp");
 
 const router = express.Router();
 
@@ -208,4 +210,68 @@ router.delete(
     }
   }
 );
+
+// user avatar
+const avatar = mutler({
+  limits: {
+    fileSize: 5000000,
+  },
+  fileFilter(req, file, callback) {
+    if (!file.originalname.toLowerCase().match(/\.(jpg|jpeg|png)/)) {
+      return callback(new Error("Please uplode jpg/jpeg/png"));
+    }
+    callback(undefined, true);
+  },
+});
+router.post(
+  "/api/admin/user/avatar/upload/:id",
+  [auth, authAdmin],
+  avatar.single("avatar"),
+  async (req, res) => {
+    const user = await User.findById(req.params.id);
+    const imgBuffer = await sharp(req.file.buffer)
+      .resize({ width: 250, height: 250 })
+      .png()
+      .toBuffer();
+    user.avatar = imgBuffer;
+    await user.save();
+    res.send(user);
+  },
+  (error, req, res, next) => {
+    res.status(400).send({ error: error.message });
+  }
+);
+
+// Workout logo
+const logo = mutler({
+  limits: {
+    fileSize: 10000000,
+  },
+  fileFilter(req, file, callback) {
+    if (!file.originalname.toLowerCase().match(/\.(jpg|jpeg|png)/)) {
+      return callback(new Error("Please uplode jpg/jpeg/png"));
+    }
+    callback(undefined, true);
+  },
+});
+
+router.post(
+  "/api/admin/workout/logo/upload/:id",
+  [auth, authAdmin],
+  logo.single("logo"),
+  async (req, res) => {
+    const workout = await Workout.findById(req.params.id);
+    const imgBuffer = await sharp(req.file.buffer)
+      .resize({ width: 250, height: 250 })
+      .png()
+      .toBuffer();
+    workout.logo = imgBuffer;
+    await workout.save();
+    res.send(workout);
+  },
+  (error, req, res, next) => {
+    res.status(400).send({ error: error.message });
+  }
+);
+
 module.exports = router;
