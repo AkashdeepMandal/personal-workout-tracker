@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Formik, Form } from "formik";
+import { Formik } from "formik";
 import * as yup from "yup";
 import {
   Alert,
@@ -66,7 +66,7 @@ function ChangePassWord() {
     const password = value.confirmNewPassword;
     await updateUserDetails(user.authToken, { password })
       .then((res) => {
-        setFormSuccess("Registration Successful");
+        setFormSuccess("Password changed successful");
         props.resetForm();
       })
       .catch((error) => {
@@ -79,7 +79,7 @@ function ChangePassWord() {
       });
   };
   return (
-    <Card sx={{ minWidth: 275, boxShadow: "0 0 12px #ccc" }}>
+    <Card sx={{ boxShadow: "0 0 12px #ccc" }}>
       <CardContent>
         <Typography variant="h5" py={2} sx={{ fontWeight: 600 }}>
           Change Password

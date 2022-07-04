@@ -41,7 +41,6 @@ export const getUserDetails = async (authToken) => {
 };
 
 export const updateUserDetails = async (authToken, user) => {
-  console.log(user);
   return await axios.patch(baseURL + "/user/edit", user, {
     headers: {
       Authorization: "Bearer " + authToken,
