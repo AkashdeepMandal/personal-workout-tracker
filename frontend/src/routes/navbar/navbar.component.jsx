@@ -20,9 +20,11 @@ function Navbar() {
     <Fragment>
       <div className="navigation">
         <div className="nav-links-container">
+
           <Link className="logo-container" to="/">
             Personal Workout Tracker
           </Link>
+
           {/* <Link className="nav-link" to="/trainer">
             Trainer
           </Link>
