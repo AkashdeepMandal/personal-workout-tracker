@@ -17,7 +17,7 @@ export const adminViewUsers = async (authToken) => {
   });
 };
 
-// Get user Details
+// view user Details
 export const adminViewUserDetails = async (authToken, id) => {
   return await axios.get(baseURL + `/admin/users/details/${id}`, {
     headers: { Authorization: "Bearer " + authToken },
@@ -69,7 +69,8 @@ export const adminViewWorkouts = async (authToken) => {
     headers: { Authorization: "Bearer " + authToken },
   });
 };
-// view workout
+
+// view workout details
 export const adminViewWorkoutDetails = async (authToken, id) => {
   return await axios.get(baseURL + `/admin/workouts/details/${id}`, {
     headers: { Authorization: "Bearer " + authToken },

@@ -16,6 +16,8 @@ import EditWorkouts from "./pages/admin/edit-workouts/EditWorkouts";
 import DeleteWorkouts from "./pages/admin/delete-workouts/DeleteWorkouts";
 import EditUser from "./pages/admin/edit-user-details/EditUser";
 import EditWorkout from "./pages/admin/edit-workout-details/EditWorkout";
+import ViewUserDetails from "./pages/admin/view-user-details/ViewUserDetails";
+import ViewWorkoutDetails from "./pages/admin/view-workout-details/ViewWorkoutDetails";
 
 function App() {
   return (
@@ -31,12 +33,17 @@ function App() {
         <Route path="admin/" element={<Main />}>
           <Route path="create-user" element={<CreateUser />} />
           <Route path="view-users" element={<ViewUsers />} />
+          <Route path="view-user-details/:id" element={<ViewUserDetails />} />
           <Route path="edit-users" element={<EditUsers />} />
           <Route path="edit-user-details/:id" element={<EditUser />} />
           <Route path="delete-users" element={<DeleteUsers />} />
 
           <Route path="create-workout" element={<CreateWorkout />} />
           <Route path="view-workouts" element={<ViewWorkouts />} />
+          <Route
+            path="view-workout-details/:id"
+            element={<ViewWorkoutDetails />}
+          />
           <Route path="edit-workouts" element={<EditWorkouts />} />
           <Route path="edit-workout-details/:id" element={<EditWorkout />} />
           <Route path="delete-workouts" element={<DeleteWorkouts />} />

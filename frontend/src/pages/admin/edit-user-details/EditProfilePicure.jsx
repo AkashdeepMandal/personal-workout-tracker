@@ -81,7 +81,6 @@ function EditProfilePicture({ id }) {
       </CardContent>
       <Divider />
       <CardActions>
-        {/* <Stack direction="row" spacing={1}> */}
         <Button
           size="medium"
           variant="text"
@@ -101,7 +100,6 @@ function EditProfilePicture({ id }) {
         >
           Upload Picture
         </Button>
-        {/* </Stack> */}
       </CardActions>
     </Card>
   );

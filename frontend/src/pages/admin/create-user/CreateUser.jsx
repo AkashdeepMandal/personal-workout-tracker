@@ -3,8 +3,6 @@ import * as yup from "yup";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 
-import { Link as RouterLink } from "react-router-dom";
-
 // material-ui
 import {
   Box,
@@ -12,7 +10,6 @@ import {
   FormControl,
   FormHelperText,
   Grid,
-  Link,
   IconButton,
   InputAdornment,
   InputLabel,
@@ -516,18 +513,6 @@ function CreateUser() {
                           </FormHelperText>
                         )}
                       </Stack>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Typography variant="body2">
-                        By Signing up, you agree to our &nbsp;
-                        <Link variant="subtitle2" component={RouterLink} to="#">
-                          Terms of Service
-                        </Link>
-                        &nbsp; and &nbsp;
-                        <Link variant="subtitle2" component={RouterLink} to="#">
-                          Privacy Policy
-                        </Link>
-                      </Typography>
                     </Grid>
 
                     <Grid item xs={12}>
