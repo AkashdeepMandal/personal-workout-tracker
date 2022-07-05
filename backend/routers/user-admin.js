@@ -37,7 +37,12 @@ router.get(
       if (req.params.id) {
         const user = await User.findById(req.params.id);
         res.send(user);
-      } else {
+      } else if (
+        req.query.limit ||
+        req.query.filter ||
+        req.query.skip ||
+        req.query.search
+      ) {
         const users = await User.find(
           {
             $and: [
@@ -57,6 +62,9 @@ router.get(
           }
         );
         res.send(users);
+      } else {
+        const users = await User.find();
+        res.send(users);
       }
     } catch (error) {
       next(error);
@@ -66,7 +74,7 @@ router.get(
 
 // Edit User
 router.patch(
-  "/api/admin/user/delete/:id",
+  "/api/admin/user/edit/:id",
   [auth, authAdmin],
   async (req, res, next) => {
     const updates = Object.keys(req.body);
@@ -142,11 +150,14 @@ router.get(
   async (req, res, next) => {
     try {
       if (req.params.id) {
-        const workout = await Workout.findById(req.params.id).populate(
-          "createdBy"
-        );
+        const workout = await Workout.findById(req.params.id);
         res.send(workout);
-      } else {
+      } else if (
+        req.query.limit ||
+        req.query.filter ||
+        req.query.skip ||
+        req.query.search
+      ) {
         const workouts = await Workout.find(
           {
             $and: [
@@ -162,6 +173,9 @@ router.get(
             skip: parseInt(req.query.skip) || 0,
           }
         ).populate("createdBy");
+        res.send(workouts);
+      } else {
+        const workouts = await Workout.find();
         res.send(workouts);
       }
     } catch (error) {

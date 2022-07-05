@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { updateUser } from "../../store/slices/userSlice";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Avatar,
   Button,
@@ -12,16 +11,30 @@ import {
   Typography,
 } from "@mui/material";
 
-import { uploadProfilePic } from "../../apis/allUser";
-import { buildImage } from "../../utils/buildImage";
+import { adminViewUserDetails } from "../../../apis/admin";
+import { buildImage } from "../../../utils/buildImage";
+import { updateUserAvatar } from "../../../apis/admin";
 
-function ProfileCard() {
-  const { isLoggedIn, user } = useSelector((state) => state.user);
-
-  const dispatch = useDispatch();
-
+function EditProfilePicture({ id }) {
+  const { user } = useSelector((state) => state.user);
+  const [userDetails, setUserDetails] = useState({
+    firstName: "",
+    lastName: "",
+  });
   const [selectedFile, setSelectedFile] = useState();
   const [isSelected, setIsSelected] = useState(false);
+
+  useEffect(() => {
+    async function getUserData() {
+      await adminViewUserDetails(user.authToken, id).then((res) => {
+        if (res.data.avatar) {
+          setUserDetails(res.data);
+        }
+      });
+    }
+    getUserData();
+    // eslint-disable-next-line
+  }, [selectedFile]);
 
   const changeHandler = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -32,9 +45,8 @@ function ProfileCard() {
     const formData = new FormData();
     formData.append("avatar", selectedFile);
 
-    await uploadProfilePic(formData, user.authToken)
+    await updateUserAvatar(user.authToken, formData, id)
       .then((res) => {
-        dispatch(updateUser(res.data));
         setSelectedFile(null);
         setIsSelected(false);
       })
@@ -51,29 +63,24 @@ function ProfileCard() {
           spacing={2}
           py={3}
         >
-          {isLoggedIn && (
-            <>
-              <Avatar
-                sx={{
-                  width: 80,
-                  height: 80,
-                  bgcolor: "White",
-                  color: "#212121",
-                }}
-                alt={`${user.firstName} ${user.lastName}`}
-                src={buildImage(user?.avatar)}
-              />
-              <Typography
-                variant="h6"
-                sx={{ textTransform: "capitalize", fontWeight: 600 }}
-              >{`${user.firstName} ${user.lastName}`}</Typography>
-            </>
-          )}
+          <Avatar
+            sx={{
+              width: 80,
+              height: 80,
+              bgcolor: "White",
+              color: "#212121",
+            }}
+            alt={`${userDetails.firstName} ${userDetails.lastName}`}
+            src={buildImage(userDetails?.avatar)}
+          />
+          <Typography
+            variant="h6"
+            sx={{ textTransform: "capitalize", fontWeight: 600 }}
+          >{`${userDetails.firstName} ${userDetails.lastName}`}</Typography>
         </Stack>
       </CardContent>
       <Divider />
       <CardActions>
-        {/* <Stack direction="row" spacing={1}> */}
         <Button
           size="medium"
           variant="text"
@@ -93,10 +100,9 @@ function ProfileCard() {
         >
           Upload Picture
         </Button>
-        {/* </Stack> */}
       </CardActions>
     </Card>
   );
 }
 
-export default ProfileCard;
+export default EditProfilePicture;
