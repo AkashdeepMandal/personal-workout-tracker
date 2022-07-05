@@ -1,8 +1,6 @@
-export const textCapitalize = (string, first = false) => {
-  if (!string) {
+export const textCapitalize = (string) => {
+  if (!string || string === undefined) {
     return " ";
-  } else if (first === true) {
-    return string[0].toUpperCase();
   }
   return string[0].toUpperCase() + string.slice(1);
 };

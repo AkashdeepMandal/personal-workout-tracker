@@ -23,10 +23,6 @@ function ViewUserDetails() {
     // eslint-disable-next-line
   }, []);
 
-  // render testing
-  console.log("rendre");
-  console.log("rendering");
-
   return (
     <Box>
       <Typography
@@ -44,9 +40,7 @@ function ViewUserDetails() {
               <Avatar
                 sx={{ height: 70, width: 70 }}
                 src={buildImage(userDetails?.avatar)}
-              >
-                {`${textCapitalize(userDetails?.firstName)}`}
-              </Avatar>
+              />
               <Stack direction="column" justifyContent="center">
                 <Typography variant="body1" fontWeight={600}>
                   Name

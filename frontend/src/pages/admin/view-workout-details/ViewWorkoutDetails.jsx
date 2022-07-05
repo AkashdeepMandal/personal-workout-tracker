@@ -13,19 +13,16 @@ function ViewWorkoutDetails() {
   const [workoutDetails, setWorkoutDetails] = useState({});
   const { id } = useParams();
 
+  console.log(user.authToken);
   useEffect(() => {
-    async function fetchUserDetails() {
+    async function fetchWorkoutDetails() {
       await adminViewWorkoutDetails(user.authToken, id).then((res) => {
         setWorkoutDetails(res.data);
       });
     }
-    fetchUserDetails();
+    fetchWorkoutDetails();
     // eslint-disable-next-line
   }, []);
-
-  // render testing
-  console.log("rendre");
-  console.log("rendering");
 
   return (
     <Box>
@@ -55,7 +52,7 @@ function ViewWorkoutDetails() {
                 </Typography>
                 <Typography variant="body1">{`${textCapitalize(
                   workoutDetails?.name
-                )} ${textCapitalize(workoutDetails?.name)}`}</Typography>
+                )}`}</Typography>
               </Stack>
             </Stack>
             <Divider variant="middle" py={0} />
@@ -72,9 +69,9 @@ function ViewWorkoutDetails() {
                 <Typography variant="body1" fontWeight={600}>
                   Calories burn per minute :
                 </Typography>
-                <Typography variant="body1">{`${textCapitalize(
-                  workoutDetails?.calories
-                )}`}</Typography>
+                <Typography variant="body1">
+                  {workoutDetails?.calories}
+                </Typography>
               </Stack>
 
               <Stack direction="row" spacing={2}>

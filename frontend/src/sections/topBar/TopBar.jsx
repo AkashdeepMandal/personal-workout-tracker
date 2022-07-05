@@ -2,14 +2,10 @@ import React, { useState } from "react";
 import { NavLink as RouterLink, Outlet, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../../store/slices/userSlice";
-import {
-  sideBarOpen,
-  sideBarClose,
-} from "../../store/slices/mobileToggleSlice";
+
 import {
   AppBar,
   Avatar,
-  IconButton,
   Menu,
   MenuItem,
   Stack,
@@ -18,10 +14,11 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
+
 import { NavButton } from "../../components/styles/buttons";
 import { buildImage } from "../../utils/buildImage";
 import { logout } from "../../apis/allUser";
+import { textCapitalize } from "../../utils/textCapitalize";
 
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
@@ -30,8 +27,6 @@ const StyledToolbar = styled(Toolbar)({
 
 const TopBar = () => {
   const { isLoggedIn, user } = useSelector((state) => state.user);
-  // for toggling side bar
-  const { isMobileOpen } = useSelector((state) => state.mobileToggle);
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -50,21 +45,6 @@ const TopBar = () => {
       <AppBar position="sticky" sx={{ height: { xs: "50px", sm: "60px" } }}>
         <StyledToolbar>
           <Stack direction="row" alignItems="center" spacing={0.5}>
-            {isLoggedIn && (
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                edge="start"
-                onClick={() => {
-                  isMobileOpen
-                    ? dispatch(sideBarClose())
-                    : dispatch(sideBarOpen());
-                }}
-                sx={{ mr: 1, display: { sm: "none" } }}
-              >
-                <MenuIcon />
-              </IconButton>
-            )}
             <Typography
               component={RouterLink}
               to={"/"}
@@ -93,7 +73,9 @@ const TopBar = () => {
               alt={`${user.firstName} ${user.lastName}`}
               src={buildImage(user?.avatar)}
               onClick={handleClick}
-            />
+            >
+              {textCapitalize(user.firstName, true)}
+            </Avatar>
           ) : (
             <Stack direction="row" spacing={{ xs: 1, sm: 2 }}>
               <NavButton
