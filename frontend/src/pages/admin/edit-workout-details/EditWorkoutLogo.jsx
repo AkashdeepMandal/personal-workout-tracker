@@ -18,16 +18,14 @@ import cardio from "../../../assets/cardio.png";
 
 function EditWorkoutLogo({ id }) {
   const { user } = useSelector((state) => state.user);
-  const [workoutDetails, setWorkoutDetails] = useState({});
+  const [workoutDetails, setWorkoutDetails] = useState({ name: "" });
   const [selectedFile, setSelectedFile] = useState();
   const [isSelected, setIsSelected] = useState(false);
 
   useEffect(() => {
     async function getUserData() {
       await adminViewWorkoutDetails(user.authToken, id).then((res) => {
-        if (res.data.avatar) {
-          setWorkoutDetails(res.data);
-        }
+        setWorkoutDetails(res.data);
       });
     }
     getUserData();

@@ -27,9 +27,7 @@ function EditProfilePicture({ id }) {
   useEffect(() => {
     async function getUserData() {
       await adminViewUserDetails(user.authToken, id).then((res) => {
-        if (res.data.avatar) {
-          setUserDetails(res.data);
-        }
+        setUserDetails(res.data);
       });
     }
     getUserData();
