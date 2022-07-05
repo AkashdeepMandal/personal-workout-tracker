@@ -17,7 +17,7 @@ export const adminViewUsers = async (authToken) => {
   });
 };
 
-// view user Details
+// view user's Details
 export const adminViewUserDetails = async (authToken, id) => {
   return await axios.get(baseURL + `/admin/users/details/${id}`, {
     headers: { Authorization: "Bearer " + authToken },

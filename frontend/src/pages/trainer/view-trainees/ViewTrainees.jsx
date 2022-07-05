@@ -3,25 +3,23 @@ import { Avatar, Box, Typography, useTheme, Button } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useSelector } from "react-redux";
 import { Link as NavLink } from "react-router-dom";
-import { adminViewUsers } from "../../../apis/admin";
 import { buildImage } from "../../../utils/buildImage";
 import { textCapitalize } from "../../../utils/textCapitalize";
 import { calculateAge } from "../../../utils/calculateAge";
+import { trainerViewTrainees } from "../../../apis/trainer";
 import { stringToAvatar } from "../../../utils/generateAvatarLogo";
 
-function EditUsers() {
+function ViewTrainees() {
   const [tableData, setTableData] = useState([]);
   const { user } = useSelector((state) => state.user);
   const theme = useTheme();
 
   const columns = [
     { field: "id", headerName: "Id", hide: true, allowSearch: false },
-    { field: "role", headerName: "Role" },
     {
       field: "avatar",
       headerName: "Avatar",
       renderCell: (params) => {
-        console.log(params);
         return (
           <>
             <Avatar
@@ -32,39 +30,30 @@ function EditUsers() {
         );
       },
       allowSearch: false,
+      flex: 1,
     },
     {
       field: "name",
       headerName: "Name",
       flex: 1,
     },
-    { field: "email", headerName: "E-mail", flex: 1 },
-    { field: "gender", headerName: "Gender", width: 100, allowSearch: false },
-    { field: "age", headerName: "Age", width: 90, allowSearch: false },
-    {
-      field: "contactNumber",
-      headerName: "Contact Number",
-      width: 150,
-      allowSearch: false,
-    },
+    { field: "gender", headerName: "Gender", flex: 1, allowSearch: false },
+    { field: "age", headerName: "Age", flex: 1, allowSearch: false },
     {
       field: "action",
       headerName: "Action",
-      width: 140,
+      flex: 1,
       renderCell: (params) => {
         return (
           <>
             <Button
               size="small"
-              to={`/admin/edit-user-details/${params.id}`}
+              to={`/trainer/view-trainee-details/${params.id}`}
               variant="contained"
               component={NavLink}
-              sx={{
-                fontSize: "14px",
-                textTransform: "capitalize",
-              }}
+              sx={{ fontSize: "14px", textTransform: "capitalize" }}
             >
-              Edit
+              View
             </Button>
           </>
         );
@@ -73,24 +62,20 @@ function EditUsers() {
   ];
 
   useEffect(() => {
-    adminViewUsers(user.authToken)
+    trainerViewTrainees(user.authToken)
       .then((res) => {
-        const Users = res.data.map((user) => {
+        const trainees = res.data.map((user) => {
           return {
             id: user._id,
-            role: `${textCapitalize(user.role)}`,
             avatar: user.avatar,
             name: `${textCapitalize(user.firstName)} ${textCapitalize(
               user.lastName
             )}`,
-            email: user.email,
             gender: user.gender,
-            contactNumber: user.contactNumber,
-            address: user.address,
             age: calculateAge(user.dob),
           };
         });
-        setTableData(Users);
+        setTableData(trainees);
       })
       .catch((error) => {});
     // eslint-disable-next-line
@@ -112,7 +97,7 @@ function EditUsers() {
           color: theme.palette.grey[800],
         }}
       >
-        Edit Users
+        View Users
       </Typography>
       <DataGrid
         disableColumnSelector
@@ -135,4 +120,4 @@ function EditUsers() {
   );
 }
 
-export default EditUsers;
+export default ViewTrainees;

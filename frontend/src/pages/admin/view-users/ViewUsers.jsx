@@ -7,62 +7,66 @@ import { adminViewUsers } from "../../../apis/admin";
 import { buildImage } from "../../../utils/buildImage";
 import { textCapitalize } from "../../../utils/textCapitalize";
 import { calculateAge } from "../../../utils/calculateAge";
-
-const columns = [
-  { field: "id", headerName: "Id", hide: true, allowSearch: false },
-  { field: "role", headerName: "Role" },
-  {
-    field: "avatar",
-    headerName: "Avatar",
-    renderCell: (params) => {
-      return (
-        <>
-          <Avatar src={buildImage(params.value)} />
-        </>
-      );
-    },
-    allowSearch: false,
-  },
-  {
-    field: "name",
-    headerName: "Name",
-    flex: 1,
-  },
-  { field: "email", headerName: "E-mail", flex: 1 },
-  { field: "gender", headerName: "Gender", width: 100, allowSearch: false },
-  { field: "age", headerName: "Age", width: 90, allowSearch: false },
-  {
-    field: "contactNumber",
-    headerName: "Contact Number",
-    width: 150,
-    allowSearch: false,
-  },
-  {
-    field: "action",
-    headerName: "Action",
-    width: 120,
-    renderCell: (params) => {
-      return (
-        <>
-          <Button
-            size="small"
-            to={`/admin/view-user-details/${params.id}`}
-            variant="contained"
-            component={NavLink}
-            sx={{ fontSize: "14px", textTransform: "capitalize" }}
-          >
-            View
-          </Button>
-        </>
-      );
-    },
-  },
-];
+import { stringToAvatar } from "../../../utils/generateAvatarLogo";
 
 function ViewUsers() {
   const [tableData, setTableData] = useState([]);
   const { user } = useSelector((state) => state.user);
   const theme = useTheme();
+
+  const columns = [
+    { field: "id", headerName: "Id", hide: true, allowSearch: false },
+    { field: "role", headerName: "Role" },
+    {
+      field: "avatar",
+      headerName: "Avatar",
+      renderCell: (params) => {
+        return (
+          <>
+            <Avatar
+              {...stringToAvatar(params.row.name)}
+              src={buildImage(params.value)}
+            />
+          </>
+        );
+      },
+      allowSearch: false,
+    },
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+    },
+    { field: "email", headerName: "E-mail", flex: 1 },
+    { field: "gender", headerName: "Gender", width: 100, allowSearch: false },
+    { field: "age", headerName: "Age", width: 90, allowSearch: false },
+    {
+      field: "contactNumber",
+      headerName: "Contact Number",
+      width: 150,
+      allowSearch: false,
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 120,
+      renderCell: (params) => {
+        return (
+          <>
+            <Button
+              size="small"
+              to={`/admin/view-user-details/${params.id}`}
+              variant="contained"
+              component={NavLink}
+              sx={{ fontSize: "14px", textTransform: "capitalize" }}
+            >
+              View
+            </Button>
+          </>
+        );
+      },
+    },
+  ];
 
   useEffect(() => {
     adminViewUsers(user.authToken)

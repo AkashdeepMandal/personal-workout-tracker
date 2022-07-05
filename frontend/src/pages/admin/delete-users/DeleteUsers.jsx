@@ -16,6 +16,7 @@ import { adminDeleteUserDetails, adminViewUsers } from "../../../apis/admin";
 import { buildImage } from "../../../utils/buildImage";
 import { textCapitalize } from "../../../utils/textCapitalize";
 import { calculateAge } from "../../../utils/calculateAge";
+import { stringToAvatar } from "../../../utils/generateAvatarLogo";
 
 function DeleteUsers() {
   const [tableData, setTableData] = useState([]);
@@ -32,7 +33,10 @@ function DeleteUsers() {
       renderCell: (params) => {
         return (
           <>
-            <Avatar src={buildImage(params.value)} />
+            <Avatar
+              {...stringToAvatar(params.row.name)}
+              src={buildImage(params.value)}
+            />
           </>
         );
       },

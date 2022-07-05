@@ -5,22 +5,21 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { buildImage } from "../../../utils/buildImage";
 import { textCapitalize } from "../../../utils/textCapitalize";
-import { adminViewUserDetails } from "../../../apis/admin";
+import { trainerViewTraineeDetails } from "../../../apis/trainer";
 import { calculateAge } from "../../../utils/calculateAge";
 import { stringToAvatar } from "../../../utils/generateAvatarLogo";
 
-function ViewUserDetails() {
+function ViewTraineeDetails() {
   const { user } = useSelector((state) => state.user);
   const [userDetails, setUserDetails] = useState({});
   const { id } = useParams();
 
   useEffect(() => {
-    async function fetchUserDetails() {
-      await adminViewUserDetails(user.authToken, id).then((res) => {
+    (async () => {
+      await trainerViewTraineeDetails(user.authToken, id).then((res) => {
         setUserDetails(res.data);
       });
-    }
-    fetchUserDetails();
+    })();
     // eslint-disable-next-line
   }, []);
 
@@ -61,14 +60,6 @@ function ViewUserDetails() {
             <Stack direction="column" spacing={1}>
               <Stack direction="row" spacing={2}>
                 <Typography variant="body1" fontWeight={600}>
-                  Role :
-                </Typography>
-                <Typography variant="body1">{`${textCapitalize(
-                  userDetails?.role
-                )}`}</Typography>
-              </Stack>
-              <Stack direction="row" spacing={2}>
-                <Typography variant="body1" fontWeight={600}>
                   Gender :
                 </Typography>
                 <Typography variant="body1">{`${textCapitalize(
@@ -97,14 +88,7 @@ function ViewUserDetails() {
                 </Typography>
                 <Typography variant="body1">{userDetails?.email}</Typography>
               </Stack>
-              <Stack direction="row" spacing={2}>
-                <Typography variant="body1" fontWeight={600}>
-                  Address:
-                </Typography>
-                <Typography variant="body1">{`${textCapitalize(
-                  userDetails?.address
-                )}`}</Typography>
-              </Stack>
+
               <Stack direction="row" spacing={2}>
                 <Typography variant="body1" fontWeight={600}>
                   Joined :
@@ -121,4 +105,4 @@ function ViewUserDetails() {
   );
 }
 
-export default ViewUserDetails;
+export default ViewTraineeDetails;

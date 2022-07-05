@@ -36,7 +36,7 @@ function TraineeSideBarNavOptions() {
         <ListItem disablePadding>
           <ListItemButton
             component={NavLink}
-            to="/user/view-plans"
+            to="/trainee/start-workouts"
             sx={{ py: 0, minHeight: 32 }}
           >
             <ListItemIcon>
@@ -51,22 +51,7 @@ function TraineeSideBarNavOptions() {
         <ListItem disablePadding>
           <ListItemButton
             component={NavLink}
-            to="/user/view-Plans"
-            sx={{ py: 0, minHeight: 32 }}
-          >
-            <ListItemIcon>
-              <PreviewIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary="View Workouts"
-              primaryTypographyProps={{ fontSize: 12, fontWeight: "medium" }}
-            />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton
-            component={NavLink}
-            to="/user/report"
+            to="/trainee/report"
             sx={{ py: 0, minHeight: 32 }}
           >
             <ListItemIcon>

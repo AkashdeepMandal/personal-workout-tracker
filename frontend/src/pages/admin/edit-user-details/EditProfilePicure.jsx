@@ -14,6 +14,7 @@ import {
 import { adminViewUserDetails } from "../../../apis/admin";
 import { buildImage } from "../../../utils/buildImage";
 import { updateUserAvatar } from "../../../apis/admin";
+import { stringToAvatar } from "../../../utils/generateAvatarLogo";
 
 function EditProfilePicture({ id }) {
   const { user } = useSelector((state) => state.user);
@@ -62,13 +63,13 @@ function EditProfilePicture({ id }) {
           py={3}
         >
           <Avatar
-            sx={{
-              width: 80,
-              height: 80,
-              bgcolor: "White",
-              color: "#212121",
-            }}
-            alt={`${userDetails.firstName} ${userDetails.lastName}`}
+            {...stringToAvatar(
+              `${userDetails?.firstName} ${userDetails?.lastName}`,
+              {
+                width: 80,
+                height: 80,
+              }
+            )}
             src={buildImage(userDetails?.avatar)}
           />
           <Typography
