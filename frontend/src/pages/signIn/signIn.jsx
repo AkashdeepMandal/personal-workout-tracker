@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../store/slices/userSlice";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { Formik } from "formik";
+import { Form, Formik } from "formik";
 import * as yup from "yup";
 import {
   Box,
@@ -12,9 +12,6 @@ import {
   FormHelperText,
   Grid,
   IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
   Stack,
   Typography,
   useTheme,
@@ -22,16 +19,16 @@ import {
   Alert,
   Collapse,
 } from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+
 import CloseIcon from "@mui/icons-material/Close";
 import { login } from "../../apis/allUser";
+import FormFieldControl from "../../components/form-control/FormControl";
 
 function SignIn() {
   const { isLoggedIn } = useSelector((state) => state.user);
   const [alartIsOpen, setAlartIsOpen] = useState(false);
   const [formError, setFormError] = useState(null);
-  const [showPassword, setShowPassword] = useState(false);
+
   const [checked, setChecked] = useState(false);
 
   const theme = useTheme();
@@ -44,16 +41,6 @@ function SignIn() {
     }
     // eslint-disable-next-line
   }, [isLoggedIn]);
-
-  // toggle password
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  // remember me checkbox
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
 
   const initialValues = {
     email: "",
@@ -143,84 +130,33 @@ function SignIn() {
               validationSchema={validationSchema}
               onSubmit={onSubmit}
             >
-              {({
-                errors,
-                handleBlur,
-                handleChange,
-                handleSubmit,
-                touched,
-                values,
-              }) => (
-                <form noValidate onSubmit={handleSubmit}>
+              {({ errors, touched, values, ...rest }) => (
+                <Form>
                   <Grid container spacing={3}>
                     <Grid item xs={12}>
-                      <Stack spacing={1}>
-                        <InputLabel htmlFor="email-login">
-                          Email Address
-                        </InputLabel>
-                        <OutlinedInput
-                          id="email-login"
-                          type="email"
-                          value={values.email}
-                          name="email"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          placeholder="Enter email address"
-                          fullWidth
-                          error={Boolean(touched.email && errors.email)}
-                        />
-                        {touched.email && errors.email && (
-                          <FormHelperText
-                            error
-                            id="standard-weight-helper-text-email-login"
-                          >
-                            {errors.email}
-                          </FormHelperText>
-                        )}
-                      </Stack>
+                      <FormFieldControl
+                        control="input"
+                        label="E-mail*"
+                        name="email"
+                        placeholder="demo@example.com"
+                        inputprops={{ maxLength: 50 }}
+                        value={values.email}
+                        error={touched.email && errors.email}
+                        errorMsg={errors.email}
+                        {...rest}
+                      />
                     </Grid>
                     <Grid item xs={12}>
-                      <Stack spacing={1}>
-                        <InputLabel htmlFor="password-login">
-                          Password
-                        </InputLabel>
-                        <OutlinedInput
-                          fullWidth
-                          error={Boolean(touched.password && errors.password)}
-                          id="-password-login"
-                          type={showPassword ? "text" : "password"}
-                          value={values.password}
-                          name="password"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          endAdornment={
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                                size="large"
-                              >
-                                {showPassword ? (
-                                  <VisibilityIcon />
-                                ) : (
-                                  <VisibilityOffIcon />
-                                )}
-                              </IconButton>
-                            </InputAdornment>
-                          }
-                          placeholder="Enter password"
-                        />
-                        {touched.password && errors.password && (
-                          <FormHelperText
-                            error
-                            id="standard-weight-helper-text-password-login"
-                          >
-                            {errors.password}
-                          </FormHelperText>
-                        )}
-                      </Stack>
+                      <FormFieldControl
+                        control="password"
+                        label="Password*"
+                        name="password"
+                        inputprops={{ maxLength: 20 }}
+                        value={values.password}
+                        error={touched.password && errors.password}
+                        errorMsg={errors.password}
+                        {...rest}
+                      />
                     </Grid>
 
                     <Grid item xs={12} sx={{ mt: -1 }}>
@@ -281,7 +217,7 @@ function SignIn() {
                       </Button>
                     </Grid>
                   </Grid>
-                </form>
+                </Form>
               )}
             </Formik>
           </Grid>

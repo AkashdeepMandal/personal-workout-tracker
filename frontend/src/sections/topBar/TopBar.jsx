@@ -18,7 +18,7 @@ import {
 import { NavButton } from "../../components/styles/buttons";
 import { buildImage } from "../../utils/buildImage";
 import { logout } from "../../apis/allUser";
-import { textCapitalize } from "../../utils/textCapitalize";
+import { stringToAvatar } from "../../utils/generateAvatarLogo";
 
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
@@ -63,19 +63,15 @@ const TopBar = () => {
 
           {isLoggedIn ? (
             <Avatar
-              sx={{
-                width: { xs: 32, sm: 40 },
-                height: { xs: 32, sm: 40 },
+              {...stringToAvatar(`${user?.firstName} ${user?.lastName}`, {
+                width: { xs: 32, sm: 45 },
+                height: { xs: 32, sm: 45 },
                 cursor: "pointer",
-                bgcolor: "White",
-                color: "#212121",
-              }}
-              alt={`${user.firstName} ${user.lastName}`}
+                fontSize: "18px",
+              })}
               src={buildImage(user?.avatar)}
               onClick={handleClick}
-            >
-              {textCapitalize(user.firstName, true)}
-            </Avatar>
+            />
           ) : (
             <Stack direction="row" spacing={{ xs: 1, sm: 2 }}>
               <NavButton

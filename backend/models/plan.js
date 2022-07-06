@@ -2,12 +2,6 @@ const mongoose = require("mongoose");
 
 const planSchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-      lowercase: true,
-    },
     workouts: [
       { workout: { type: mongoose.Schema.Types.ObjectId, ref: "Workout" } },
     ],

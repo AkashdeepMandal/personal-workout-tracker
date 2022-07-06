@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Formik } from "formik";
+import { Form, Formik } from "formik";
 import * as yup from "yup";
 import { useSelector } from "react-redux";
 import moment from "moment";
@@ -9,16 +9,9 @@ import {
   Button,
   Checkbox,
   Collapse,
-  FormControl,
   FormControlLabel,
-  FormHelperText,
-  FormLabel,
   Grid,
   IconButton,
-  InputLabel,
-  OutlinedInput,
-  Radio,
-  RadioGroup,
   Stack,
   Typography,
   useTheme,
@@ -29,6 +22,7 @@ import {
   adminViewUserDetails,
   adminUpdateUserDetails,
 } from "../../../apis/admin";
+import FormFieldControl from "../../../components/form-control/FormControl";
 
 function AdminEditUserDetails({ id }) {
   const { user } = useSelector((state) => state.user);
@@ -38,8 +32,19 @@ function AdminEditUserDetails({ id }) {
   const [formError, setFormError] = useState(null);
   const [formSuccess, setFormSuccess] = useState(null);
   const [isConfirmed, setIsConfirmed] = useState(false);
-
   const theme = useTheme();
+
+  const roleOptions = [
+    { key: "Admin", value: "admin" },
+    { key: "Trainer", value: "trainer" },
+    { key: "Trainee", value: "trainee" },
+  ];
+
+  const genderOptions = [
+    { key: "Male", value: "male" },
+    { key: "Female", value: "female" },
+    { key: "Other", value: "other" },
+  ];
 
   useEffect(() => {
     async function fetchUser() {
@@ -164,227 +169,113 @@ function AdminEditUserDetails({ id }) {
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
-        {({
-          errors,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-          handleReset,
-          setFieldValue,
-          touched,
-          values,
-        }) => (
-          <form noValidate onSubmit={handleSubmit} onReset={handleReset}>
+        {({ errors, setFieldValue, touched, values, ...rest }) => (
+          <Form>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <FormControl component="fieldset">
-                    <FormLabel component="legend">Role*</FormLabel>
-                    <RadioGroup
-                      row
-                      name="role"
-                      value={values.role}
-                      onChange={(event) => {
-                        setFieldValue("role", event.currentTarget.value);
-                      }}
-                    >
-                      <FormControlLabel
-                        value="admin"
-                        control={<Radio />}
-                        label="Admin"
-                      />
-                      <FormControlLabel
-                        value="trainer"
-                        control={<Radio />}
-                        label="Trainer"
-                      />
-                      <FormControlLabel
-                        value="trainee"
-                        control={<Radio />}
-                        label="Trainee"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                  {touched.role && errors.role && (
-                    <FormHelperText error id="helper-text-role">
-                      {errors.role}
-                    </FormHelperText>
-                  )}
-                </Stack>
+                <FormFieldControl
+                  row={true}
+                  control="radio"
+                  label="Role*"
+                  name="role"
+                  value={values.role}
+                  setFieldValue={setFieldValue}
+                  options={roleOptions}
+                  error={touched.role && errors.role}
+                  errorMsg={errors.role}
+                  {...rest}
+                />
               </Grid>
               <Grid item xs={12} md={6}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="firstName">First Name*</InputLabel>
-                  <OutlinedInput
-                    id="firstName"
-                    type="firstName"
-                    value={values.firstName}
-                    name="firstName"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    placeholder="John"
-                    fullWidth
-                    error={Boolean(touched.firstName && errors.firstName)}
-                  />
-                  {touched.firstName && errors.firstName && (
-                    <FormHelperText error id="helper-text-firstName">
-                      {errors.firstName}
-                    </FormHelperText>
-                  )}
-                </Stack>
+                <FormFieldControl
+                  control="input"
+                  label="First Name*"
+                  name="firstName"
+                  placeholder="John"
+                  inputprops={{ maxLength: 100 }}
+                  value={values.firstName}
+                  error={touched.firstName && errors.firstName}
+                  errorMsg={errors.firstName}
+                  {...rest}
+                />
               </Grid>
               <Grid item xs={12} md={6}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="lastname">Last Name*</InputLabel>
-                  <OutlinedInput
-                    fullWidth
-                    error={Boolean(touched.lastName && errors.lastName)}
-                    id="lastName"
-                    type="lastName"
-                    value={values.lastName}
-                    name="lastName"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    placeholder="Doe"
-                    inputProps={{}}
-                  />
-                  {touched.lastName && errors.lastName && (
-                    <FormHelperText error id="helper-text-lastName">
-                      {errors.lastName}
-                    </FormHelperText>
-                  )}
-                </Stack>
+                <FormFieldControl
+                  control="input"
+                  label="Last Name*"
+                  name="lastName"
+                  placeholder="Snow"
+                  inputprops={{ maxLength: 100 }}
+                  value={values.lastName}
+                  error={touched.lastName && errors.lastName}
+                  errorMsg={errors.lastName}
+                  {...rest}
+                />
               </Grid>
               <Grid item xs={12} md={6}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="dob">Date of Birth*</InputLabel>
-                  <OutlinedInput
-                    fullWidth
-                    error={Boolean(touched.dob && errors.dob)}
-                    id="dob"
-                    type="date"
-                    value={values.dob}
-                    name="dob"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    placeholder="2017-05-24"
-                    inputProps={{}}
-                  />
-                  {touched.dob && errors.dob && (
-                    <FormHelperText error id="helper-text-dob">
-                      {errors.dob}
-                    </FormHelperText>
-                  )}
-                </Stack>
+                <FormFieldControl
+                  control="date"
+                  label="Date of Birth*"
+                  name="dob"
+                  value={values.dob}
+                  error={touched.dob && errors.dob}
+                  errorMsg={errors.dob}
+                  {...rest}
+                />
               </Grid>
               <Grid item xs={12} md={6}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="contactNumber">
-                    Contact Number*
-                  </InputLabel>
-                  <OutlinedInput
-                    fullWidth
-                    error={Boolean(
-                      touched.contactNumber && errors.contactNumber
-                    )}
-                    id="contactNumber"
-                    type="tel"
-                    value={values.contactNumber}
-                    name="contactNumber"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    placeholder="+1 1111111111"
-                    inputProps={{}}
-                  />
-                  {touched.contactNumber && errors.contactNumber && (
-                    <FormHelperText error id="helper-text-contactNumber">
-                      {errors.contactNumber}
-                    </FormHelperText>
-                  )}
-                </Stack>
+                <FormFieldControl
+                  control="input"
+                  label="Contact Number*"
+                  name="contactNumber"
+                  placeholder="1800 123 4567"
+                  inputprops={{ maxLength: 16 }}
+                  value={values.contactNumber}
+                  error={touched.contactNumber && errors.contactNumber}
+                  errorMsg={errors.contactNumber}
+                  {...rest}
+                />
               </Grid>
               <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <FormControl component="fieldset">
-                    <FormLabel component="legend">Gender*</FormLabel>
-                    <RadioGroup
-                      row
-                      name="gender"
-                      value={values.gender}
-                      onChange={(event) => {
-                        setFieldValue("gender", event.currentTarget.value);
-                      }}
-                    >
-                      <FormControlLabel
-                        value="male"
-                        control={<Radio />}
-                        label="Male"
-                      />
-                      <FormControlLabel
-                        value="female"
-                        control={<Radio />}
-                        label="Female"
-                      />
-                      <FormControlLabel
-                        value="other"
-                        control={<Radio />}
-                        label="other"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                  {touched.gender && errors.gender && (
-                    <FormHelperText error id="helper-text-gender">
-                      {errors.gender}
-                    </FormHelperText>
-                  )}
-                </Stack>
+                <FormFieldControl
+                  row={true}
+                  control="radio"
+                  label="Gender*"
+                  name="gender"
+                  value={values.gender}
+                  setFieldValue={setFieldValue}
+                  options={genderOptions}
+                  error={touched.gender && errors.gender}
+                  errorMsg={errors.gender}
+                  {...rest}
+                />
               </Grid>
 
               <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="email">Email Address*</InputLabel>
-                  <OutlinedInput
-                    fullWidth
-                    error={Boolean(touched.email && errors.email)}
-                    id="email"
-                    type="email"
-                    value={values.email}
-                    name="email"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    placeholder="demo@example.com"
-                    inputProps={{}}
-                  />
-                  {touched.email && errors.email && (
-                    <FormHelperText error id="helper-text-email">
-                      {errors.email}
-                    </FormHelperText>
-                  )}
-                </Stack>
+                <FormFieldControl
+                  control="input"
+                  label="E-mail*"
+                  name="email"
+                  placeholder="demo@example.com"
+                  inputprops={{ maxLength: 50 }}
+                  value={values.email}
+                  error={touched.email && errors.email}
+                  errorMsg={errors.email}
+                  {...rest}
+                />
               </Grid>
               <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="address">Address</InputLabel>
-                  <OutlinedInput
-                    fullWidth
-                    error={Boolean(touched.address && errors.address)}
-                    id="address"
-                    multiline
-                    rows={3}
-                    type="text"
-                    value={values.address}
-                    name="address"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    placeholder="123 Main Street, New York, NY 10030"
-                    inputProps={{}}
-                  />
-                  {touched.address && errors.address && (
-                    <FormHelperText error id="helper-text-address">
-                      {errors.address}
-                    </FormHelperText>
-                  )}
-                </Stack>
+                <FormFieldControl
+                  control="textarea"
+                  label="Address"
+                  name="address"
+                  placeholder="123 Main Street, New York, NY 10030"
+                  inputprops={{ maxLength: 50 }}
+                  value={values.address}
+                  error={touched.address && errors.address}
+                  errorMsg={errors.address}
+                  {...rest}
+                />
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
@@ -435,7 +326,7 @@ function AdminEditUserDetails({ id }) {
                 </Stack>
               </Grid>
             </Grid>
-          </form>
+          </Form>
         )}
       </Formik>
     </Box>

@@ -14,6 +14,7 @@ import {
 
 import { uploadProfilePic } from "../../apis/allUser";
 import { buildImage } from "../../utils/buildImage";
+import { stringToAvatar } from "../../utils/generateAvatarLogo";
 
 function ProfileCard() {
   const { isLoggedIn, user } = useSelector((state) => state.user);
@@ -54,13 +55,10 @@ function ProfileCard() {
           {isLoggedIn && (
             <>
               <Avatar
-                sx={{
+                {...stringToAvatar(`${user?.firstName} ${user?.lastName}`, {
                   width: 80,
                   height: 80,
-                  bgcolor: "White",
-                  color: "#212121",
-                }}
-                alt={`${user.firstName} ${user.lastName}`}
+                })}
                 src={buildImage(user?.avatar)}
               />
               <Typography

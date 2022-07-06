@@ -1,4 +1,4 @@
-import { Formik } from "formik";
+import { Form, Formik } from "formik";
 import * as yup from "yup";
 import { useState } from "react";
 import { useSelector } from "react-redux";
@@ -9,18 +9,10 @@ import cardio from "../../../assets/cardio.png";
 import {
   Box,
   Button,
-  FormControl,
-  FormHelperText,
   Grid,
   IconButton,
-  InputLabel,
-  OutlinedInput,
   Stack,
   Typography,
-  Radio,
-  FormControlLabel,
-  RadioGroup,
-  FormLabel,
   Collapse,
   Alert,
   useTheme,
@@ -29,6 +21,7 @@ import {
 
 import CloseIcon from "@mui/icons-material/Close";
 import { adminCreatWorkout, adminUploadWorkoutLogo } from "../../../apis/admin";
+import FormFieldControl from "../../../components/form-control/FormControl";
 
 function CreateWorkout() {
   const { user } = useSelector((state) => state.user);
@@ -36,11 +29,14 @@ function CreateWorkout() {
   const [successAlartIsOpen, setSuccessAlartIsOpen] = useState(true);
   const [formError, setFormError] = useState(null);
   const [formSuccess, setFormSuccess] = useState(null);
-
+  const [workoutLogo, setWorkoutLogo] = useState();
+  const [selectedFile, setSelectedFile] = useState(cardio);
   const theme = useTheme();
 
-  const [selectedFile, setSelectedFile] = useState(cardio);
-  const [workoutLogo, setWorkoutLogo] = useState();
+  const categoryOptions = [
+    { key: "Strength", value: "strength" },
+    { key: "Cardio", value: "cardio" },
+  ];
 
   const changeHandlerLogo = (event) => {
     if (event.target.files && event.target.files[0]) {
@@ -62,7 +58,6 @@ function CreateWorkout() {
   });
 
   const onSubmit = async (value, props) => {
-    console.log(value);
     const formData = new FormData();
     if (workoutLogo) {
       formData.append("logo", workoutLogo);
@@ -78,6 +73,8 @@ function CreateWorkout() {
         );
       }
       setFormSuccess("New workout created");
+      setSelectedFile(cardio);
+      setWorkoutLogo();
       props.resetForm();
     } catch (error) {
       if (error.response.data) {
@@ -171,16 +168,8 @@ function CreateWorkout() {
               validationSchema={validationSchema}
               onSubmit={onSubmit}
             >
-              {({
-                errors,
-                handleBlur,
-                handleChange,
-                handleSubmit,
-                setFieldValue,
-                touched,
-                values,
-              }) => (
-                <form noValidate onSubmit={handleSubmit}>
+              {({ errors, setFieldValue, touched, values, ...rest }) => (
+                <Form>
                   <Grid container spacing={3}>
                     <Grid item xs={12}>
                       <Stack
@@ -220,83 +209,44 @@ function CreateWorkout() {
                       </Stack>
                     </Grid>
                     <Grid item xs={12}>
-                      <Stack spacing={1}>
-                        <FormControl component="fieldset">
-                          <FormLabel component="legend">Category*</FormLabel>
-                          <RadioGroup
-                            row
-                            name="category"
-                            value={values.category}
-                            onChange={(event) => {
-                              setFieldValue(
-                                "category",
-                                event.currentTarget.value
-                              );
-                            }}
-                          >
-                            <FormControlLabel
-                              value="strength"
-                              control={<Radio />}
-                              label="Strength"
-                            />
-                            <FormControlLabel
-                              value="cardio"
-                              control={<Radio />}
-                              label="Cardio"
-                            />
-                          </RadioGroup>
-                        </FormControl>
-                        {touched.category && errors.category && (
-                          <FormHelperText error id="helper-text-category">
-                            {errors.category}
-                          </FormHelperText>
-                        )}
-                      </Stack>
+                      <FormFieldControl
+                        row={true}
+                        control="radio"
+                        label="Category*"
+                        name="category"
+                        value={values.category}
+                        setFieldValue={setFieldValue}
+                        options={categoryOptions}
+                        error={touched.category && errors.category}
+                        errorMsg={errors.category}
+                        {...rest}
+                      />
                     </Grid>
                     <Grid item xs={12}>
-                      <Stack spacing={1}>
-                        <InputLabel htmlFor="name">Workout Name*</InputLabel>
-                        <OutlinedInput
-                          autoComplete="off"
-                          id="name"
-                          type="name"
-                          value={values.name}
-                          name="name"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          placeholder="Running"
-                          fullWidth
-                          error={Boolean(touched.name && errors.name)}
-                        />
-                        {touched.name && errors.name && (
-                          <FormHelperText error id="helper-text-name">
-                            {errors.name}
-                          </FormHelperText>
-                        )}
-                      </Stack>
+                      <FormFieldControl
+                        control="input"
+                        label="Name*"
+                        name="name"
+                        placeholder="Running"
+                        inputprops={{ maxLength: 100 }}
+                        value={values.name}
+                        error={touched.name && errors.name}
+                        errorMsg={errors.name}
+                        {...rest}
+                      />
                     </Grid>
                     <Grid item xs={12}>
-                      <Stack spacing={1}>
-                        <InputLabel htmlFor="calories">Calories*</InputLabel>
-                        <OutlinedInput
-                          autoComplete="off"
-                          fullWidth
-                          error={Boolean(touched.calories && errors.calories)}
-                          id="calories"
-                          type="calories"
-                          value={values.calories}
-                          name="calories"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          placeholder="12"
-                          inputProps={{}}
-                        />
-                        {touched.calories && errors.calories && (
-                          <FormHelperText error id="helper-text-calories">
-                            {errors.calories}
-                          </FormHelperText>
-                        )}
-                      </Stack>
+                      <FormFieldControl
+                        control="input"
+                        label="Calories burn per minute*"
+                        name="calories"
+                        placeholder="8"
+                        inputprops={{ maxLength: 100 }}
+                        value={values.calories}
+                        error={touched.calories && errors.calories}
+                        errorMsg={errors.calories}
+                        {...rest}
+                      />
                     </Grid>
 
                     <Grid item xs={12}>
@@ -311,7 +261,7 @@ function CreateWorkout() {
                       </Button>
                     </Grid>
                   </Grid>
-                </form>
+                </Form>
               )}
             </Formik>
           </Grid>

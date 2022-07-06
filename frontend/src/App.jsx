@@ -18,6 +18,8 @@ import EditUser from "./pages/admin/edit-user-details/EditUser";
 import EditWorkout from "./pages/admin/edit-workout-details/EditWorkout";
 import ViewUserDetails from "./pages/admin/view-user-details/ViewUserDetails";
 import ViewWorkoutDetails from "./pages/admin/view-workout-details/ViewWorkoutDetails";
+import ViewTrainees from "./pages/trainer/view-trainees/ViewTrainees";
+import ViewTraineeDetails from "./pages/trainer/view-trainee-details/ViewTraineeDetails";
 
 function App() {
   return (
@@ -47,6 +49,13 @@ function App() {
           <Route path="edit-workouts" element={<EditWorkouts />} />
           <Route path="edit-workout-details/:id" element={<EditWorkout />} />
           <Route path="delete-workouts" element={<DeleteWorkouts />} />
+        </Route>
+        <Route path="trainer/" element={<Main />}>
+          <Route path="view-trainees" element={<ViewTrainees />} />
+          <Route
+            path="view-trainee-details/:id"
+            element={<ViewTraineeDetails />}
+          />
         </Route>
       </Route>
     </Routes>

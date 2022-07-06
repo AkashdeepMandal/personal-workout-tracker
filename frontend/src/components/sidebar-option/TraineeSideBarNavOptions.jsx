@@ -9,11 +9,11 @@ import {
   ListItemText,
   ListSubheader,
 } from "@mui/material";
-import AddBoxIcon from "@mui/icons-material/AddBox";
-import GroupIcon from "@mui/icons-material/Group";
-import DeleteIcon from "@mui/icons-material/Delete";
+import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
+import PreviewIcon from "@mui/icons-material/Preview";
+import AssessmentIcon from "@mui/icons-material/Assessment";
 
-function TrainerSideBarNavOptions() {
+function TraineeSideBarNavOptions() {
   return (
     <>
       <SideBarNav
@@ -29,21 +29,21 @@ function TrainerSideBarNavOptions() {
               marginBottom: "6px",
             }}
           >
-            Actions
+            Workout
           </ListSubheader>
         }
       >
         <ListItem disablePadding>
           <ListItemButton
             component={NavLink}
-            to="/user/view-users"
+            to="/trainee/start-workouts"
             sx={{ py: 0, minHeight: 32 }}
           >
             <ListItemIcon>
-              <GroupIcon />
+              <FitnessCenterIcon />
             </ListItemIcon>
             <ListItemText
-              primary="View Trainee"
+              primary="Start Workout"
               primaryTypographyProps={{ fontSize: 12, fontWeight: "medium" }}
             />
           </ListItemButton>
@@ -51,29 +51,14 @@ function TrainerSideBarNavOptions() {
         <ListItem disablePadding>
           <ListItemButton
             component={NavLink}
-            to="/user/view-user"
+            to="/trainee/report"
             sx={{ py: 0, minHeight: 32 }}
           >
             <ListItemIcon>
-              <AddBoxIcon />
+              <AssessmentIcon />
             </ListItemIcon>
             <ListItemText
-              primary="Assign Plan"
-              primaryTypographyProps={{ fontSize: 12, fontWeight: "medium" }}
-            />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton
-            component={NavLink}
-            to="/user/view-user"
-            sx={{ py: 0, minHeight: 32 }}
-          >
-            <ListItemIcon>
-              <DeleteIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary="Remove Plan"
+              primary="Report"
               primaryTypographyProps={{ fontSize: 12, fontWeight: "medium" }}
             />
           </ListItemButton>
@@ -83,4 +68,4 @@ function TrainerSideBarNavOptions() {
   );
 }
 
-export default TrainerSideBarNavOptions;
+export default TraineeSideBarNavOptions;
