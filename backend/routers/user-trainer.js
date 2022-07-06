@@ -99,7 +99,6 @@ router.post(
       }
       const newPlan = new Plan({
         ...req.body,
-        trainer: req.user._id,
         trainee: req.params.id,
       });
       const plan = await newPlan.save();
@@ -128,14 +127,13 @@ router.get(
       const plan = await Plan.find(
         {
           trainee: req.params.id,
-        },
-        null,
-        {
-          limit: parseInt(req.query.limit) || 4,
-          skip: parseInt(req.query.skip) * 4 || 0,
         }
+        // null,
+        // {
+        //   limit: parseInt(req.query.limit) || 4,
+        //   skip: parseInt(req.query.skip) * 4 || 0,
+        // }
       )
-        .populate([{ path: "trainer", select: "firstName lastName" }])
         .populate([{ path: "trainee", select: "firstName lastName" }])
         .populate([
           { path: "workouts.workout", select: "name category calories" },

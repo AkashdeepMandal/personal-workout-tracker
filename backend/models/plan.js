@@ -3,15 +3,17 @@ const mongoose = require("mongoose");
 const planSchema = new mongoose.Schema(
   {
     workouts: [
-      { workout: { type: mongoose.Schema.Types.ObjectId, ref: "Workout" } },
+      {
+        workout: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Workout",
+          unique: true,
+        },
+      },
     ],
-    trainer: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "User",
-    },
     trainee: {
       type: mongoose.Schema.Types.ObjectId,
+      unique: true,
       required: true,
       ref: "User",
     },

@@ -1,8 +1,7 @@
 import { Box, Typography, useTheme } from "@mui/material";
+import UserTable from "../../../components/table/trainer/UserTable";
 
-import UserTable from "../../../components/table/admin/UserTable";
-
-function DeleteUsers() {
+function AssignWorkout() {
   const theme = useTheme();
 
   return (
@@ -21,11 +20,11 @@ function DeleteUsers() {
           color: theme.palette.grey[800],
         }}
       >
-        Delete Users
+        Assign Workout
       </Typography>
-      <UserTable action="delete" />
+      <UserTable action="assign" />
     </Box>
   );
 }
 
-export default DeleteUsers;
+export default AssignWorkout;

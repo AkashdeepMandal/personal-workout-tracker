@@ -20,6 +20,9 @@ import ViewUserDetails from "./pages/admin/view-user-details/ViewUserDetails";
 import ViewWorkoutDetails from "./pages/admin/view-workout-details/ViewWorkoutDetails";
 import ViewTrainees from "./pages/trainer/view-trainees/ViewTrainees";
 import ViewTraineeDetails from "./pages/trainer/view-trainee-details/ViewTraineeDetails";
+import AssignWorkout from "./pages/trainer/assign-workout/AssignWorkout";
+import RemoveWorkout from "./pages/trainer/remove-workout/RemoveWorkout";
+import Error from "./pages/error/Error";
 
 function App() {
   return (
@@ -50,13 +53,22 @@ function App() {
           <Route path="edit-workout-details/:id" element={<EditWorkout />} />
           <Route path="delete-workouts" element={<DeleteWorkouts />} />
         </Route>
-        <Route path="trainer/" element={<Main />}>
-          <Route path="view-trainees" element={<ViewTrainees />} />
-          <Route
-            path="view-trainee-details/:id"
-            element={<ViewTraineeDetails />}
-          />
+
+        {/* Trainer routes */}
+        <Route path="trainer" element={<Main />}>
+          <Route path="view-trainee">
+            <Route index element={<ViewTrainees />} />
+            <Route path=":id" element={<ViewTraineeDetails />} />
+          </Route>
+
+          <Route path="assign-workout" element={<AssignWorkout />}>
+            {/* <Route path="/trainee/:id" element={<ViewTraineeDetails />} /> */}
+          </Route>
+          <Route path="remove-workout" element={<RemoveWorkout />}>
+            {/* <Route path="/trainee/:id" element={<ViewTraineeDetails />} /> */}
+          </Route>
         </Route>
+        <Route path="*" element={<Error />} />
       </Route>
     </Routes>
   );

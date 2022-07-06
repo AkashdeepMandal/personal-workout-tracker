@@ -10,11 +10,11 @@ import {
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useSelector } from "react-redux";
 import { Link as NavLink } from "react-router-dom";
-import { buildImage } from "../../utils/buildImage";
-import { textCapitalize } from "../../utils/textCapitalize";
-import { calculateAge } from "../../utils/calculateAge";
-import { stringToAvatar } from "../../utils/generateAvatarLogo";
-import { adminDeleteUserDetails, adminViewUsers } from "../../apis/admin";
+import { buildImage } from "../../../utils/buildImage";
+import { textCapitalize } from "../../../utils/textCapitalize";
+import { calculateAge } from "../../../utils/calculateAge";
+import { stringToAvatar } from "../../../utils/generateAvatarLogo";
+import { adminDeleteUserDetails, adminViewUsers } from "../../../apis/admin";
 
 function UserTable({ action }) {
   const [tableData, setTableData] = useState([]);
