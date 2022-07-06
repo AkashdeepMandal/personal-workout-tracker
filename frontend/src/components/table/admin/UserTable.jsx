@@ -65,7 +65,7 @@ function UserTable({ action }) {
             <>
               <Button
                 size="small"
-                to={`/admin/view-user-details/${params.id}`}
+                to={`/admin/view-user/${params.id}`}
                 variant="contained"
                 component={NavLink}
                 sx={{ fontSize: "14px", textTransform: "capitalize" }}
@@ -79,7 +79,7 @@ function UserTable({ action }) {
             <>
               <Button
                 size="small"
-                to={`/admin/edit-user-details/${params.id}`}
+                to={`/admin/edit-user/${params.id}`}
                 variant="contained"
                 component={NavLink}
                 sx={{

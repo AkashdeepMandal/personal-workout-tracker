@@ -60,7 +60,7 @@ function WorkoutTable({ action }) {
             <>
               <Button
                 size="small"
-                to={`/admin/view-workout-details/${params.id}`}
+                to={`/admin/view-workout/${params.id}`}
                 variant="contained"
                 component={NavLink}
                 sx={{ fontSize: "14px", textTransform: "capitalize" }}
@@ -74,7 +74,7 @@ function WorkoutTable({ action }) {
             <>
               <Button
                 size="small"
-                to={`/admin/edit-workout-details/${params.id}`}
+                to={`/admin/edit-workout/${params.id}`}
                 variant="contained"
                 component={NavLink}
                 sx={{ fontSize: "14px", textTransform: "capitalize" }}
