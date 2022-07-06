@@ -10,11 +10,11 @@ import {
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useSelector } from "react-redux";
 import { Link as NavLink } from "react-router-dom";
-import { buildImage } from "../../utils/buildImage";
-import { textCapitalize } from "../../utils/textCapitalize";
-import { calculateAge } from "../../utils/calculateAge";
-import { stringToAvatar } from "../../utils/generateAvatarLogo";
-import { adminDeleteUserDetails, adminViewUsers } from "../../apis/admin";
+import { buildImage } from "../../../utils/buildImage";
+import { textCapitalize } from "../../../utils/textCapitalize";
+import { calculateAge } from "../../../utils/calculateAge";
+import { stringToAvatar } from "../../../utils/generateAvatarLogo";
+import { adminDeleteUserDetails, adminViewUsers } from "../../../apis/admin";
 
 function UserTable({ action }) {
   const [tableData, setTableData] = useState([]);
@@ -65,7 +65,7 @@ function UserTable({ action }) {
             <>
               <Button
                 size="small"
-                to={`/admin/view-user-details/${params.id}`}
+                to={`/admin/view-user/${params.id}`}
                 variant="contained"
                 component={NavLink}
                 sx={{ fontSize: "14px", textTransform: "capitalize" }}
@@ -79,7 +79,7 @@ function UserTable({ action }) {
             <>
               <Button
                 size="small"
-                to={`/admin/edit-user-details/${params.id}`}
+                to={`/admin/edit-user/${params.id}`}
                 variant="contained"
                 component={NavLink}
                 sx={{
@@ -203,6 +203,7 @@ function UserTable({ action }) {
       )}
 
       <DataGrid
+        disableSelectionOnClick
         disableColumnSelector
         disableDensitySelector
         rows={tableData}

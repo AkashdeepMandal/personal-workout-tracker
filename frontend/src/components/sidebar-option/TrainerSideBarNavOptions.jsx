@@ -36,7 +36,7 @@ function TrainerSideBarNavOptions() {
         <ListItem disablePadding>
           <ListItemButton
             component={NavLink}
-            to="/trainer/view-trainees"
+            to="/trainer/view-trainee"
             sx={{ py: 0, minHeight: 32 }}
           >
             <ListItemIcon>

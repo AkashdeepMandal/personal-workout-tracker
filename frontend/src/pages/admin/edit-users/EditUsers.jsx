@@ -1,5 +1,5 @@
 import { Box, Typography, useTheme } from "@mui/material";
-import UserTable from "../../../components/table/UserTable";
+import UserTable from "../../../components/table/admin/UserTable";
 
 function EditUsers() {
   const theme = useTheme();
