@@ -1,6 +1,5 @@
 import { Box, Typography, useTheme } from "@mui/material";
-
-import WorkoutTable from "../../../components/table/WorkoutTable";
+import WorkoutTable from "../../../components/table/admin/WorkoutTable";
 
 function DeleteWorkouts() {
   const theme = useTheme();

@@ -60,11 +60,12 @@ function UserTable({ action }) {
             </>
           );
         } else if (action === "assign") {
+          console.log(params);
           return (
             <>
               <Button
                 size="small"
-                to={`/trainer/assign-workout/${params.id}`}
+                to={`/trainer/assign-workout/${params.row.name}/${params.id}`}
                 variant="contained"
                 component={NavLink}
                 sx={{ fontSize: "12px", textTransform: "capitalize" }}
@@ -79,7 +80,7 @@ function UserTable({ action }) {
               <Button
                 size="small"
                 color="error"
-                to={`/trainer/remove-workout/${params.id}`}
+                to={`/trainer/remove-workout/${params.row.name}/${params.id}`}
                 variant="contained"
                 component={NavLink}
                 sx={{ fontSize: "12px", textTransform: "capitalize" }}
@@ -119,6 +120,7 @@ function UserTable({ action }) {
 
   return (
     <DataGrid
+      disableSelectionOnClick
       disableColumnSelector
       disableDensitySelector
       rows={tableData}

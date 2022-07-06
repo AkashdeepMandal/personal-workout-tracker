@@ -1,22 +1,25 @@
 import { useEffect, useState } from "react";
 import {
   Avatar,
-  Button,
   useTheme,
+  Button,
+  Snackbar,
   Alert,
   Slide,
-  Snackbar,
 } from "@mui/material";
+import { Link as NavLink } from "react-router-dom";
+
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useSelector } from "react-redux";
-import { Link as NavLink } from "react-router-dom";
+import {
+  adminDeleteWorkoutDetails,
+  adminViewWorkouts,
+} from "../../../apis/admin";
 import { buildImage } from "../../../utils/buildImage";
 import { textCapitalize } from "../../../utils/textCapitalize";
-import { calculateAge } from "../../../utils/calculateAge";
-import { stringToAvatar } from "../../../utils/generateAvatarLogo";
-import { adminDeleteUserDetails, adminViewUsers } from "../../../apis/admin";
+import cardio from "../../../assets/cardio.png";
 
-function UserTable({ action }) {
+function WorkoutTable({ action }) {
   const [tableData, setTableData] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -25,47 +28,42 @@ function UserTable({ action }) {
 
   const columns = [
     { field: "id", headerName: "Id", hide: true, allowSearch: false },
-    { field: "role", headerName: "Role" },
+    { field: "category", headerName: "Category", flex: 1 },
     {
-      field: "avatar",
-      headerName: "Avatar",
+      field: "logo",
+      headerName: "Logo",
       renderCell: (params) => {
         return (
           <>
-            <Avatar
-              {...stringToAvatar(params.row.name)}
-              src={buildImage(params.value)}
-            />
+            {params.value ? (
+              <Avatar src={buildImage(params.value)} />
+            ) : (
+              <Avatar src={cardio} />
+            )}
           </>
         );
       },
       allowSearch: false,
+      flex: 1,
     },
+
     {
       field: "name",
       headerName: "Name",
       flex: 1,
     },
-    { field: "email", headerName: "E-mail", flex: 1 },
-    { field: "gender", headerName: "Gender", width: 100, allowSearch: false },
-    { field: "age", headerName: "Age", width: 90, allowSearch: false },
-    {
-      field: "contactNumber",
-      headerName: "Contact Number",
-      width: 150,
-      allowSearch: false,
-    },
+    { field: "calories", headerName: "Calories per minute", flex: 1 },
     {
       field: "action",
       headerName: "Action",
-      width: 140,
+      flex: 1,
       renderCell: (params) => {
         if (action === "view") {
           return (
             <>
               <Button
                 size="small"
-                to={`/admin/view-user/${params.id}`}
+                to={`/admin/view-workout/${params.id}`}
                 variant="contained"
                 component={NavLink}
                 sx={{ fontSize: "14px", textTransform: "capitalize" }}
@@ -79,13 +77,10 @@ function UserTable({ action }) {
             <>
               <Button
                 size="small"
-                to={`/admin/edit-user/${params.id}`}
+                to={`/admin/edit-workout/${params.id}`}
                 variant="contained"
                 component={NavLink}
-                sx={{
-                  fontSize: "14px",
-                  textTransform: "capitalize",
-                }}
+                sx={{ fontSize: "14px", textTransform: "capitalize" }}
               >
                 Edit
               </Button>
@@ -117,25 +112,19 @@ function UserTable({ action }) {
 
   useEffect(() => {
     setIsLoading(true);
-    adminViewUsers(user.authToken)
+    adminViewWorkouts(user.authToken)
       .then((res) => {
-        const Users = res.data.map((user) => {
+        const workouts = res.data.map((workout) => {
           return {
-            id: user._id,
-            role: `${textCapitalize(user.role)}`,
-            avatar: user.avatar,
-            name: `${textCapitalize(user.firstName)} ${textCapitalize(
-              user.lastName
-            )}`,
-            email: user.email,
-            gender: user.gender,
-            contactNumber: user.contactNumber,
-            address: user.address,
-            age: calculateAge(user.dob),
+            id: workout._id,
+            category: `${textCapitalize(workout.category)}`,
+            name: `${textCapitalize(workout.name)}`,
+            calories: workout.calories,
+            logo: workout.logo ? workout.logo : null,
           };
         });
         setIsLoading(false);
-        setTableData(Users);
+        setTableData(workouts);
       })
       .catch((error) => {
         setIsLoading(false);
@@ -145,7 +134,7 @@ function UserTable({ action }) {
   }, [refresh]);
 
   const handelDelete = async (id) => {
-    await adminDeleteUserDetails(user.authToken, id)
+    await adminDeleteWorkoutDetails(user.authToken, id)
       .then((res) => {
         setRefresh(true);
         handleClick({
@@ -183,25 +172,22 @@ function UserTable({ action }) {
 
   return (
     <>
-      {action === "delete" && (
-        <Snackbar
-          anchorOrigin={{ vertical, horizontal }}
-          open={snackBarState.open}
-          autoHideDuration={6000}
+      <Snackbar
+        anchorOrigin={{ vertical, horizontal }}
+        open={snackBarState.open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        TransitionComponent={Slide}
+        direction="down"
+      >
+        <Alert
           onClose={handleClose}
-          TransitionComponent={Slide}
-          direction="down"
+          severity={snackBarState.severity}
+          sx={{ width: "100%" }}
         >
-          <Alert
-            onClose={handleClose}
-            severity={snackBarState.severity}
-            sx={{ width: "100%" }}
-          >
-            {snackBarState.message}
-          </Alert>
-        </Snackbar>
-      )}
-
+          {snackBarState.message}
+        </Alert>
+      </Snackbar>
       <DataGrid
         disableSelectionOnClick
         disableColumnSelector
@@ -225,4 +211,4 @@ function UserTable({ action }) {
   );
 }
 
-export default UserTable;
+export default WorkoutTable;

@@ -1,3 +1,6 @@
+import { Box, Typography } from "@mui/material";
+import React from "react";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   Avatar,
@@ -7,16 +10,20 @@ import {
   Alert,
   Slide,
 } from "@mui/material";
-import { Link as NavLink } from "react-router-dom";
 
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import { useSelector } from "react-redux";
-import { adminDeleteWorkoutDetails, adminViewWorkouts } from "../../apis/admin";
-import { buildImage } from "../../utils/buildImage";
-import { textCapitalize } from "../../utils/textCapitalize";
-import cardio from "../../assets/cardio.png";
 
-function WorkoutTable({ action }) {
+import { buildImage } from "../../../utils/buildImage";
+import { textCapitalize } from "../../../utils/textCapitalize";
+import cardio from "../../../assets/cardio.png";
+import {
+  trainerGetAssignedWorkout,
+  trainerRemoveWorkout,
+} from "../../../apis/trainer";
+
+const RemoveWorkoutTrainee = () => {
+  const { name, id } = useParams();
   const [tableData, setTableData] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -55,69 +62,39 @@ function WorkoutTable({ action }) {
       headerName: "Action",
       flex: 1,
       renderCell: (params) => {
-        if (action === "view") {
-          return (
-            <>
-              <Button
-                size="small"
-                to={`/admin/view-workout/${params.id}`}
-                variant="contained"
-                component={NavLink}
-                sx={{ fontSize: "14px", textTransform: "capitalize" }}
-              >
-                View
-              </Button>
-            </>
-          );
-        } else if (action === "edit") {
-          return (
-            <>
-              <Button
-                size="small"
-                to={`/admin/edit-workout/${params.id}`}
-                variant="contained"
-                component={NavLink}
-                sx={{ fontSize: "14px", textTransform: "capitalize" }}
-              >
-                Edit
-              </Button>
-            </>
-          );
-        } else if (action === "delete") {
-          return (
-            <>
-              <Button
-                size="small"
-                color="error"
-                variant="contained"
-                sx={{
-                  fontSize: "14px",
-                  textTransform: "capitalize",
-                }}
-                onClick={() => {
-                  handelDelete(params.id);
-                }}
-              >
-                Delete
-              </Button>
-            </>
-          );
-        }
+        return (
+          <>
+            <Button
+              size="small"
+              color="error"
+              variant="contained"
+              sx={{
+                fontSize: "14px",
+                textTransform: "capitalize",
+              }}
+              onClick={() => {
+                handelRemove(params.id);
+              }}
+            >
+              Remove
+            </Button>
+          </>
+        );
       },
     },
   ];
 
   useEffect(() => {
     setIsLoading(true);
-    adminViewWorkouts(user.authToken)
+    trainerGetAssignedWorkout(user.authToken, id)
       .then((res) => {
-        const workouts = res.data.map((workout) => {
+        const workouts = res.data[0].workouts.map((value) => {
           return {
-            id: workout._id,
-            category: `${textCapitalize(workout.category)}`,
-            name: `${textCapitalize(workout.name)}`,
-            calories: workout.calories,
-            logo: workout.logo ? workout.logo : null,
+            id: value.workout._id,
+            category: `${textCapitalize(value.workout.category)}`,
+            logo: value.workout.logo,
+            name: `${textCapitalize(value.workout.name)}`,
+            calories: value.workout.calories,
           };
         });
         setIsLoading(false);
@@ -130,8 +107,8 @@ function WorkoutTable({ action }) {
     // eslint-disable-next-line
   }, [refresh]);
 
-  const handelDelete = async (id) => {
-    await adminDeleteWorkoutDetails(user.authToken, id)
+  const handelRemove = async (workout) => {
+    await trainerRemoveWorkout(user.authToken, id, workout)
       .then((res) => {
         setRefresh(true);
         handleClick({
@@ -156,19 +133,29 @@ function WorkoutTable({ action }) {
     vertical: "top",
     horizontal: "center",
   });
-
   const { vertical, horizontal } = snackBarState;
-
   const handleClick = (newState) => {
     setSnackBarState({ ...snackBarState, open: true, ...newState });
   };
-
   const handleClose = () => {
     setSnackBarState({ ...snackBarState, open: false });
   };
 
   return (
-    <>
+    <Box
+      sx={{
+        height: { xs: `calc(100vh - 60px)`, sm: `calc(100vh - 200px)` },
+      }}
+    >
+      <Typography
+        variant="h4"
+        component="h1"
+        fontWeight={600}
+        pb={2}
+        sx={{ fontSize: { xs: "24px", sm: "28px" } }}
+      >
+        {`Workout Assigned for ${name}`}
+      </Typography>
       <Snackbar
         anchorOrigin={{ vertical, horizontal }}
         open={snackBarState.open}
@@ -186,6 +173,7 @@ function WorkoutTable({ action }) {
         </Alert>
       </Snackbar>
       <DataGrid
+        disableSelectionOnClick
         disableColumnSelector
         disableDensitySelector
         rows={tableData}
@@ -194,17 +182,10 @@ function WorkoutTable({ action }) {
         rowsPerPageOptions={[10]}
         backgroundColor={theme.palette.grey[50]}
         sx={{ boxShadow: "0 0 12px #ccc" }}
-        components={{ Toolbar: GridToolbar }}
-        componentsProps={{
-          toolbar: {
-            showQuickFilter: true,
-            quickFilterProps: { debounceMs: 500 },
-          },
-        }}
         loading={isLoading}
       />
-    </>
+    </Box>
   );
-}
+};
 
-export default WorkoutTable;
+export default RemoveWorkoutTrainee;

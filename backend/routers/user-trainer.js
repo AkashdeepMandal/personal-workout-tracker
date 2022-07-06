@@ -57,11 +57,14 @@ router.get(
   async (req, res, next) => {
     try {
       if (req.params.id) {
-        const workout = await Workout.findById(req.params.id).populate(
-          "createdBy"
-        );
+        const workout = await Workout.findById(req.params.id);
         res.send(workout);
-      } else {
+      } else if (
+        req.query.limit ||
+        req.query.filter ||
+        req.query.skip ||
+        req.query.search
+      ) {
         const workouts = await Workout.find(
           {
             $and: [
@@ -78,6 +81,9 @@ router.get(
           }
         ).populate("createdBy");
         res.send(workouts);
+      } else {
+        const workouts = await Workout.find();
+        res.send(workouts);
       }
     } catch (error) {
       next(error);
@@ -85,9 +91,9 @@ router.get(
   }
 );
 
-// create plan for user
+// create / modify plan for user
 router.post(
-  "/api/trainer/plan/create/:id",
+  "/api/trainer/workout/assign/:id",
   [auth, authTrainer],
   async (req, res, next) => {
     try {
@@ -97,12 +103,18 @@ router.post(
         error.status = 404;
         throw error;
       }
-      const newPlan = new Plan({
-        ...req.body,
-        trainee: req.params.id,
-      });
-      const plan = await newPlan.save();
-      res.status(201).send(plan);
+      const plan = await Plan.findOne({ trainee: user._id });
+      if (plan) {
+        plan.workouts = req.body;
+        await plan.save();
+      } else {
+        const newPlan = new Plan({
+          ...req.body,
+          trainee: req.params.id,
+        });
+        await newPlan.save();
+      }
+      res.status(201).send();
     } catch (error) {
       error.status = 400;
       next(error);
@@ -114,7 +126,7 @@ router.post(
 // /GET /api/trainer/plan/user/:trainee_id  auth:trainer._id
 // /GET /api/trainer/plan/user/:id?limit=2&skip=0  auth:trainer._id
 router.get(
-  "/api/trainer/plan/user/:id",
+  "/api/trainer/assigned/workouts/:id",
   [auth, authTrainer],
   async (req, res, next) => {
     if (!req.params.id) {
@@ -136,7 +148,7 @@ router.get(
       )
         .populate([{ path: "trainee", select: "firstName lastName" }])
         .populate([
-          { path: "workouts.workout", select: "name category calories" },
+          { path: "workouts.workout", select: "name logo category calories" },
         ]);
       if (!plan) {
         const newError = new Error("Plan not found");
@@ -152,14 +164,17 @@ router.get(
 );
 
 // delete plans of trainee assigned by trainer
-// /DELETE /api/trainer/plan/delete/plan_id
+// /DELETE /api/trainer/plan/delete/trainee_id
 router.delete(
-  "/api/trainer/plan/delete/:id",
+  "/api/trainer/remove/workout/:id",
   [auth, authTrainer],
   async (req, res, next) => {
     try {
-      const plan = await Plan.findById(req.params.id);
-      await plan.remove();
+      const plan = await Plan.find({ trainee: req.params.id });
+      plan[0].workouts = plan[0].workouts.filter((value) => {
+        return value.workout != req.body.workout;
+      });
+      await plan[0].save();
       res.send(plan);
     } catch (error) {
       error.status = 400;

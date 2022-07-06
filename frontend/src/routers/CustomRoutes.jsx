@@ -25,6 +25,8 @@ import EditUser from "../pages/admin/edit-user-details/EditUser";
 import AssignWorkout from "../pages/trainer/assign-workout/AssignWorkout";
 import PageNotFound from "../pages/error/PageNotFound";
 import ProtectedRoute from "./ProtectedRoute";
+import AssignWorkoutTrainee from "../pages/trainer/assign-workout-trainee/AssignWorkoutTrainee";
+import RemoveWorkoutTrainee from "../pages/trainer/remove-workout-trainee/RemoveWorkoutTrainee";
 
 const CustomRoutes = () => {
   return (
@@ -121,15 +123,20 @@ const CustomRoutes = () => {
               index
               element={<ProtectedRoute Component={AssignWorkout} />}
             />
-            {/* <Route path=":id" element={<ViewTraineeDetails />} /> */}
+            <Route
+              path=":name/:id"
+              element={<ProtectedRoute Component={AssignWorkoutTrainee} />}
+            />
           </Route>
           <Route path="remove-workout">
             <Route
               index
               element={<ProtectedRoute Component={RemoveWorkout} />}
             />
-
-            {/* <Route path=":id" element={<ViewTraineeDetails />} /> */}
+            <Route
+              path=":name/:id"
+              element={<ProtectedRoute Component={RemoveWorkoutTrainee} />}
+            />
           </Route>
         </Route>
         {/* error */}
