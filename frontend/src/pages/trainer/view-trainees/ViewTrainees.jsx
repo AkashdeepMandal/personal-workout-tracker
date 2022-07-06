@@ -11,6 +11,7 @@ import { stringToAvatar } from "../../../utils/generateAvatarLogo";
 
 function ViewTrainees() {
   const [tableData, setTableData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { user } = useSelector((state) => state.user);
   const theme = useTheme();
 
@@ -62,6 +63,7 @@ function ViewTrainees() {
   ];
 
   useEffect(() => {
+    setIsLoading(true);
     trainerViewTrainees(user.authToken)
       .then((res) => {
         const trainees = res.data.map((user) => {
@@ -76,8 +78,11 @@ function ViewTrainees() {
           };
         });
         setTableData(trainees);
+        setIsLoading(false);
       })
-      .catch((error) => {});
+      .catch((error) => {
+        setIsLoading(false);
+      });
     // eslint-disable-next-line
   }, []);
 
@@ -115,6 +120,7 @@ function ViewTrainees() {
             quickFilterProps: { debounceMs: 500 },
           },
         }}
+        loading={isLoading}
       />
     </Box>
   );

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Formik } from "formik";
+import { Form, Formik } from "formik";
 import * as yup from "yup";
 import {
   Alert,
@@ -7,20 +7,16 @@ import {
   Card,
   CardContent,
   Collapse,
-  FormHelperText,
   Grid,
   IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
   Stack,
   Typography,
 } from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+
 import { updateUserDetails } from "../../apis/allUser";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector } from "react-redux";
+import FormFieldControl from "../form-control/FormControl";
 
 function ChangePassWord() {
   const { user } = useSelector((state) => state.user);
@@ -28,19 +24,6 @@ function ChangePassWord() {
   const [successAlartIsOpen, setSuccessAlartIsOpen] = useState(true);
   const [formError, setFormError] = useState(null);
   const [formSuccess, setFormSuccess] = useState(null);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-  const handleClickShowConfirmPassword = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
 
   const initialvalues = {
     newPassword: "",
@@ -133,102 +116,32 @@ function ChangePassWord() {
           validationSchema={validationSchema}
           onSubmit={onSubmit}
         >
-          {({
-            errors,
-            handleBlur,
-            handleChange,
-            handleSubmit,
-            handleReset,
-            touched,
-            values,
-          }) => (
-            <form noValidate onSubmit={handleSubmit} onReset={handleReset}>
+          {({ errors, touched, values, ...rest }) => (
+            <Form>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  <Stack spacing={1}>
-                    <InputLabel htmlFor="newPassword">New Password</InputLabel>
-                    <OutlinedInput
-                      fullWidth
-                      error={Boolean(touched.newPassword && errors.newPassword)}
-                      id="newPassword"
-                      type={showPassword ? "text" : "password"}
-                      value={values.newPassword}
-                      name="newPassword"
-                      onBlur={handleBlur}
-                      onChange={(e) => {
-                        handleChange(e);
-                      }}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
-                            onMouseDown={handleMouseDownPassword}
-                            edge="end"
-                            size="large"
-                          >
-                            {showPassword ? (
-                              <VisibilityIcon />
-                            ) : (
-                              <VisibilityOffIcon />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                      placeholder="Enter new password"
-                      inputProps={{}}
-                    />
-                    {touched.newPassword && errors.newPassword && (
-                      <FormHelperText error id="helper-text-password-signup">
-                        {errors.newPassword}
-                      </FormHelperText>
-                    )}
-                  </Stack>
+                  <FormFieldControl
+                    control="password"
+                    label="New Password*"
+                    name="newPassword"
+                    inputprops={{ maxLength: 20 }}
+                    value={values.newPassword}
+                    error={touched.newPassword && errors.newPassword}
+                    errorMsg={errors.newPassword}
+                    {...rest}
+                  />
                 </Grid>
                 <Grid item xs={12}>
-                  <Stack spacing={1}>
-                    <InputLabel htmlFor="confirmNewPassword">
-                      Confirm New Password
-                    </InputLabel>
-                    <OutlinedInput
-                      fullWidth
-                      error={Boolean(
-                        touched.confirmNewPassword && errors.confirmNewPassword
-                      )}
-                      id="confirmNewPassword"
-                      type={showConfirmPassword ? "text" : "password"}
-                      value={values.confirmNewPassword}
-                      name="confirmNewPassword"
-                      onBlur={handleBlur}
-                      onChange={(e) => {
-                        handleChange(e);
-                      }}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowConfirmPassword}
-                            onMouseDown={handleMouseDownPassword}
-                            edge="end"
-                            size="large"
-                          >
-                            {showConfirmPassword ? (
-                              <VisibilityIcon />
-                            ) : (
-                              <VisibilityOffIcon />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                      placeholder="Enter Confirm Password"
-                      inputProps={{}}
-                    />
-                    {touched.confirmNewPassword && errors.confirmNewPassword && (
-                      <FormHelperText error id="helper-text-confirmPassword">
-                        {errors.confirmNewPassword}
-                      </FormHelperText>
-                    )}
-                  </Stack>
+                  <FormFieldControl
+                    control="password"
+                    label="Confirm Password*"
+                    name="confirmPassword"
+                    inputprops={{ maxLength: 20 }}
+                    value={values.confirmPassword}
+                    error={touched.confirmPassword && errors.confirmPassword}
+                    errorMsg={errors.confirmPassword}
+                    {...rest}
+                  />
                 </Grid>
                 <Grid item xs={12}>
                   <Stack direction="row" spacing={1}>
@@ -256,7 +169,7 @@ function ChangePassWord() {
                   </Stack>
                 </Grid>
               </Grid>
-            </form>
+            </Form>
           )}
         </Formik>
       </CardContent>

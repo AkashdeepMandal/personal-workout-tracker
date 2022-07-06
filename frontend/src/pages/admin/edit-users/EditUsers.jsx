@@ -1,100 +1,8 @@
-import { useEffect, useState } from "react";
-import { Avatar, Box, Typography, useTheme, Button } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { useSelector } from "react-redux";
-import { Link as NavLink } from "react-router-dom";
-import { adminViewUsers } from "../../../apis/admin";
-import { buildImage } from "../../../utils/buildImage";
-import { textCapitalize } from "../../../utils/textCapitalize";
-import { calculateAge } from "../../../utils/calculateAge";
-import { stringToAvatar } from "../../../utils/generateAvatarLogo";
+import { Box, Typography, useTheme } from "@mui/material";
+import UserTable from "../../../components/table/UserTable";
 
 function EditUsers() {
-  const [tableData, setTableData] = useState([]);
-  const { user } = useSelector((state) => state.user);
   const theme = useTheme();
-
-  const columns = [
-    { field: "id", headerName: "Id", hide: true, allowSearch: false },
-    { field: "role", headerName: "Role" },
-    {
-      field: "avatar",
-      headerName: "Avatar",
-      renderCell: (params) => {
-        console.log(params);
-        return (
-          <>
-            <Avatar
-              {...stringToAvatar(params.row.name)}
-              src={buildImage(params.value)}
-            />
-          </>
-        );
-      },
-      allowSearch: false,
-    },
-    {
-      field: "name",
-      headerName: "Name",
-      flex: 1,
-    },
-    { field: "email", headerName: "E-mail", flex: 1 },
-    { field: "gender", headerName: "Gender", width: 100, allowSearch: false },
-    { field: "age", headerName: "Age", width: 90, allowSearch: false },
-    {
-      field: "contactNumber",
-      headerName: "Contact Number",
-      width: 150,
-      allowSearch: false,
-    },
-    {
-      field: "action",
-      headerName: "Action",
-      width: 140,
-      renderCell: (params) => {
-        return (
-          <>
-            <Button
-              size="small"
-              to={`/admin/edit-user-details/${params.id}`}
-              variant="contained"
-              component={NavLink}
-              sx={{
-                fontSize: "14px",
-                textTransform: "capitalize",
-              }}
-            >
-              Edit
-            </Button>
-          </>
-        );
-      },
-    },
-  ];
-
-  useEffect(() => {
-    adminViewUsers(user.authToken)
-      .then((res) => {
-        const Users = res.data.map((user) => {
-          return {
-            id: user._id,
-            role: `${textCapitalize(user.role)}`,
-            avatar: user.avatar,
-            name: `${textCapitalize(user.firstName)} ${textCapitalize(
-              user.lastName
-            )}`,
-            email: user.email,
-            gender: user.gender,
-            contactNumber: user.contactNumber,
-            address: user.address,
-            age: calculateAge(user.dob),
-          };
-        });
-        setTableData(Users);
-      })
-      .catch((error) => {});
-    // eslint-disable-next-line
-  }, []);
 
   return (
     <Box
@@ -114,23 +22,7 @@ function EditUsers() {
       >
         Edit Users
       </Typography>
-      <DataGrid
-        disableColumnSelector
-        disableDensitySelector
-        rows={tableData}
-        columns={columns}
-        pageSize={10}
-        rowsPerPageOptions={[10]}
-        backgroundColor={theme.palette.grey[50]}
-        sx={{ boxShadow: "0 0 12px #ccc" }}
-        components={{ Toolbar: GridToolbar }}
-        componentsProps={{
-          toolbar: {
-            showQuickFilter: true,
-            quickFilterProps: { debounceMs: 500 },
-          },
-        }}
-      />
+      <UserTable action="edit" />
     </Box>
   );
 }

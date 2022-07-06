@@ -21,9 +21,9 @@ import LogoutIcon from "@mui/icons-material/Logout";
 
 // custom imports
 import { SideBarNav } from "../../components/styles/navList";
-import AdminSideBarNavOption from "../../components/admin/sideBarNavOptions";
-import TrainerSideBarNavOption from "../../components/trainer/sideBarNavOptions";
-import TraineeSideBarNavOption from "../../components/trainee/sideBarNavOptions";
+import AdminSideBarNavOptions from "../../components/sidebar-option/AdminSideBarNavOptions";
+import TrainerSideBarNavOptions from "../../components/sidebar-option/TrainerSideBarNavOptions";
+import TraineeSideBarNavOptions from "../../components/sidebar-option/TraineeSideBarNavOptions";
 
 function SideBar(props) {
   const navigate = useNavigate();
@@ -104,9 +104,9 @@ function SideBar(props) {
         </ListItem>
       </SideBarNav>
       <Divider variant="middle" />
-      {isLoggedIn && user.role === "admin" && <AdminSideBarNavOption />}
-      {isLoggedIn && user.role === "trainer" && <TrainerSideBarNavOption />}
-      {isLoggedIn && user.role === "trainee" && <TraineeSideBarNavOption />}
+      {isLoggedIn && user.role === "admin" && <AdminSideBarNavOptions />}
+      {isLoggedIn && user.role === "trainer" && <TrainerSideBarNavOptions />}
+      {isLoggedIn && user.role === "trainee" && <TraineeSideBarNavOptions />}
 
       <Divider variant="middle" />
       <SideBarNav
