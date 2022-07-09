@@ -151,7 +151,7 @@ function SignIn() {
                       />
                     </Grid>
 
-                    {/* <Grid item xs={12} sx={{ mt: -1 }}>
+                    <Grid item xs={12} sx={{ mt: -1 }}>
                       <Stack
                         direction="row"
                         justifyContent="space-between"
@@ -185,7 +185,7 @@ function SignIn() {
                           Forgot Password?
                         </Typography>
                       </Stack>
-                    </Grid> */}
+                    </Grid>
                     {errors.submit && (
                       <Grid item xs={12}>
                         <FormHelperText error>{errors.submit}</FormHelperText>

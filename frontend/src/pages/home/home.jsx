@@ -1,8 +1,5 @@
 import * as React from "react";
 import "./home.scss";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -34,14 +31,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-function App() {
-  const [open, setOpen] = React.useState(false);
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleToggle = () => {
-    setOpen(!open);
-  };
+function Home() {
   return (
     <div className="landing">
       <div className="heading">
@@ -162,4 +152,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;

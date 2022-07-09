@@ -1,12 +1,12 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import TopBar from "../sections/topBar/TopBar";
-import Home from "../pages/home/Home";
-import SignIn from "../pages/signIn/SignIn";
-import SignUp from "../pages/signUp/SignUp";
+import Home from "../pages/home/home";
+import SignIn from "../pages/signIn/signIn";
+import SignUp from "../pages/signUp/signUp";
 import Main from "../sections/mainContainer/Main";
 import Dashboard from "../pages/dashboard/Dashboard";
-import Profile from "../pages/profile/Profile";
+import Profile from "../pages/profile/profile";
 import CreateUser from "../pages/admin/create-user/CreateUser";
 import ViewUsers from "../pages/admin/view-users/ViewUsers";
 import EditUsers from "../pages/admin/edit-users/EditUsers";

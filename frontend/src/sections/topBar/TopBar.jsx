@@ -17,7 +17,6 @@ import {
 
 import { NavButton } from "../../components/styles/buttons";
 import { buildImage } from "../../utils/buildImage";
-import { logout } from "../../apis/allUser";
 import { stringToAvatar } from "../../utils/generateAvatarLogo";
 
 const StyledToolbar = styled(Toolbar)({
