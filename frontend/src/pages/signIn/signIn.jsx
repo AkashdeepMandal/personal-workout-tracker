@@ -21,11 +21,10 @@ import {
 } from "@mui/material";
 
 import CloseIcon from "@mui/icons-material/Close";
-import { login } from "../../apis/allUser";
 import FormFieldControl from "../../components/form-control/FormControl";
 
 function SignIn() {
-  const { isLoggedIn } = useSelector((state) => state.user);
+  const { isLoggedIn, error } = useSelector((state) => state.user);
   const [alartIsOpen, setAlartIsOpen] = useState(false);
   const [formError, setFormError] = useState(null);
 
@@ -37,7 +36,7 @@ function SignIn() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate("/user/dashboard");
+      navigate("/dashboard");
     }
     // eslint-disable-next-line
   }, [isLoggedIn]);
@@ -56,20 +55,13 @@ function SignIn() {
     password: yup.string().max(255).required("Password required"),
   });
 
-  const onSubmit = async (value, props) => {
-    await login({ ...value })
-      .then((res) => {
-        dispatch(loginUser(res.data));
-        navigate("/user/dashboard");
-      })
-      .catch((error) => {
-        if (error.response.data) {
-          setFormError(error.response.data.error.message);
-        } else {
-          setFormError("Please Check Network Connection");
-        }
-        setAlartIsOpen(true);
-      });
+  const onSubmit = (value, props) => {
+    dispatch(loginUser({ ...value }));
+    if (!error) {
+      setFormError(error);
+      setAlartIsOpen(true);
+    }
+    navigate("/dashboard");
   };
   return (
     <Container maxWidth="sm">

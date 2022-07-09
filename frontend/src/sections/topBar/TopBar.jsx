@@ -117,23 +117,16 @@ const TopBar = () => {
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
-          <MenuItem component={RouterLink} to={"/user/dashboard"}>
+          <MenuItem component={RouterLink} to={"/dashboard"}>
             Dashboard
           </MenuItem>
-          <MenuItem component={RouterLink} to={"/user/profile"}>
+          <MenuItem component={RouterLink} to={"/profile"}>
             Profile
           </MenuItem>
           <MenuItem
-            onClick={async () => {
-              await logout(user.authToken)
-                .then((res) => {
-                  dispatch(logoutUser());
-                  navigate("/");
-                })
-                .catch((error) => {
-                  dispatch(logoutUser());
-                  navigate("/");
-                });
+            onClick={() => {
+              dispatch(logoutUser(user.authToken));
+              navigate("/", { replace: true });
             }}
           >
             Logout

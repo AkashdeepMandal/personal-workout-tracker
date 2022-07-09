@@ -90,7 +90,7 @@ function SideBar(props) {
         <ListItem disablePadding>
           <ListItemButton
             component={NavLink}
-            to="/user/dashboard"
+            to="/dashboard"
             sx={{ py: 0, minHeight: 32 }}
           >
             <ListItemIcon>
@@ -129,7 +129,7 @@ function SideBar(props) {
         <ListItem disablePadding>
           <ListItemButton
             component={NavLink}
-            to="/user/profile"
+            to="/profile"
             sx={{ py: 0, minHeight: 32 }}
           >
             <ListItemIcon>
@@ -148,8 +148,8 @@ function SideBar(props) {
           <ListItemButton
             component={Button}
             onClick={() => {
-              dispatch(logoutUser());
-              navigate("/sign-in");
+              dispatch(logoutUser(user.authToken));
+              navigate("/", { replace: true });
             }}
             sx={{ py: 0, minHeight: 32 }}
           >

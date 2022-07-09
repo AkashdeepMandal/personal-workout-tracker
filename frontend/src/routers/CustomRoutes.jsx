@@ -27,6 +27,7 @@ import PageNotFound from "../pages/error/PageNotFound";
 import ProtectedRoute from "./ProtectedRoute";
 import AssignWorkoutTrainee from "../pages/trainer/assign-workout-trainee/AssignWorkoutTrainee";
 import RemoveWorkoutTrainee from "../pages/trainer/remove-workout-trainee/RemoveWorkoutTrainee";
+import Unauthorized from "../pages/error/Unauthorized";
 
 const CustomRoutes = () => {
   return (
@@ -36,7 +37,7 @@ const CustomRoutes = () => {
         <Route path="sign-in" element={<SignIn />} />
         <Route path="sign-up" element={<SignUp />} />
 
-        <Route path="user/" element={<ProtectedRoute Component={Main} />}>
+        <Route element={<Main />}>
           <Route
             path="dashboard"
             element={<ProtectedRoute Component={Dashboard} />}
@@ -141,6 +142,7 @@ const CustomRoutes = () => {
         </Route>
         {/* error */}
         <Route path="*" element={<PageNotFound />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
       </Route>
     </Routes>
   );
