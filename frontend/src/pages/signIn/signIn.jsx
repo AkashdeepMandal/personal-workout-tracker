@@ -22,6 +22,7 @@ import {
 
 import CloseIcon from "@mui/icons-material/Close";
 import FormFieldControl from "../../components/form-control/FormControl";
+import { unwrapResult, unwrap } from "@reduxjs/toolkit";
 
 function SignIn() {
   const { isLoggedIn, error } = useSelector((state) => state.user);
@@ -39,12 +40,14 @@ function SignIn() {
       navigate("/dashboard");
     }
     // eslint-disable-next-line
-  }, [isLoggedIn]);
+  }, [isLoggedIn, error]);
 
   const initialValues = {
     email: "",
     password: "",
   };
+
+  console.log("render");
 
   const validationSchema = yup.object().shape({
     email: yup
@@ -55,13 +58,16 @@ function SignIn() {
     password: yup.string().max(255).required("Password required"),
   });
 
-  const onSubmit = (value, props) => {
-    dispatch(loginUser({ ...value }));
-    if (!error) {
-      setFormError(error);
-      setAlartIsOpen(true);
-    }
-    navigate("/dashboard");
+  const onSubmit = async (value, props) => {
+    await dispatch(loginUser({ ...value }))
+      .unwrap()
+      .then((res) => {
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        setFormError(error);
+        setAlartIsOpen(true);
+      });
   };
   return (
     <Container maxWidth="sm">
@@ -151,7 +157,7 @@ function SignIn() {
                       />
                     </Grid>
 
-                    {/* <Grid item xs={12} sx={{ mt: -1 }}>
+                    <Grid item xs={12} sx={{ mt: -1 }}>
                       <Stack
                         direction="row"
                         justifyContent="space-between"
@@ -185,7 +191,7 @@ function SignIn() {
                           Forgot Password?
                         </Typography>
                       </Stack>
-                    </Grid> */}
+                    </Grid>
                     {errors.submit && (
                       <Grid item xs={12}>
                         <FormHelperText error>{errors.submit}</FormHelperText>

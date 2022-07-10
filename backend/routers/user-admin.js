@@ -15,6 +15,12 @@ router.post(
   [auth, authAdmin],
   async (req, res, next) => {
     try {
+      const countEmail = await User.countDocuments({ email: req.body.email });
+      if (countEmail) {
+        const errorMsg = new Error("User already exist with this email");
+        errorMsg.status = 401;
+        throw errorMsg;
+      }
       const newUser = new User(req.body);
       const user = await newUser.save();
       const authToken = await newUser.generateAuthToken();

@@ -10,7 +10,6 @@ import {
   ListSubheader,
 } from "@mui/material";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
-import PreviewIcon from "@mui/icons-material/Preview";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 
 function TraineeSideBarNavOptions() {

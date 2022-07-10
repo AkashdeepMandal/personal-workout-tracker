@@ -24,24 +24,21 @@ import FormFieldControl from "../form-control/FormControl";
 function EditUserDetails() {
   const { user } = useSelector((state) => state.user);
   const [userDetails, setUserDetails] = useState({});
-  const [alartIsOpen, setAlartIsOpen] = useState(true);
-  const [successAlartIsOpen, setSuccessAlartIsOpen] = useState(true);
-  const [formError, setFormError] = useState(null);
-  const [formSuccess, setFormSuccess] = useState(null);
+  const [alartIsOpen, setAlartIsOpen] = useState(false);
+  const [formAlert, setFormAlert] = useState({ severity: null, msg: "" });
   const [isConfirmed, setIsConfirmed] = useState(false);
 
   const theme = useTheme();
 
   useEffect(() => {
-    async function fetchUser() {
+    (async () => {
       await getUserDetails(user.authToken)
         .then((res) => setUserDetails(res.data))
         .catch((error) => setUserDetails({}));
-    }
-    fetchUser();
+    })();
 
     // eslint-disable-next-line
-  }, [formSuccess]);
+  }, [formAlert]);
 
   const initialvalues = {
     firstName: userDetails.firstName ? userDetails.firstName : "",
@@ -70,17 +67,26 @@ function EditUserDetails() {
   const onSubmit = async (value, props) => {
     await updateUserDetails(user.authToken, { ...value })
       .then((res) => {
-        setFormSuccess("Account details updated Successfully");
+        setFormAlert({
+          severity: "success",
+          msg: "Account details updated Successfully",
+        });
         props.resetForm();
       })
       .catch((error) => {
         if (error.response.data) {
-          setFormError(error.response.data.error.message);
+          setFormAlert({
+            severity: "error",
+            msg: error.response.data.error.message,
+          });
         } else {
-          setFormError("Please Check Network Connection");
+          setFormAlert({
+            severity: "error",
+            msg: "Please check your internet connection",
+          });
         }
-        setAlartIsOpen(true);
       });
+    setAlartIsOpen(true);
   };
 
   return (
@@ -96,50 +102,26 @@ function EditUserDetails() {
       <Typography variant="h4" py={2} sx={{ fontWeight: 600 }}>
         Edit details
       </Typography>
-      {formError && (
-        <Collapse in={alartIsOpen}>
-          <Alert
-            severity="error"
-            action={
-              <IconButton
-                aria-label="close"
-                color="inherit"
-                size="small"
-                onClick={() => {
-                  setAlartIsOpen(false);
-                }}
-              >
-                <CloseIcon fontSize="inherit" />
-              </IconButton>
-            }
-            sx={{ mb: 2 }}
-          >
-            {formError}
-          </Alert>
-        </Collapse>
-      )}
-      {formSuccess && (
-        <Collapse in={successAlartIsOpen}>
-          <Alert
-            severity="success"
-            action={
-              <IconButton
-                aria-label="close"
-                color="inherit"
-                size="small"
-                onClick={() => {
-                  setSuccessAlartIsOpen(false);
-                }}
-              >
-                <CloseIcon fontSize="inherit" />
-              </IconButton>
-            }
-            sx={{ mb: 2 }}
-          >
-            {formSuccess}
-          </Alert>
-        </Collapse>
-      )}
+      <Collapse in={alartIsOpen}>
+        <Alert
+          severity={formAlert.severity ? formAlert.severity : "success"}
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setAlartIsOpen(false);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          sx={{ mb: 2 }}
+        >
+          {formAlert.msg}
+        </Alert>
+      </Collapse>
       <Formik
         enableReinitialize
         initialValues={initialvalues}

@@ -8,20 +8,26 @@ const initialState = {
   user: null,
 };
 
-export const loginUser = createAsyncThunk("user/loginUser", async (user) => {
-  const res = await login(user);
+export const loginUser = createAsyncThunk(
+  "user/loginUser",
+  async (user, { rejectWithValue }) => {
+    try {
+      const res = await login(user);
+      const userdata = {
+        role: res.data.user.role,
 
-  const userdata = {
-    role: res.data.user.role,
+        firstName: res.data.user.firstName,
+        lastName: res.data.user.lastName,
 
-    firstName: res.data.user.firstName,
-    lastName: res.data.user.lastName,
-
-    avatar: res.data.user?.avatar,
-    authToken: res.data.authToken,
-  };
-  return userdata;
-});
+        avatar: res.data.user?.avatar,
+        authToken: res.data.authToken,
+      };
+      return userdata;
+    } catch (error) {
+      return rejectWithValue(error.response.data.error.message);
+    }
+  }
+);
 
 export const logoutUser = createAsyncThunk("user/logoutUser", async (auth) => {
   const res = await logout(auth);
@@ -53,11 +59,10 @@ const userSlice = createSlice({
       state.error = "";
     },
     [loginUser.rejected]: (state, action) => {
-      console.log(action.payload);
       state.isLoading = false;
       state.isLoggedIn = false;
       state.user = null;
-      state.error = action.error.message;
+      state.error = action.payload;
     },
     [logoutUser.pending]: (state) => {
       state.isLoading = true;
@@ -76,37 +81,6 @@ const userSlice = createSlice({
     },
   },
 });
-
-// const userSlice = createSlice({
-//   name: "user",
-//   initialState,
-//   reducers: {
-//     loginUser: (state, action) => {
-//       state.isLoggedIn = true;
-//       const userData = {
-//         role: action.payload.user.role,
-//         firstName: action.payload.user.firstName,
-//         lastName: action.payload.user.lastName,
-//         avatar: action.payload.user?.avatar,
-//         authToken: action.payload.authToken,
-//       };
-//       state.user = userData;
-//     },
-//     logoutUser: (state) => {
-//       state.isLoggedIn = false;
-//       state.user = null;
-//     },
-//     updateUser: (state, action) => {
-//       const userData = {
-//         role: action.payload.role,
-//         firstName: action.payload.firstName,
-//         lastName: action.payload.lastName,
-//         avatar: action.payload?.avatar,
-//       };
-//       state.user = { ...state.user, ...userData };
-//     },
-//   },
-// });
 
 export default userSlice.reducer;
 export const { updateUser } = userSlice.actions;
