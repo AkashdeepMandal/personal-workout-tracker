@@ -11,10 +11,20 @@ export const adminCreatUser = async (authToken, user) => {
 };
 
 // view users
-export const adminViewUsers = async (authToken) => {
-  return await axios.get(baseURL + "/admin/users/details", {
-    headers: { Authorization: "Bearer " + authToken },
-  });
+export const adminViewUsers = async (
+  authToken,
+  search = "",
+  filter = "",
+  skip = 0
+) => {
+  search = search.toLocaleLowerCase();
+  return await axios.get(
+    baseURL +
+      `/admin/users/details?filter=${filter}&search=${search}&skip=${skip}`,
+    {
+      headers: { Authorization: "Bearer " + authToken },
+    }
+  );
 };
 
 // view user's Details
@@ -64,10 +74,20 @@ export const adminCreatWorkout = async (authToken, workout) => {
 };
 
 // view workouts
-export const adminViewWorkouts = async (authToken) => {
-  return await axios.get(baseURL + "/admin/workouts/details", {
-    headers: { Authorization: "Bearer " + authToken },
-  });
+export const adminViewWorkouts = async (
+  authToken,
+  search = "",
+  filter = "",
+  skip = 0
+) => {
+  search = search.toLocaleLowerCase();
+  return await axios.get(
+    baseURL +
+      `/admin/workouts/details?filter=${filter}&search=${search}&skip=${skip}`,
+    {
+      headers: { Authorization: "Bearer " + authToken },
+    }
+  );
 };
 
 // view workout details

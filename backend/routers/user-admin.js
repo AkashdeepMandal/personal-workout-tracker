@@ -43,12 +43,19 @@ router.get(
       if (req.params.id) {
         const user = await User.findById(req.params.id);
         res.send(user);
-      } else if (
-        req.query.limit ||
-        req.query.filter ||
-        req.query.skip ||
-        req.query.search
-      ) {
+      } else {
+        const totalUsers = await User.countDocuments({
+          $and: [
+            { role: { $regex: req.query.filter || "" } },
+            {
+              $or: [
+                { firstName: { $regex: req.query.search || "" } },
+                { lastName: { $regex: req.query.search || "" } },
+                { email: { $regex: req.query.search || "" } },
+              ],
+            },
+          ],
+        });
         const users = await User.find(
           {
             $and: [
@@ -57,6 +64,7 @@ router.get(
                 $or: [
                   { firstName: { $regex: req.query.search || "" } },
                   { lastName: { $regex: req.query.search || "" } },
+                  { email: { $regex: req.query.search || "" } },
                 ],
               },
             ],
@@ -64,13 +72,10 @@ router.get(
           null,
           {
             limit: parseInt(req.query.limit) || 10,
-            skip: parseInt(req.query.skip) || 0,
+            skip: parseInt(req.query.skip) * 10 || 0,
           }
         );
-        res.send(users);
-      } else {
-        const users = await User.find();
-        res.send(users);
+        res.send({ users, totalUsers });
       }
     } catch (error) {
       next(error);
@@ -158,12 +163,15 @@ router.get(
       if (req.params.id) {
         const workout = await Workout.findById(req.params.id);
         res.send(workout);
-      } else if (
-        req.query.limit ||
-        req.query.filter ||
-        req.query.skip ||
-        req.query.search
-      ) {
+      } else {
+        const totalWorkouts = await Workout.countDocuments({
+          $and: [
+            { category: { $regex: req.query.filter || "" } },
+            {
+              $or: [{ name: { $regex: req.query.search || "" } }],
+            },
+          ],
+        });
         const workouts = await Workout.find(
           {
             $and: [
@@ -176,13 +184,10 @@ router.get(
           null,
           {
             limit: parseInt(req.query.limit) || 10,
-            skip: parseInt(req.query.skip) || 0,
+            skip: parseInt(req.query.skip) * 10 || 0,
           }
-        ).populate("createdBy");
-        res.send(workouts);
-      } else {
-        const workouts = await Workout.find();
-        res.send(workouts);
+        );
+        res.send({ workouts, totalWorkouts });
       }
     } catch (error) {
       next(error);
