@@ -25,10 +25,8 @@ import FormFieldControl from "../../../components/form-control/FormControl";
 
 function CreateWorkout() {
   const { user } = useSelector((state) => state.user);
-  const [alartIsOpen, setAlartIsOpen] = useState(true);
-  const [successAlartIsOpen, setSuccessAlartIsOpen] = useState(true);
-  const [formError, setFormError] = useState(null);
-  const [formSuccess, setFormSuccess] = useState(null);
+  const [alartIsOpen, setAlartIsOpen] = useState(false);
+  const [formAlert, setFormAlert] = useState({ severity: null, msg: "" });
   const [workoutLogo, setWorkoutLogo] = useState();
   const [selectedFile, setSelectedFile] = useState(cardio);
   const theme = useTheme();
@@ -72,18 +70,27 @@ function CreateWorkout() {
           workout.data._id
         );
       }
-      setFormSuccess("New workout created");
+      setFormAlert({
+        severity: "success",
+        msg: "Workout created successfully",
+      });
       setSelectedFile(cardio);
       setWorkoutLogo();
       props.resetForm();
     } catch (error) {
       if (error.response.data) {
-        setFormError(error.response.data.error.message);
+        setFormAlert({
+          severity: "error",
+          msg: error.response.data.error.message,
+        });
       } else {
-        setFormError("Please Check Network Connection");
+        setFormAlert({
+          severity: "error",
+          msg: "Please check your internet connection",
+        });
       }
-      setAlartIsOpen(true);
     }
+    setAlartIsOpen(true);
   };
 
   return (
@@ -119,50 +126,26 @@ function CreateWorkout() {
           </Grid>
 
           <Grid item xs={12}>
-            {formError && (
-              <Collapse in={alartIsOpen}>
-                <Alert
-                  severity="error"
-                  action={
-                    <IconButton
-                      aria-label="close"
-                      color="inherit"
-                      size="small"
-                      onClick={() => {
-                        setAlartIsOpen(false);
-                      }}
-                    >
-                      <CloseIcon fontSize="inherit" />
-                    </IconButton>
-                  }
-                  sx={{ mb: 2 }}
-                >
-                  {formError}
-                </Alert>
-              </Collapse>
-            )}
-            {formSuccess && (
-              <Collapse in={successAlartIsOpen}>
-                <Alert
-                  severity="success"
-                  action={
-                    <IconButton
-                      aria-label="close"
-                      color="inherit"
-                      size="small"
-                      onClick={() => {
-                        setSuccessAlartIsOpen(false);
-                      }}
-                    >
-                      <CloseIcon fontSize="inherit" />
-                    </IconButton>
-                  }
-                  sx={{ mb: 2 }}
-                >
-                  {formSuccess}
-                </Alert>
-              </Collapse>
-            )}
+            <Collapse in={alartIsOpen}>
+              <Alert
+                severity={formAlert.severity ? formAlert.severity : "success"}
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => {
+                      setAlartIsOpen(false);
+                    }}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+                sx={{ mb: 2 }}
+              >
+                {formAlert.msg}
+              </Alert>
+            </Collapse>
             <Formik
               initialValues={initialValues}
               validationSchema={validationSchema}

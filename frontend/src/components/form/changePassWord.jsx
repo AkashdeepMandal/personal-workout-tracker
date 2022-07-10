@@ -20,10 +20,8 @@ import FormFieldControl from "../form-control/FormControl";
 
 function ChangePassWord() {
   const { user } = useSelector((state) => state.user);
-  const [alartIsOpen, setAlartIsOpen] = useState(true);
-  const [successAlartIsOpen, setSuccessAlartIsOpen] = useState(true);
-  const [formError, setFormError] = useState(null);
-  const [formSuccess, setFormSuccess] = useState(null);
+  const [alartIsOpen, setAlartIsOpen] = useState(false);
+  const [formAlert, setFormAlert] = useState({ severity: null, msg: "" });
 
   const initialvalues = {
     newPassword: "",
@@ -49,17 +47,26 @@ function ChangePassWord() {
     const password = value.confirmNewPassword;
     await updateUserDetails(user.authToken, { password })
       .then((res) => {
-        setFormSuccess("Password changed successful");
+        setFormAlert({
+          severity: "success",
+          msg: "Password changed Successfully",
+        });
         props.resetForm();
       })
       .catch((error) => {
         if (error.response.data) {
-          setFormError(error.response.data.error.message);
+          setFormAlert({
+            severity: "error",
+            msg: error.response.data.error.message,
+          });
         } else {
-          setFormError("Please Check Network Connection");
+          setFormAlert({
+            severity: "error",
+            msg: "Please check your internet connection",
+          });
         }
-        setAlartIsOpen(true);
       });
+    setAlartIsOpen(true);
   };
   return (
     <Card sx={{ boxShadow: "0 0 12px #ccc" }}>
@@ -67,50 +74,28 @@ function ChangePassWord() {
         <Typography variant="h5" py={2} sx={{ fontWeight: 600 }}>
           Change Password
         </Typography>
-        {formError && (
-          <Collapse in={alartIsOpen}>
-            <Alert
-              severity="error"
-              action={
-                <IconButton
-                  aria-label="close"
-                  color="inherit"
-                  size="small"
-                  onClick={() => {
-                    setAlartIsOpen(false);
-                  }}
-                >
-                  <CloseIcon fontSize="inherit" />
-                </IconButton>
-              }
-              sx={{ mb: 2 }}
-            >
-              {formError}
-            </Alert>
-          </Collapse>
-        )}
-        {formSuccess && (
-          <Collapse in={successAlartIsOpen}>
-            <Alert
-              severity="success"
-              action={
-                <IconButton
-                  aria-label="close"
-                  color="inherit"
-                  size="small"
-                  onClick={() => {
-                    setSuccessAlartIsOpen(false);
-                  }}
-                >
-                  <CloseIcon fontSize="inherit" />
-                </IconButton>
-              }
-              sx={{ mb: 2 }}
-            >
-              Password Updated
-            </Alert>
-          </Collapse>
-        )}
+
+        <Collapse in={alartIsOpen}>
+          <Alert
+            severity={formAlert.severity ? formAlert.severity : "success"}
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setAlartIsOpen(false);
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+            sx={{ mb: 2 }}
+          >
+            {formAlert.msg}
+          </Alert>
+        </Collapse>
+
         <Formik
           initialValues={initialvalues}
           validationSchema={validationSchema}
@@ -135,11 +120,13 @@ function ChangePassWord() {
                   <FormFieldControl
                     control="password"
                     label="Confirm Password*"
-                    name="confirmPassword"
+                    name="confirmNewPassword"
                     inputprops={{ maxLength: 20 }}
-                    value={values.confirmPassword}
-                    error={touched.confirmPassword && errors.confirmPassword}
-                    errorMsg={errors.confirmPassword}
+                    value={values.confirmNewPassword}
+                    error={
+                      touched.confirmNewPassword && errors.confirmNewPassword
+                    }
+                    errorMsg={errors.confirmNewPassword}
                     {...rest}
                   />
                 </Grid>
