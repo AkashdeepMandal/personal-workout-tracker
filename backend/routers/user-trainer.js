@@ -22,6 +22,17 @@ router.get(
         });
         res.send(user);
       } else {
+        const totalUsers = await User.countDocuments({
+          $and: [
+            { role: "trainee" },
+            {
+              $or: [
+                { firstName: { $regex: req.query.search || "" } },
+                { lastName: { $regex: req.query.search || "" } },
+              ],
+            },
+          ],
+        });
         const users = await User.find(
           {
             $and: [
@@ -40,7 +51,7 @@ router.get(
             skip: parseInt(req.query.skip) || 0,
           }
         );
-        res.send(users);
+        res.send({ users, totalUsers });
       }
     } catch (error) {
       next(error);
@@ -59,12 +70,15 @@ router.get(
       if (req.params.id) {
         const workout = await Workout.findById(req.params.id);
         res.send(workout);
-      } else if (
-        req.query.limit ||
-        req.query.filter ||
-        req.query.skip ||
-        req.query.search
-      ) {
+      } else {
+        const totalWorkouts = await User.countDocuments({
+          $and: [
+            { category: { $regex: req.query.filter || "" } },
+            {
+              $or: [{ name: { $regex: req.query.search || "" } }],
+            },
+          ],
+        });
         const workouts = await Workout.find(
           {
             $and: [
@@ -79,11 +93,8 @@ router.get(
             limit: parseInt(req.query.limit) || 10,
             skip: parseInt(req.query.skip) || 0,
           }
-        ).populate("createdBy");
-        res.send(workouts);
-      } else {
-        const workouts = await Workout.find();
-        res.send(workouts);
+        );
+        res.send({ workouts, totalWorkouts });
       }
     } catch (error) {
       next(error);

@@ -10,6 +10,10 @@ import {
   Typography,
   Box,
   Stack,
+  OutlinedInput,
+  FormControl,
+  Select,
+  MenuItem,
 } from "@mui/material";
 
 import { DataGrid } from "@mui/x-data-grid";
@@ -24,10 +28,14 @@ import { textCapitalize } from "../../../utils/textCapitalize";
 import cardio from "../../../assets/cardio.png";
 
 function AssignWorkouts({ id }) {
-  const [tableData, setTableData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [workoutList, setWorkoutList] = useState([]);
   const { user } = useSelector((state) => state.user);
+  const [tableData, setTableData] = useState([]);
+  const [workoutList, setWorkoutList] = useState([]);
+  const [rowCount, setRowCount] = useState(0);
+  const [page, setPage] = useState(0);
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const theme = useTheme();
 
   const viewWorkoutColumns = [
@@ -137,11 +145,12 @@ function AssignWorkouts({ id }) {
     },
   ];
 
+  // view workout table
   useEffect(() => {
-    setIsLoading(true);
-    trainerViewWorkouts(user.authToken)
+    trainerViewWorkouts(user.authToken, search, filter, page)
       .then((res) => {
-        const workouts = res.data.map((workout) => {
+        const { workouts, totalWorkouts } = res.data;
+        const Workouts = workouts.map((workout) => {
           return {
             id: workout._id,
             category: `${textCapitalize(workout.category)}`,
@@ -151,11 +160,18 @@ function AssignWorkouts({ id }) {
           };
         });
         setIsLoading(false);
-        setTableData(workouts);
+        setRowCount(totalWorkouts);
+        setTableData(Workouts);
       })
       .catch((error) => {
         setIsLoading(false);
       });
+    // eslint-disable-next-line
+  }, [search, filter, page]);
+
+  // assigned workout tablw
+  useEffect(() => {
+    setIsLoading(true);
     trainerGetAssignedWorkout(user.authToken, id).then((res) => {
       const workout = res.data[0].workouts.map((value) => {
         return {
@@ -166,6 +182,7 @@ function AssignWorkouts({ id }) {
       });
       setWorkoutList(workout);
     });
+    setIsLoading(false);
 
     // eslint-disable-next-line
   }, []);
@@ -257,17 +274,62 @@ function AssignWorkouts({ id }) {
             <Typography variant="body1" mb={2} sx={{ fontWeight: 600 }}>
               Available Workouts
             </Typography>
-            <DataGrid
-              disableSelectionOnClick
-              disableColumnSelector
-              disableDensitySelector
-              rows={tableData}
-              columns={viewWorkoutColumns}
-              pageSize={10}
-              rowsPerPageOptions={[10]}
-              backgroundColor={theme.palette.grey[50]}
-              loading={isLoading}
-            />
+            <Stack direction="column" gap={1} sx={{ height: "100%" }}>
+              <Stack
+                direction="row"
+                spacing={3}
+                justifyContent="flex-end"
+                mb={1}
+              >
+                <OutlinedInput
+                  size="small"
+                  autoComplete="off"
+                  id="search"
+                  type="text"
+                  value={search}
+                  name="search"
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                  }}
+                  placeholder="Search by name or e-mail"
+                  inputProps={{}}
+                />
+                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                  <Select
+                    size="small"
+                    value={filter}
+                    onChange={(e) => {
+                      setFilter(e.target.value);
+                    }}
+                    displayEmpty
+                    inputProps={{ "aria-label": "Without label" }}
+                  >
+                    <MenuItem value="">
+                      <em>Fliter by category</em>
+                    </MenuItem>
+                    <MenuItem value="strength">Strength</MenuItem>
+                    <MenuItem value="cardio">Cardio</MenuItem>
+                  </Select>
+                </FormControl>
+              </Stack>
+
+              <DataGrid
+                disableColumnMenu
+                disableSelectionOnClick
+                pagination
+                paginationMode="server"
+                rowCount={rowCount}
+                onPageChange={(newPage) => {
+                  setPage(newPage);
+                }}
+                rowsPerPageOptions={[10]}
+                pageSize={10}
+                rows={tableData}
+                columns={viewWorkoutColumns}
+                loading={isLoading}
+                backgroundColor={theme.palette.grey[50]}
+              />
+            </Stack>
           </Grid>
 
           <Grid item sm={5}>

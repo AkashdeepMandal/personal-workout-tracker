@@ -202,6 +202,7 @@ function WorkoutTable({ action }) {
 
       <Stack direction="row" spacing={3} justifyContent="flex-end" marginY={2}>
         <OutlinedInput
+          fullWidth
           size="small"
           autoComplete="off"
           id="search"

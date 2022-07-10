@@ -10,9 +10,12 @@ import { stringToAvatar } from "../../../utils/generateAvatarLogo";
 import { trainerViewTrainees } from "../../../apis/trainer";
 
 function UserTable({ action }) {
-  const [tableData, setTableData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const { user } = useSelector((state) => state.user);
+  const [tableData, setTableData] = useState([]);
+  const [rowCount, setRowCount] = useState(0);
+  const [page, setPage] = useState(0);
+  const [search, setSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const theme = useTheme();
 
   const columns = [
@@ -60,7 +63,6 @@ function UserTable({ action }) {
             </>
           );
         } else if (action === "assign") {
-          console.log(params);
           return (
             <>
               <Button
@@ -96,9 +98,10 @@ function UserTable({ action }) {
 
   useEffect(() => {
     setIsLoading(true);
-    trainerViewTrainees(user.authToken)
+    trainerViewTrainees(user.authToken, search, page)
       .then((res) => {
-        const trainees = res.data.map((user) => {
+        const { users, totalUsers } = res.data;
+        const trainees = users.map((user) => {
           return {
             id: user._id,
             avatar: user.avatar,
@@ -110,33 +113,32 @@ function UserTable({ action }) {
           };
         });
         setTableData(trainees);
+        setRowCount(totalUsers);
         setIsLoading(false);
       })
       .catch((error) => {
         setIsLoading(false);
       });
     // eslint-disable-next-line
-  }, []);
+  }, [search, page]);
 
   return (
     <DataGrid
+      disableColumnMenu
       disableSelectionOnClick
-      disableColumnSelector
-      disableDensitySelector
+      pagination
+      paginationMode="server"
+      rowCount={rowCount}
+      onPageChange={(newPage) => {
+        setPage(newPage);
+      }}
+      rowsPerPageOptions={[10]}
+      pageSize={10}
       rows={tableData}
       columns={columns}
-      pageSize={10}
-      rowsPerPageOptions={[10]}
-      backgroundColor={theme.palette.grey[50]}
-      sx={{ boxShadow: "0 0 12px #ccc" }}
-      components={{ Toolbar: GridToolbar }}
-      componentsProps={{
-        toolbar: {
-          showQuickFilter: true,
-          quickFilterProps: { debounceMs: 500 },
-        },
-      }}
       loading={isLoading}
+      sx={{ boxShadow: "0 0 12px #ccc" }}
+      backgroundColor={theme.palette.grey[50]}
     />
   );
 }
