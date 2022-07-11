@@ -28,6 +28,8 @@ import ProtectedRoute from "./ProtectedRoute";
 import AssignWorkoutTrainee from "../pages/trainer/assign-workout-trainee/AssignWorkoutTrainee";
 import RemoveWorkoutTrainee from "../pages/trainer/remove-workout-trainee/RemoveWorkoutTrainee";
 import Unauthorized from "../pages/error/Unauthorized";
+import StartWorkouts from "../pages/trainee/start-workouts/StartWorkouts";
+import StartWorkout from "../pages/trainee/start-workout/StartWorkout";
 
 const CustomRoutes = () => {
   return (
@@ -140,6 +142,21 @@ const CustomRoutes = () => {
             />
           </Route>
         </Route>
+
+        {/* Trainee routes */}
+        <Route path="trainee" element={<ProtectedRoute Component={Main} />}>
+          <Route path="start-workouts">
+            <Route
+              index
+              element={<ProtectedRoute Component={StartWorkouts} />}
+            />
+            <Route
+              path=":id"
+              element={<ProtectedRoute Component={StartWorkout} />}
+            />
+          </Route>
+        </Route>
+
         {/* error */}
         <Route path="*" element={<PageNotFound />} />
         <Route path="/unauthorized" element={<Unauthorized />} />

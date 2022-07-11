@@ -9,8 +9,9 @@ const progressSchema = new mongoose.Schema(
     },
     workouts: [
       {
-        Workout: { type: mongoose.Schema.Types.ObjectId, ref: "Workout" },
-        duration: { type: Number },
+        name: { type: String },
+        logo: { type: Buffer },
+        duration: { type: String },
         totalCalories: { type: Number },
       },
     ],
