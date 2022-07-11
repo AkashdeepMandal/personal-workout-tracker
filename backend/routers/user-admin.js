@@ -23,7 +23,7 @@ router.post(
       }
       const newUser = new User(req.body);
       const user = await newUser.save();
-      const authToken = await newUser.generateAuthToken();
+      const authToken = [];
       res.status(201).send({ user, authToken });
     } catch (error) {
       error.status = 400;

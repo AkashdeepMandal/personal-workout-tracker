@@ -22,7 +22,6 @@ import {
 
 import CloseIcon from "@mui/icons-material/Close";
 import FormFieldControl from "../../components/form-control/FormControl";
-import { unwrapResult, unwrap } from "@reduxjs/toolkit";
 
 function SignIn() {
   const { isLoggedIn, error } = useSelector((state) => state.user);
@@ -47,8 +46,6 @@ function SignIn() {
     password: "",
   };
 
-  console.log("render");
-
   const validationSchema = yup.object().shape({
     email: yup
       .string()
@@ -59,7 +56,7 @@ function SignIn() {
   });
 
   const onSubmit = async (value, props) => {
-    await dispatch(loginUser({ ...value }))
+    await dispatch(loginUser({ ...value, remember: checked }))
       .unwrap()
       .then((res) => {
         navigate("/dashboard");
