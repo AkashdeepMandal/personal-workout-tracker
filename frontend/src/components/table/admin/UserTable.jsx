@@ -6,8 +6,13 @@ import {
   Alert,
   Slide,
   Snackbar,
+  OutlinedInput,
+  Stack,
+  FormControl,
+  Select,
+  MenuItem,
 } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import { useSelector } from "react-redux";
 import { Link as NavLink } from "react-router-dom";
 import { buildImage } from "../../../utils/buildImage";
@@ -17,10 +22,14 @@ import { stringToAvatar } from "../../../utils/generateAvatarLogo";
 import { adminDeleteUserDetails, adminViewUsers } from "../../../apis/admin";
 
 function UserTable({ action }) {
+  const { user } = useSelector((state) => state.user);
   const [tableData, setTableData] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [rowCount, setRowCount] = useState(0);
+  const [page, setPage] = useState(0);
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const { user } = useSelector((state) => state.user);
   const theme = useTheme();
 
   const columns = [
@@ -117,9 +126,10 @@ function UserTable({ action }) {
 
   useEffect(() => {
     setIsLoading(true);
-    adminViewUsers(user.authToken)
+    adminViewUsers(user.authToken, search, filter, page)
       .then((res) => {
-        const Users = res.data.map((user) => {
+        const { users, totalUsers } = res.data;
+        const Users = users.map((user) => {
           return {
             id: user._id,
             role: `${textCapitalize(user.role)}`,
@@ -135,6 +145,7 @@ function UserTable({ action }) {
           };
         });
         setIsLoading(false);
+        setRowCount(totalUsers);
         setTableData(Users);
       })
       .catch((error) => {
@@ -142,7 +153,7 @@ function UserTable({ action }) {
       });
     setRefresh(false);
     // eslint-disable-next-line
-  }, [refresh]);
+  }, [refresh, search, filter, page]);
 
   const handelDelete = async (id) => {
     await adminDeleteUserDetails(user.authToken, id)
@@ -201,25 +212,55 @@ function UserTable({ action }) {
           </Alert>
         </Snackbar>
       )}
-
+      <Stack direction="row" spacing={3} justifyContent="flex-end" marginY={2}>
+        <OutlinedInput
+          size="small"
+          autoComplete="off"
+          id="search"
+          type="text"
+          value={search}
+          name="search"
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+          placeholder="Search by name or e-mail"
+          inputProps={{}}
+        />
+        <FormControl sx={{ m: 1, minWidth: 120 }}>
+          <Select
+            size="small"
+            value={filter}
+            onChange={(e) => {
+              setFilter(e.target.value);
+            }}
+            displayEmpty
+            inputProps={{ "aria-label": "Without label" }}
+          >
+            <MenuItem value="">
+              <em>Fliter by role</em>
+            </MenuItem>
+            <MenuItem value="admin">Admin</MenuItem>
+            <MenuItem value="trainer">Trainer</MenuItem>
+            <MenuItem value="trainee">Trainee</MenuItem>
+          </Select>
+        </FormControl>
+      </Stack>
       <DataGrid
+        disableColumnMenu
         disableSelectionOnClick
-        disableColumnSelector
-        disableDensitySelector
+        pagination
+        paginationMode="server"
+        rowCount={rowCount}
+        onPageChange={(newPage) => {
+          setPage(newPage);
+        }}
+        rowsPerPageOptions={[10]}
+        pageSize={10}
         rows={tableData}
         columns={columns}
-        pageSize={10}
-        rowsPerPageOptions={[10]}
+        loading={isLoading}
         backgroundColor={theme.palette.grey[50]}
         sx={{ boxShadow: "0 0 12px #ccc" }}
-        components={{ Toolbar: GridToolbar }}
-        componentsProps={{
-          toolbar: {
-            showQuickFilter: true,
-            quickFilterProps: { debounceMs: 500 },
-          },
-        }}
-        loading={isLoading}
       />
     </>
   );

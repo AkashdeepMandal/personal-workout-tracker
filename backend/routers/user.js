@@ -18,7 +18,8 @@ router.post("/api/user/create", async (req, res, next) => {
     }
     const newUser = new User({ ...req.body, role: "trainee" });
     const user = await newUser.save();
-    const authToken = await newUser.generateAuthToken();
+    console.log(req.body?.remember);
+    const authToken = [];
     res.status(201).send({ user, authToken });
   } catch (error) {
     error.status = 400;
@@ -33,8 +34,22 @@ router.post("/api/user/login", async (req, res, next) => {
       req.body.email,
       req.body.password
     );
-    const authToken = await user.generateAuthToken();
+    const authToken = await user.generateAuthToken(req.body?.remember);
     res.send({ user, authToken });
+  } catch (error) {
+    error.status = 400;
+    next(error);
+  }
+});
+
+// logout Users
+router.post("/api/user/logout", auth, async (req, res, next) => {
+  try {
+    req.user.tokens = req.user.tokens.filter(
+      (token) => token.token !== req.token
+    );
+    await req.user.save();
+    res.send({ message: "logout successful" });
   } catch (error) {
     error.status = 400;
     next(error);
@@ -78,20 +93,6 @@ router.patch("/api/user/edit", auth, async (req, res, next) => {
     await req.user.save();
 
     res.send(req.user);
-  } catch (error) {
-    error.status = 400;
-    next(error);
-  }
-});
-
-// logout Users
-router.post("/api/user/logout", auth, async (req, res, next) => {
-  try {
-    req.user.tokens = req.user.tokens.filter(
-      (token) => token.token !== req.token
-    );
-    await req.user.save();
-    res.send({ message: "logout successful" });
   } catch (error) {
     error.status = 400;
     next(error);

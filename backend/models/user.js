@@ -70,13 +70,15 @@ const userSchema = new mongoose.Schema(
 );
 
 // instance functions
-userSchema.methods.generateAuthToken = async function () {
+userSchema.methods.generateAuthToken = async function (rememberMe = false) {
   const user = this;
+  let validity = "1d";
+  if (rememberMe === true) validity = "30d";
   const token = await jwt.sign(
     { _id: user._id.toString(), role: user.role.toString() },
     process.env.JWT_SECRET,
     {
-      expiresIn: "7d",
+      expiresIn: validity,
     }
   );
   user.tokens = user.tokens.concat({ token });

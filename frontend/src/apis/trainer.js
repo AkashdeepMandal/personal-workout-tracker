@@ -3,10 +3,13 @@ import axios from "axios";
 const baseURL = "http://localhost:5000/api";
 
 // view trainees
-export const trainerViewTrainees = async (authToken) => {
-  return await axios.get(baseURL + "/trainer/users/details", {
-    headers: { Authorization: "Bearer " + authToken },
-  });
+export const trainerViewTrainees = async (authToken, search = "", skip = 0) => {
+  return await axios.get(
+    baseURL + `/trainer/users/details?skip=${skip}&search=${search}`,
+    {
+      headers: { Authorization: "Bearer " + authToken },
+    }
+  );
 };
 
 // view trainee's details
@@ -17,10 +20,19 @@ export const trainerViewTraineeDetails = async (authToken, id) => {
 };
 
 // get workouts
-export const trainerViewWorkouts = async (authToken) => {
-  return await axios.get(baseURL + "/trainer/workouts/details", {
-    headers: { Authorization: "Bearer " + authToken },
-  });
+export const trainerViewWorkouts = async (
+  authToken,
+  search = "",
+  filter = "",
+  skip = 0
+) => {
+  return await axios.get(
+    baseURL +
+      `/trainer/workouts/details?skip=${skip}&search=${search}&filter=${filter}`,
+    {
+      headers: { Authorization: "Bearer " + authToken },
+    }
+  );
 };
 
 // assign workout for trainee

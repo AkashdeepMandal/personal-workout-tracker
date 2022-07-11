@@ -6,10 +6,15 @@ import {
   Snackbar,
   Alert,
   Slide,
+  Stack,
+  OutlinedInput,
+  FormControl,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { Link as NavLink } from "react-router-dom";
 
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import { useSelector } from "react-redux";
 import {
   adminDeleteWorkoutDetails,
@@ -20,10 +25,14 @@ import { textCapitalize } from "../../../utils/textCapitalize";
 import cardio from "../../../assets/cardio.png";
 
 function WorkoutTable({ action }) {
+  const { user } = useSelector((state) => state.user);
   const [tableData, setTableData] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [rowCount, setRowCount] = useState(0);
+  const [page, setPage] = useState(0);
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const { user } = useSelector((state) => state.user);
   const theme = useTheme();
 
   const columns = [
@@ -112,9 +121,10 @@ function WorkoutTable({ action }) {
 
   useEffect(() => {
     setIsLoading(true);
-    adminViewWorkouts(user.authToken)
+    adminViewWorkouts(user.authToken, search, filter, page)
       .then((res) => {
-        const workouts = res.data.map((workout) => {
+        const { workouts, totalWorkouts } = res.data;
+        const Workouts = workouts.map((workout) => {
           return {
             id: workout._id,
             category: `${textCapitalize(workout.category)}`,
@@ -124,14 +134,15 @@ function WorkoutTable({ action }) {
           };
         });
         setIsLoading(false);
-        setTableData(workouts);
+        setRowCount(totalWorkouts);
+        setTableData(Workouts);
       })
       .catch((error) => {
         setIsLoading(false);
       });
     setRefresh(false);
     // eslint-disable-next-line
-  }, [refresh]);
+  }, [refresh, search, filter, page]);
 
   const handelDelete = async (id) => {
     await adminDeleteWorkoutDetails(user.authToken, id)
@@ -188,24 +199,57 @@ function WorkoutTable({ action }) {
           {snackBarState.message}
         </Alert>
       </Snackbar>
+
+      <Stack direction="row" spacing={3} justifyContent="flex-end" marginY={2}>
+        <OutlinedInput
+          fullWidth
+          size="small"
+          autoComplete="off"
+          id="search"
+          type="text"
+          value={search}
+          name="search"
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+          placeholder="Search by name or e-mail"
+          inputProps={{}}
+        />
+        <FormControl sx={{ m: 1, minWidth: 120 }}>
+          <Select
+            size="small"
+            value={filter}
+            onChange={(e) => {
+              setFilter(e.target.value);
+            }}
+            displayEmpty
+            inputProps={{ "aria-label": "Without label" }}
+          >
+            <MenuItem value="">
+              <em>Fliter by category</em>
+            </MenuItem>
+            <MenuItem value="strength">Strength</MenuItem>
+            <MenuItem value="cardio">Cardio</MenuItem>
+          </Select>
+        </FormControl>
+      </Stack>
+
       <DataGrid
+        disableColumnMenu
         disableSelectionOnClick
-        disableColumnSelector
-        disableDensitySelector
+        pagination
+        paginationMode="server"
+        rowCount={rowCount}
+        onPageChange={(newPage) => {
+          setPage(newPage);
+        }}
+        rowsPerPageOptions={[10]}
+        pageSize={10}
         rows={tableData}
         columns={columns}
-        pageSize={10}
-        rowsPerPageOptions={[10]}
+        loading={isLoading}
         backgroundColor={theme.palette.grey[50]}
         sx={{ boxShadow: "0 0 12px #ccc" }}
-        components={{ Toolbar: GridToolbar }}
-        componentsProps={{
-          toolbar: {
-            showQuickFilter: true,
-            quickFilterProps: { debounceMs: 500 },
-          },
-        }}
-        loading={isLoading}
       />
     </>
   );
