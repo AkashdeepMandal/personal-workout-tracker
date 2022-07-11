@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Avatar, Button, useTheme } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { Avatar, Button, OutlinedInput, Stack, useTheme } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 import { useSelector } from "react-redux";
 import { Link as NavLink } from "react-router-dom";
 import { buildImage } from "../../../utils/buildImage";
@@ -123,23 +123,40 @@ function UserTable({ action }) {
   }, [search, page]);
 
   return (
-    <DataGrid
-      disableColumnMenu
-      disableSelectionOnClick
-      pagination
-      paginationMode="server"
-      rowCount={rowCount}
-      onPageChange={(newPage) => {
-        setPage(newPage);
-      }}
-      rowsPerPageOptions={[10]}
-      pageSize={10}
-      rows={tableData}
-      columns={columns}
-      loading={isLoading}
-      sx={{ boxShadow: "0 0 12px #ccc" }}
-      backgroundColor={theme.palette.grey[50]}
-    />
+    <>
+      <Stack direction="row" spacing={3} justifyContent="flex-end" marginY={2}>
+        <OutlinedInput
+          size="small"
+          autoComplete="off"
+          id="search"
+          type="text"
+          value={search}
+          name="search"
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+          placeholder="Search by name or e-mail"
+          inputProps={{}}
+        />
+      </Stack>
+      <DataGrid
+        disableColumnMenu
+        disableSelectionOnClick
+        pagination
+        paginationMode="server"
+        rowCount={rowCount}
+        onPageChange={(newPage) => {
+          setPage(newPage);
+        }}
+        rowsPerPageOptions={[10]}
+        pageSize={10}
+        rows={tableData}
+        columns={columns}
+        loading={isLoading}
+        sx={{ boxShadow: "0 0 12px #ccc" }}
+        backgroundColor={theme.palette.grey[50]}
+      />
+    </>
   );
 }
 
