@@ -46,6 +46,7 @@ router.get(
       } else {
         const totalUsers = await User.countDocuments({
           $and: [
+            { _id: { $ne: req.user.id } },
             { role: { $regex: req.query.filter || "" } },
             {
               $or: [
@@ -59,6 +60,7 @@ router.get(
         const users = await User.find(
           {
             $and: [
+              { _id: { $ne: req.user.id } },
               { role: { $regex: req.query.filter || "" } },
               {
                 $or: [
@@ -72,11 +74,31 @@ router.get(
           null,
           {
             limit: parseInt(req.query.limit) || 10,
-            skip: parseInt(req.query.skip) * 10 || 0,
+            skip:
+              parseInt(req.query.skip) * (parseInt(req.query.limit) || 10) || 0,
           }
         );
         res.send({ users, totalUsers });
       }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// Count users
+router.get(
+  "/api/admin/count/users",
+  [auth, authAdmin],
+  async (req, res, next) => {
+    try {
+      const count = {};
+      count.totalUser = await User.countDocuments();
+      count.admin = await User.countDocuments({ role: "admin" });
+      count.trainer = await User.countDocuments({ role: "trainer" });
+      count.trainee = await User.countDocuments({ role: "trainee" });
+
+      res.send({ count });
     } catch (error) {
       next(error);
     }

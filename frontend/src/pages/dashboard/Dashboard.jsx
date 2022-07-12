@@ -1,19 +1,30 @@
-import { Box } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import React from "react";
+import Admin from "../../components/dashboard/Admin";
+import { useSelector } from "react-redux";
 
-function Dashboard({ drawerWidth }) {
-  console.log(drawerWidth);
+function Dashboard() {
+  const { user } = useSelector((state) => state.user);
   return (
-    <Box
-      sx={{
-        width: { sm: `calc(100% - ${drawerWidth}px)` },
-        flexGrow: 1,
-        p: 3,
-        // height: "100vh",
-        backgroundColor: "green",
-      }}
-    >
-      Dashboard
+    <Box>
+      <Typography
+        variant="h4"
+        component="h1"
+        fontWeight={600}
+        sx={{ fontSize: { xs: "24px", sm: "28px" } }}
+      >
+        Dashboard
+      </Typography>
+      <Grid
+        container
+        spacing={2}
+        direction="column"
+        py={4}
+        sx={{ minHeight: "400px" }}
+        justifyContent="center"
+      >
+        {user.role === "admin" && <Admin />}
+      </Grid>
     </Box>
   );
 }
