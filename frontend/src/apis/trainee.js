@@ -16,8 +16,8 @@ export const traineeViewWorkoutDetails = async (authToken, id) => {
   });
 };
 
+// save completed workout
 export const traineeSaveWorkouts = async (authToken, workouts) => {
-  console.log(workouts);
   return await axios.post(baseURL + "/trainee/workout/save", workouts, {
     headers: { Authorization: "Bearer " + authToken },
   });

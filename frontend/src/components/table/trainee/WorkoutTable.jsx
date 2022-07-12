@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { Avatar, useTheme, Button } from "@mui/material";
+import {
+  Avatar,
+  useTheme,
+  Button,
+  Snackbar,
+  Alert,
+  Slide,
+} from "@mui/material";
 import { Link as NavLink } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import { useSelector } from "react-redux";
@@ -45,6 +52,7 @@ const WorkoutTable = () => {
       hide: true,
       allowSearch: false,
     },
+    { field: "status", headerName: "Status", flex: 1 },
     {
       field: "action",
       headerName: "Action",
@@ -55,6 +63,7 @@ const WorkoutTable = () => {
             size="small"
             to={`/trainee/start-workouts/${params.id}`}
             variant="contained"
+            disabled={params.row.status === "Completed" ? true : false}
             component={NavLink}
             sx={{ fontSize: "14px", textTransform: "capitalize" }}
           >
@@ -73,10 +82,19 @@ const WorkoutTable = () => {
         return {
           id: value.workout._id,
           logo: value.workout.logo,
+          status: `${textCapitalize(value.status)}`,
           calories: value.workout.calories,
           name: `${textCapitalize(value.workout.name)}`,
         };
       });
+      const checkAllWorkoutCompleted = workout.every(
+        (value) => value.status === "Completed"
+      );
+      if (checkAllWorkoutCompleted) {
+        openAlart({
+          message: "All workouts are completed for today, Come back tomorrow.",
+        });
+      }
       setWorkoutList(workout);
     });
     setIsLoading(false);
@@ -84,8 +102,44 @@ const WorkoutTable = () => {
     // eslint-disable-next-line
   }, []);
 
+  // Snackbar
+  const [snackBarState, setSnackBarState] = useState({
+    open: false,
+    severity: "success",
+    message: "",
+    vertical: "top",
+    horizontal: "center",
+  });
+
+  const { vertical, horizontal } = snackBarState;
+
+  const openAlart = (newState) => {
+    setSnackBarState({ ...snackBarState, open: true, ...newState });
+  };
+
+  const handleClose = () => {
+    setSnackBarState({ ...snackBarState, open: false });
+  };
+
   return (
     <>
+      <Snackbar
+        anchorOrigin={{ vertical, horizontal }}
+        open={snackBarState.open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        TransitionComponent={Slide}
+        direction="down"
+      >
+        <Alert
+          onClose={handleClose}
+          severity={snackBarState.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackBarState.message}
+        </Alert>
+      </Snackbar>
+
       <DataGrid
         disableColumnMenu
         disableSelectionOnClick

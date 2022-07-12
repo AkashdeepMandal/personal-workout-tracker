@@ -90,10 +90,13 @@ router.patch(
   async (req, res, next) => {
     const updates = Object.keys(req.body);
     const allowedUpdates = [
+      "role",
       "firstName",
       "lastName",
       "dob",
       "contactNumber",
+      "gender",
+      "email",
       "address",
       "password",
     ];
@@ -101,7 +104,11 @@ router.patch(
       allowedUpdates.includes(update)
     );
 
-    if (!isValidOptions) throw new Error("Invalid updates!");
+    if (!isValidOptions) {
+      const newError = new Error("Invalid updates!");
+      newError.status = 400;
+      next(newError);
+    }
     try {
       const user = await User.findById(req.params.id);
       if (!user) throw new Error("Invalid User");
