@@ -20,7 +20,7 @@ function EditWorkouts() {
           color: theme.palette.grey[800],
         }}
       >
-        View Users
+        Edit Workouts
       </Typography>
       <WorkoutTable action="edit" />
     </Box>

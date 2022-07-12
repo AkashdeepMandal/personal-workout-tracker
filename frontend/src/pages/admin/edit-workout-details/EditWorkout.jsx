@@ -15,7 +15,7 @@ function EditWorkout() {
         fontWeight={600}
         sx={{ fontSize: { xs: "24px", sm: "28px" } }}
       >
-        Edit User Details
+        Edit Workout Details
       </Typography>
 
       <Grid container spacing={2} direction="row" py={4}>

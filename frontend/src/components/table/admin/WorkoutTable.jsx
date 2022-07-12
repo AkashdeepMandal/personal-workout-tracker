@@ -202,7 +202,6 @@ function WorkoutTable({ action }) {
 
       <Stack direction="row" spacing={3} justifyContent="flex-end" marginY={2}>
         <OutlinedInput
-          fullWidth
           size="small"
           autoComplete="off"
           id="search"
@@ -212,7 +211,7 @@ function WorkoutTable({ action }) {
           onChange={(e) => {
             setSearch(e.target.value);
           }}
-          placeholder="Search by name or e-mail"
+          placeholder="Search by workout name"
           inputProps={{}}
         />
         <FormControl sx={{ m: 1, minWidth: 120 }}>
