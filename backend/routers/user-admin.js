@@ -154,9 +154,9 @@ router.post(
         name: newWorkout.name,
       });
       if (checkWorkoutExist) {
-        const errorMsg = new Error("Workout Already Exist");
-        errorMsg.status = 400;
-        throw errorMsg;
+        const errorMessege = new Error("Workout Already Exist");
+        errorMessege.status = 401;
+        throw errorMessege;
       }
       const workout = await newWorkout.save();
       res.status(201).send(workout);
