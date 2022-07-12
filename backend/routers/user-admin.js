@@ -148,8 +148,16 @@ router.post(
   "/api/admin/workout/create",
   [auth, authAdmin],
   async (req, res, next) => {
-    const newWorkout = new Workout({ ...req.body, createdBy: req.user._id });
     try {
+      const newWorkout = new Workout({ ...req.body, createdBy: req.user._id });
+      const checkWorkoutExist = await Workout.findOne({
+        name: newWorkout.name,
+      });
+      if (checkWorkoutExist) {
+        const errorMessege = new Error("Workout Already Exist");
+        errorMessege.status = 401;
+        throw errorMessege;
+      }
       const workout = await newWorkout.save();
       res.status(201).send(workout);
     } catch (error) {

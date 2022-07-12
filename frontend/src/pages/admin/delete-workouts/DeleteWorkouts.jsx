@@ -20,7 +20,7 @@ function DeleteWorkouts() {
           color: theme.palette.grey[800],
         }}
       >
-        Delete Users
+        Delete Workouts
       </Typography>
       <WorkoutTable action={"delete"} />
     </Box>

@@ -20,7 +20,7 @@ function ViewWorkouts() {
           color: theme.palette.grey[800],
         }}
       >
-        View Users
+        View Workouts
       </Typography>
       <WorkoutTable action="view" />
     </Box>
