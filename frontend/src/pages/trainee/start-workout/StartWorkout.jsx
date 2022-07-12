@@ -56,21 +56,20 @@ const StartWorkout = () => {
     clearInterval(timer);
     const workouts = {
       name: workoutDetails.name,
-      // logo: workoutDetails.logo,
+      logo: workoutDetails.logo,
       duration: `${
         duration.minute < 10 ? "0" + duration.minute : duration.minute
       } : ${duration.second < 10 ? "0" + duration.second : duration.second}`,
       totalCalories,
     };
-    console.log(workouts);
-    await traineeSaveWorkouts(user.authToken, workouts)
+    const { logo, ...workoutdata } = workouts;
+    await traineeSaveWorkouts(user.authToken, workoutdata)
       .then(() => {
         navigate("/trainee/start-workouts");
       })
       .catch(() => {
         navigate("/trainee/start-workouts");
       });
-    // setDuration({ minute: 0, second: 0 });
   };
 
   return (
@@ -155,7 +154,7 @@ const StartWorkout = () => {
                 sx={{ fontSize: "14px", textTransform: "capitalize" }}
                 onClick={handleClick}
               >
-                Finish Workout
+                End Workout
               </Button>
             </Stack>
           </Stack>

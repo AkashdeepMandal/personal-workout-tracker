@@ -9,23 +9,46 @@ const User = require("../models/user");
 const router = express.Router();
 
 //Get plans assigned to trainee
-// /GET /api/trainer/plan/user/:trainee_id
+// /GET /api/trainee/assigned/workouts
 router.get(
   "/api/trainee/assigned/workouts",
   [auth, authTrainee],
   async (req, res, next) => {
     try {
-      // if (req.param.id) {
       const plan = await Plan.findOne({ trainee: req.user._id })
         .populate([{ path: "trainee", select: "firstName lastName" }])
         .populate([
           { path: "workouts.workout", select: "name category calories logo" },
-        ]);
-      if (!plan) {
+        ])
+        .lean();
+      const date = new Date();
+      const today =
+        date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate();
+      const trainee = await Progress.findOne({
+        trainee: req.user.id,
+        createdAt: { $gte: new Date(today) },
+      });
+      if (trainee) {
+        plan.workouts = plan.workouts.map((value) => {
+          const isWorkoutExist = trainee.workouts.find((completedWorkout) => {
+            return completedWorkout.name === value.workout.name;
+          });
+          return {
+            ...value,
+            status: isWorkoutExist ? "completed" : "pending",
+          };
+        });
+      } else if (!plan) {
         const errorMsg = new Error("Plans Unavailable");
         errorMsg.status = 404;
         throw errorMsg;
+      } else {
+        plan.workouts = plan.workouts.map((value) => ({
+          ...value,
+          status: "pending",
+        }));
       }
+
       res.send(plan);
     } catch (error) {
       next(error);
@@ -48,6 +71,7 @@ router.get(
   }
 );
 
+// save workout progress
 router.post(
   "/api/trainee/workout/save",
   [auth, authTrainee],
@@ -84,6 +108,28 @@ router.post(
       }
     } catch (error) {
       error.status = 404;
+      next(error);
+    }
+  }
+);
+
+// check workout is done
+router.get(
+  "/api/trainee/check/progress",
+  [auth, authTrainee],
+  async (req, res, next) => {
+    try {
+      const date = new Date();
+      const today =
+        date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate();
+      const trainee = await Progress.findOne({
+        trainee: req.user.id,
+        createdAt: { $gte: new Date(today) },
+      });
+      if (trainee) res.send(trainee?.workouts);
+      res.send([]);
+    } catch (error) {
+      error.status = 400;
       next(error);
     }
   }

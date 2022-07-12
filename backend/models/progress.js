@@ -10,7 +10,6 @@ const progressSchema = new mongoose.Schema(
     workouts: [
       {
         name: { type: String },
-        logo: { type: Buffer },
         duration: { type: String },
         totalCalories: { type: Number },
       },
