@@ -65,6 +65,13 @@ export const adminDeleteUserDetails = async (authToken, id) => {
   });
 };
 
+// count users
+export const countUsers = async (authToken) => {
+  return await axios.get(baseURL + `/admin/count/users`, {
+    headers: { Authorization: "Bearer " + authToken },
+  });
+};
+
 // workout action
 // create new workout
 export const adminCreatWorkout = async (authToken, workout) => {
