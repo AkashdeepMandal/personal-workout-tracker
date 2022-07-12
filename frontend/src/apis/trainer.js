@@ -19,6 +19,13 @@ export const trainerViewTraineeDetails = async (authToken, id) => {
   });
 };
 
+// count trainees
+export const countTrainees = async (authToken) => {
+  return await axios.get(baseURL + `/trainer/count/trainees`, {
+    headers: { Authorization: "Bearer " + authToken },
+  });
+};
+
 // get workouts
 export const trainerViewWorkouts = async (
   authToken,
@@ -58,5 +65,12 @@ export const trainerRemoveWorkout = async (authToken, id, workout) => {
     data: {
       workout,
     },
+  });
+};
+
+// count workouts
+export const countWorkouts = async (authToken) => {
+  return await axios.get(baseURL + `/trainer/count/workouts`, {
+    headers: { Authorization: "Bearer " + authToken },
   });
 };

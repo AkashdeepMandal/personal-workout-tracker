@@ -59,6 +59,20 @@ router.get(
   }
 );
 
+// Count trainees
+router.get(
+  "/api/trainer/count/trainees",
+  [auth, authTrainer],
+  async (req, res, next) => {
+    try {
+      const countTrainees = await User.countDocuments({ role: "trainee" });
+      res.send({ countTrainees });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 // get workouts
 // /GET /api/trainer/workouts/details/62bc60f8da2d4e0cc50e75bb
 // /GET /api/trainer/workouts/details?filter=cardio&limit=2&skip=0&search=5
@@ -128,6 +142,20 @@ router.post(
       res.status(201).send();
     } catch (error) {
       error.status = 400;
+      next(error);
+    }
+  }
+);
+
+// Count Workous
+router.get(
+  "/api/trainer/count/workouts",
+  [auth, authTrainer],
+  async (req, res, next) => {
+    try {
+      const countWorkouts = await Workout.countDocuments();
+      res.send({ countWorkouts });
+    } catch (error) {
       next(error);
     }
   }

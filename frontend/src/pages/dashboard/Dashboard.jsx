@@ -2,6 +2,7 @@ import { Box, Grid, Typography } from "@mui/material";
 import React from "react";
 import Admin from "../../components/dashboard/Admin";
 import { useSelector } from "react-redux";
+import Trainer from "../../components/dashboard/Trainer";
 
 function Dashboard() {
   const { user } = useSelector((state) => state.user);
@@ -24,6 +25,7 @@ function Dashboard() {
         justifyContent="center"
       >
         {user.role === "admin" && <Admin />}
+        {user.role === "trainer" && <Trainer />}
       </Grid>
     </Box>
   );
