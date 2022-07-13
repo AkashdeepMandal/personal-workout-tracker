@@ -30,6 +30,7 @@ import RemoveWorkoutTrainee from "../pages/trainer/remove-workout-trainee/Remove
 import Unauthorized from "../pages/error/Unauthorized";
 import StartWorkouts from "../pages/trainee/start-workouts/StartWorkouts";
 import StartWorkout from "../pages/trainee/start-workout/StartWorkout";
+import Report from "../pages/trainee/report/Report";
 
 const CustomRoutes = () => {
   return (
@@ -155,6 +156,10 @@ const CustomRoutes = () => {
               element={<ProtectedRoute Component={StartWorkout} />}
             />
           </Route>
+          <Route
+            path="report"
+            element={<ProtectedRoute Component={Report} />}
+          />
         </Route>
 
         {/* error */}

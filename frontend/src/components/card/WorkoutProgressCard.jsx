@@ -1,18 +1,10 @@
-import {
-  capitalize,
-  Card,
-  CardContent,
-  Divider,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Card, CardContent, Divider, Stack, Typography } from "@mui/material";
 import moment from "moment";
 import React from "react";
 import { textCapitalize } from "../../utils/textCapitalize";
 import "../styles/scss/progressCardTables.scss";
 
 const WorkoutProgressCard = ({ value, ...rest }) => {
-  console.log(value.workouts);
   return (
     <Card
       sx={{
