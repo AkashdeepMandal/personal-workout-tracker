@@ -7,7 +7,6 @@ import {
   Alert,
   Slide,
   Typography,
-  Box,
   Stack,
 } from "@mui/material";
 import { Link as NavLink } from "react-router-dom";

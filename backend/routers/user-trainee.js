@@ -28,7 +28,6 @@ router.get(
         trainee: req.user.id,
         createdAt: {
           $gte: today.toDate(),
-          // $lte: moment(today).endOf("day").toDate(),
         },
       });
       if (trainee) {
@@ -85,7 +84,6 @@ router.post(
         trainee: req.user.id,
         createdAt: {
           $gte: today.toDate(),
-          // $lte: moment(today).endOf("day").toDate(),
         },
       });
       if (trainee) {
@@ -181,14 +179,17 @@ router.get(
 
       for (let month = 1; month <= 12; month++) {
         // first day of a month
-        const startOfMonth = moment(`${currentYear}-${month}`).startOf("month");
-        // .format("YYYY-MM-DD");
+        const startOfMonth = moment(
+          `${currentYear}-${month}`,
+          "yyyy-MM"
+        ).startOf("month");
         // last day of a month
-        const endOfMonth = moment(`${currentYear}-${month}`).endOf("month");
-        // .format("YYYY-MM-DD");
+        const endOfMonth = moment(`${currentYear}-${month}`, "yyyy-MM").endOf(
+          "month"
+        );
         // list of months
         monthlyProgress.labels.push(
-          moment(`${currentYear}-${month}`).format("MMMM").toString()
+          moment(`${currentYear}-${month}`, "yyyy-MM").format("MMMM").toString()
         );
 
         const progress = await Progress.find({
@@ -214,6 +215,54 @@ router.get(
         }
       }
       res.send({ monthlyProgress });
+    } catch (error) {
+      error.status = 400;
+      next(error);
+    }
+  }
+);
+
+// weekly Report
+router.get(
+  "/api/trainee/report/weekly",
+  [auth, authTrainee],
+  async (req, res, next) => {
+    try {
+      const weeklyProgress = { labels: [], data: [] };
+
+      const currentYear = moment().format("yyyy");
+      const currentMonth = moment().format("MM");
+      let day = moment().format("DD");
+
+      for (let i = 0; i < 7; i++) {
+        const date = `${currentYear} / ${currentMonth} / ${day}`;
+
+        const traineeProgress = await Progress.find({
+          trainee: req.user.id,
+          createdAt: {
+            $gte: moment(date, "yyyy/MM/DD").startOf("day").toDate(),
+            $lte: moment(date, "yyyy/MM/DD").endOf("day").toDate(),
+          },
+        });
+
+        // check if previours session exist of not
+        if (traineeProgress.length <= 0) {
+          weeklyProgress.data.push(0);
+        } else {
+          traineeProgress.map((progress) => {
+            const totalCalories = progress.workouts.reduce((total, workout) => {
+              return workout.totalCalories + total;
+            }, 0);
+            const avg = totalCalories / progress.workouts.length;
+            weeklyProgress.data.push(avg);
+          });
+        }
+        weeklyProgress.labels.push(moment(date, "yyyy/MM/DD").format("DD MMM"));
+        day -= 1;
+      }
+      weeklyProgress.labels = weeklyProgress.labels.reverse();
+      weeklyProgress.data = weeklyProgress.data.reverse();
+      res.send({ weeklyProgress });
     } catch (error) {
       error.status = 400;
       next(error);

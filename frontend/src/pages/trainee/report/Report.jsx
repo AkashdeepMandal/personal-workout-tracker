@@ -1,7 +1,10 @@
 import { Box, Stack, Typography, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { traineeMonthlyProgress } from "../../../apis/trainee";
+import {
+  traineeMonthlyProgress,
+  traineeWeeklyProgress,
+} from "../../../apis/trainee";
 import BarChart from "../../../components/charts/BarChart";
 import moment from "moment";
 
@@ -11,16 +14,23 @@ const Report = () => {
     labels: [],
     data: [],
   });
+  const [weeklyProgress, setWeeklyProgress] = useState({
+    labels: [],
+    data: [],
+  });
   const theme = useTheme();
 
   useEffect(() => {
     traineeMonthlyProgress(user.authToken).then((res) => {
       setMonthlyProgress(res.data.monthlyProgress);
     });
+    traineeWeeklyProgress(user.authToken).then((res) => {
+      setWeeklyProgress(res.data.weeklyProgress);
+    });
     // eslint-disable-next-line
   }, []);
 
-  console.log(monthlyProgress);
+  console.log(weeklyProgress);
 
   return (
     <Box
@@ -43,18 +53,18 @@ const Report = () => {
       <Stack direction="column" spacing={2}>
         <Box height={300}>
           <Typography variant="body1">
+            Weekly report - Average calories burned per day
+          </Typography>
+          <BarChart data={weeklyProgress} label={`Weekly progress`} />
+        </Box>
+        <Box height={300}>
+          <Typography variant="body1" pt={6}>
             Monthly report - Average calories burned per month
           </Typography>
           <BarChart
             data={monthlyProgress}
             label={`${moment().format("yyyy")} monthly progress`}
           />
-        </Box>
-        <Box height={300}>
-          <Typography variant="body1" pt={6}>
-            Weekly report - Average calories burned per day
-          </Typography>
-          <BarChart data={monthlyProgress} label={` weekly progress`} />
         </Box>
       </Stack>
     </Box>

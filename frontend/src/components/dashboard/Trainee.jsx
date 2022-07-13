@@ -18,8 +18,6 @@ const Trainee = () => {
     // eslint-disable-next-line
   }, []);
 
-  console.log(progress.length);
-
   return (
     <>
       <Grid item sm={12}>

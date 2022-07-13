@@ -36,3 +36,10 @@ export const traineeMonthlyProgress = async (authToken) => {
     headers: { Authorization: "Bearer " + authToken },
   });
 };
+
+// monthly progress graph of current year
+export const traineeWeeklyProgress = async (authToken) => {
+  return await axios.get(baseURL + "/trainee/report/weekly", {
+    headers: { Authorization: "Bearer " + authToken },
+  });
+};
