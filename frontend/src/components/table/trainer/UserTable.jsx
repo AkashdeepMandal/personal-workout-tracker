@@ -34,19 +34,19 @@ function UserTable({ action }) {
         );
       },
       allowSearch: false,
-      flex: 1,
+      width: 80,
     },
     {
       field: "name",
       headerName: "Name",
-      flex: 1,
+      width: 200,
     },
     { field: "gender", headerName: "Gender", flex: 1, allowSearch: false },
     { field: "age", headerName: "Age", flex: 1, allowSearch: false },
     {
       field: "action",
       headerName: "Action",
-      flex: 1,
+      width: 150,
       renderCell: (params) => {
         if (action === "view") {
           return (

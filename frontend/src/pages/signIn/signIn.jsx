@@ -85,7 +85,7 @@ function SignIn() {
               alignItems="baseline"
               sx={{ mb: { xs: -0.5, sm: 0.5 } }}
             >
-              <Typography variant="h3">Login</Typography>
+              <Typography variant="h4">Login</Typography>
               <Typography
                 component={RouterLink}
                 to="/sign-up"
@@ -174,7 +174,7 @@ function SignIn() {
                             />
                           }
                           label={
-                            <Typography variant="h6">
+                            <Typography variant="body1">
                               Keep me sign in
                             </Typography>
                           }

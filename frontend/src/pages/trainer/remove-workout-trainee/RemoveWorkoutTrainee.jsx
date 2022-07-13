@@ -32,7 +32,7 @@ const RemoveWorkoutTrainee = () => {
 
   const columns = [
     { field: "id", headerName: "Id", hide: true, allowSearch: false },
-    { field: "category", headerName: "Category", flex: 1 },
+    { field: "category", headerName: "Category", width: 120 },
     {
       field: "logo",
       headerName: "Logo",
@@ -54,13 +54,13 @@ const RemoveWorkoutTrainee = () => {
     {
       field: "name",
       headerName: "Name",
-      flex: 1,
+      width: 180,
     },
     { field: "calories", headerName: "Calories per minute", flex: 1 },
     {
       field: "action",
       headerName: "Action",
-      flex: 1,
+      width: 120,
       renderCell: (params) => {
         return (
           <>

@@ -53,9 +53,9 @@ function UserTable({ action }) {
     {
       field: "name",
       headerName: "Name",
-      flex: 1,
+      width: 150,
     },
-    { field: "email", headerName: "E-mail", flex: 1 },
+    { field: "email", headerName: "E-mail", width: 200 },
     { field: "gender", headerName: "Gender", width: 100, allowSearch: false },
     { field: "age", headerName: "Age", width: 90, allowSearch: false },
     {

@@ -17,16 +17,17 @@ function TrainerSideBarNavOptions() {
   return (
     <>
       <SideBarNav
-        sx={{ margin: { xs: "14px 6px 12px 6px", sm: "16px 14px 14px 14px" } }}
+        sx={{ margin: { xs: "14px 6px 12px 6px", md: "16px 14px 14px 14px" } }}
         subheader={
           <ListSubheader
             component="div"
             id="nested-list-subheader"
             sx={{
               fontWeight: 600,
-              fontSize: { xs: "12px", sm: "14px" },
+              fontSize: { xs: "12px", md: "14px" },
               letterSpacing: "1px",
               marginBottom: "6px",
+              display: { xs: "none", md: "block" },
             }}
           >
             Actions
@@ -44,7 +45,11 @@ function TrainerSideBarNavOptions() {
             </ListItemIcon>
             <ListItemText
               primary="View Trainee"
-              primaryTypographyProps={{ fontSize: 12, fontWeight: "medium" }}
+              primaryTypographyProps={{
+                fontSize: 12,
+                fontWeight: "medium",
+                display: { xs: "none", md: "block" },
+              }}
             />
           </ListItemButton>
         </ListItem>
@@ -59,7 +64,11 @@ function TrainerSideBarNavOptions() {
             </ListItemIcon>
             <ListItemText
               primary="Assign Workout"
-              primaryTypographyProps={{ fontSize: 12, fontWeight: "medium" }}
+              primaryTypographyProps={{
+                fontSize: 12,
+                fontWeight: "medium",
+                display: { xs: "none", md: "block" },
+              }}
             />
           </ListItemButton>
         </ListItem>
@@ -74,7 +83,11 @@ function TrainerSideBarNavOptions() {
             </ListItemIcon>
             <ListItemText
               primary="Remove Workout"
-              primaryTypographyProps={{ fontSize: 12, fontWeight: "medium" }}
+              primaryTypographyProps={{
+                fontSize: 12,
+                fontWeight: "medium",
+                display: { xs: "none", md: "block" },
+              }}
             />
           </ListItemButton>
         </ListItem>

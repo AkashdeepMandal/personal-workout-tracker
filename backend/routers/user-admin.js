@@ -139,7 +139,6 @@ router.patch(
 
       res.send(user);
     } catch (error) {
-      error.status = 400;
       next(error);
     }
   }

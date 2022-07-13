@@ -22,16 +22,17 @@ function AdminSideBarNavOptions() {
   return (
     <>
       <SideBarNav
-        sx={{ margin: { xs: "14px 6px 12px 6px", sm: "16px 14px 14px 14px" } }}
+        sx={{ margin: { xs: "14px 6px 12px 6px", md: "16px 14px 14px 14px" } }}
         subheader={
           <ListSubheader
             component="div"
             id="nested-list-subheader"
             sx={{
               fontWeight: 600,
-              fontSize: { xs: "12px", sm: "14px" },
+              fontSize: { xs: "12px", md: "14px" },
               letterSpacing: "1px",
               marginBottom: "6px",
+              display: { xs: "none", md: "block" },
             }}
           >
             Users
@@ -49,7 +50,11 @@ function AdminSideBarNavOptions() {
             </ListItemIcon>
             <ListItemText
               primary="Create User"
-              primaryTypographyProps={{ fontSize: 12, fontWeight: "medium" }}
+              primaryTypographyProps={{
+                fontSize: 12,
+                fontWeight: "medium",
+                display: { xs: "none", md: "block" },
+              }}
             />
           </ListItemButton>
         </ListItem>
@@ -64,7 +69,11 @@ function AdminSideBarNavOptions() {
             </ListItemIcon>
             <ListItemText
               primary="View Users"
-              primaryTypographyProps={{ fontSize: 12, fontWeight: "medium" }}
+              primaryTypographyProps={{
+                fontSize: 12,
+                fontWeight: "medium",
+                display: { xs: "none", md: "block" },
+              }}
             />
           </ListItemButton>
         </ListItem>
@@ -79,7 +88,11 @@ function AdminSideBarNavOptions() {
             </ListItemIcon>
             <ListItemText
               primary="Edit Users"
-              primaryTypographyProps={{ fontSize: 12, fontWeight: "medium" }}
+              primaryTypographyProps={{
+                fontSize: 12,
+                fontWeight: "medium",
+                display: { xs: "none", md: "block" },
+              }}
             />
           </ListItemButton>
         </ListItem>
@@ -94,23 +107,28 @@ function AdminSideBarNavOptions() {
             </ListItemIcon>
             <ListItemText
               primary="Delete Users"
-              primaryTypographyProps={{ fontSize: 12, fontWeight: "medium" }}
+              primaryTypographyProps={{
+                fontSize: 12,
+                fontWeight: "medium",
+                display: { xs: "none", md: "block" },
+              }}
             />
           </ListItemButton>
         </ListItem>
       </SideBarNav>
       <Divider variant="middle" />
       <SideBarNav
-        sx={{ margin: { xs: "14px 6px 12px 6px", sm: "16px 14px 14px 14px" } }}
+        sx={{ margin: { xs: "14px 6px 12px 6px", md: "16px 14px 14px 14px" } }}
         subheader={
           <ListSubheader
             component="div"
             id="nested-list-subheader"
             sx={{
               fontWeight: 600,
-              fontSize: { xs: "12px", sm: "14px" },
+              fontSize: { xs: "12px", md: "14px" },
               letterSpacing: "1px",
               marginBottom: "6px",
+              display: { xs: "none", md: "block" },
             }}
           >
             Workouts
@@ -128,7 +146,11 @@ function AdminSideBarNavOptions() {
             </ListItemIcon>
             <ListItemText
               primary="Create Workout"
-              primaryTypographyProps={{ fontSize: 12, fontWeight: "medium" }}
+              primaryTypographyProps={{
+                fontSize: 12,
+                fontWeight: "medium",
+                display: { xs: "none", md: "block" },
+              }}
             />
           </ListItemButton>
         </ListItem>
@@ -143,7 +165,11 @@ function AdminSideBarNavOptions() {
             </ListItemIcon>
             <ListItemText
               primary="View Workouts"
-              primaryTypographyProps={{ fontSize: 12, fontWeight: "medium" }}
+              primaryTypographyProps={{
+                fontSize: 12,
+                fontWeight: "medium",
+                display: { xs: "none", md: "block" },
+              }}
             />
           </ListItemButton>
         </ListItem>
@@ -158,7 +184,11 @@ function AdminSideBarNavOptions() {
             </ListItemIcon>
             <ListItemText
               primary="Edit Workouts"
-              primaryTypographyProps={{ fontSize: 12, fontWeight: "medium" }}
+              primaryTypographyProps={{
+                fontSize: 12,
+                fontWeight: "medium",
+                display: { xs: "none", md: "block" },
+              }}
             />
           </ListItemButton>
         </ListItem>
@@ -173,7 +203,11 @@ function AdminSideBarNavOptions() {
             </ListItemIcon>
             <ListItemText
               primary="Delete Workout"
-              primaryTypographyProps={{ fontSize: 12, fontWeight: "medium" }}
+              primaryTypographyProps={{
+                fontSize: 12,
+                fontWeight: "medium",
+                display: { xs: "none", md: "block" },
+              }}
             />
           </ListItemButton>
         </ListItem>

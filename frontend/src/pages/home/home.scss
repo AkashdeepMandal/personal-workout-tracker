@@ -243,3 +243,33 @@
     margin-top: 10px;
   }
 }
+
+@media (max-width: 768px) {
+  .landing {
+    .sign {
+      font-size: 32px;
+    }
+    .card-heading {
+      font-size: 18px;
+    }
+    .card-text {
+      font-size: 16px;
+    }
+    .fp,
+    .sp {
+      font-size: 16px;
+    }
+  }
+}
+@media (max-width: 486px) {
+  .landing {
+    .sign {
+      font-size: 22px;
+    }
+
+    .footer {
+      font-size: 16px;
+      padding: 18px;
+    }
+  }
+}

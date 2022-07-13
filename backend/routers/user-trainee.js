@@ -109,7 +109,6 @@ router.post(
         res.send(progress);
       }
     } catch (error) {
-      error.status = 404;
       next(error);
     }
   }
@@ -132,7 +131,6 @@ router.get(
       if (trainee) res.send(trainee?.workouts);
       res.send([]);
     } catch (error) {
-      error.status = 400;
       next(error);
     }
   }
@@ -161,7 +159,6 @@ router.get(
       }
       res.send([]);
     } catch (error) {
-      next.status = 400;
       next(error);
     }
   }
@@ -216,7 +213,6 @@ router.get(
       }
       res.send({ monthlyProgress });
     } catch (error) {
-      error.status = 400;
       next(error);
     }
   }
@@ -264,7 +260,6 @@ router.get(
       weeklyProgress.data = weeklyProgress.data.reverse();
       res.send({ weeklyProgress });
     } catch (error) {
-      error.status = 400;
       next(error);
     }
   }
