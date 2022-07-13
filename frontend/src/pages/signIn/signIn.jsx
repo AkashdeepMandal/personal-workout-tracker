@@ -179,14 +179,6 @@ function SignIn() {
                             </Typography>
                           }
                         />
-                        <Typography
-                          variant="h6"
-                          component={RouterLink}
-                          to=""
-                          color="text.primary"
-                        >
-                          Forgot Password?
-                        </Typography>
                       </Stack>
                     </Grid>
                     {errors.submit && (
