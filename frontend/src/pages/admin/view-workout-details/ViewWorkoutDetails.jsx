@@ -13,7 +13,6 @@ function ViewWorkoutDetails() {
   const [workoutDetails, setWorkoutDetails] = useState({});
   const { id } = useParams();
 
-  console.log(user.authToken);
   useEffect(() => {
     async function fetchWorkoutDetails() {
       await adminViewWorkoutDetails(user.authToken, id).then((res) => {
