@@ -51,9 +51,10 @@ function Home() {
               container
               rowSpacing={1}
               columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+              paddingX={1}
             >
-              <Grid item xs={6}>
-                <Card sx={{ maxWidth: 345 }}>
+              <Grid item xs={6} pb={6}>
+                <Card sx={{ maxWidth: 300 }}>
                   <CardActionArea>
                     <CardMedia
                       component="img"
@@ -83,7 +84,7 @@ function Home() {
                 </Card>
               </Grid>
               <Grid item xs={6}>
-                <Card sx={{ maxWidth: 345 }}>
+                <Card sx={{ maxWidth: 300 }}>
                   <CardActionArea>
                     <CardMedia
                       component="img"
