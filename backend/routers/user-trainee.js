@@ -5,6 +5,7 @@ const Workout = require("../models/workout");
 const Plan = require("../models/plan");
 const Progress = require("../models/progress");
 const User = require("../models/user");
+const moment = require("moment");
 
 const router = express.Router();
 
@@ -21,12 +22,14 @@ router.get(
           { path: "workouts.workout", select: "name category calories logo" },
         ])
         .lean();
-      const date = new Date();
-      const today =
-        date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate();
+
+      const today = moment().startOf("day");
       const trainee = await Progress.findOne({
         trainee: req.user.id,
-        createdAt: { $gte: new Date(today) },
+        createdAt: {
+          $gte: today.toDate(),
+          // $lte: moment(today).endOf("day").toDate(),
+        },
       });
       if (trainee) {
         plan.workouts = plan.workouts.map((value) => {
@@ -77,12 +80,13 @@ router.post(
   [auth, authTrainee],
   async (req, res, next) => {
     try {
-      const date = new Date();
-      const today =
-        date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate();
+      const today = moment().startOf("day");
       const trainee = await Progress.findOne({
         trainee: req.user.id,
-        createdAt: { $gte: new Date(today) },
+        createdAt: {
+          $gte: today.toDate(),
+          // $lte: moment(today).endOf("day").toDate(),
+        },
       });
       if (trainee) {
         const isWorkoutExist = trainee.workouts.find(
@@ -119,17 +123,47 @@ router.get(
   [auth, authTrainee],
   async (req, res, next) => {
     try {
-      const date = new Date();
-      const today =
-        date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate();
+      const today = moment().startOf("day");
       const trainee = await Progress.findOne({
         trainee: req.user.id,
-        createdAt: { $gte: new Date(today) },
+        createdAt: {
+          $gte: today.toDate(),
+          $lte: moment(today).endOf("day").toDate(),
+        },
       });
       if (trainee) res.send(trainee?.workouts);
       res.send([]);
     } catch (error) {
       error.status = 400;
+      next(error);
+    }
+  }
+);
+
+// trainee workout history
+router.get(
+  "/api/trainee/workout/history",
+  [auth, authTrainee],
+  async (req, res, next) => {
+    try {
+      const progress = await Progress.find({ trainee: req.user.id })
+        .sort({
+          _id: -1,
+        })
+        .limit(6)
+        .lean();
+      if (progress) {
+        const progressHistory = progress.map((progress) => {
+          const totalCalories = progress.workouts.reduce((total, workout) => {
+            return workout.totalCalories + total;
+          }, 0);
+          return { ...progress, totalCaloriesBurned: totalCalories };
+        });
+        res.send(progressHistory);
+      }
+      res.send([]);
+    } catch (error) {
+      next.status = 400;
       next(error);
     }
   }

@@ -3,6 +3,7 @@ import React from "react";
 import Admin from "../../components/dashboard/Admin";
 import { useSelector } from "react-redux";
 import Trainer from "../../components/dashboard/Trainer";
+import Trainee from "../../components/dashboard/Trainee";
 
 function Dashboard() {
   const { user } = useSelector((state) => state.user);
@@ -26,6 +27,7 @@ function Dashboard() {
       >
         {user.role === "admin" && <Admin />}
         {user.role === "trainer" && <Trainer />}
+        {user.role === "trainee" && <Trainee />}
       </Grid>
     </Box>
   );

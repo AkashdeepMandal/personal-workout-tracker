@@ -6,6 +6,9 @@ import {
   Snackbar,
   Alert,
   Slide,
+  Typography,
+  Box,
+  Stack,
 } from "@mui/material";
 import { Link as NavLink } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
@@ -77,26 +80,33 @@ const WorkoutTable = () => {
   // assigned workout table
   useEffect(() => {
     setIsLoading(true);
-    traineeGetAssignedWorkout(user.authToken).then((res) => {
-      const workout = res.data.workouts.map((value) => {
-        return {
-          id: value.workout._id,
-          logo: value.workout.logo,
-          status: `${textCapitalize(value.status)}`,
-          calories: value.workout.calories,
-          name: `${textCapitalize(value.workout.name)}`,
-        };
-      });
-      const checkAllWorkoutCompleted = workout.every(
-        (value) => value.status === "Completed"
-      );
-      if (checkAllWorkoutCompleted) {
-        openAlart({
-          message: "All workouts are completed for today, Come back tomorrow.",
+    traineeGetAssignedWorkout(user.authToken)
+      .then((res) => {
+        const workout = res.data.workouts.map((value) => {
+          return {
+            id: value.workout._id,
+            logo: value.workout.logo,
+            status: `${textCapitalize(value.status)}`,
+            calories: value.workout.calories,
+            name: `${textCapitalize(value.workout.name)}`,
+          };
         });
-      }
-      setWorkoutList(workout);
-    });
+        const checkAllWorkoutCompleted = workout.every(
+          (value) => value.status === "Completed"
+        );
+        if (checkAllWorkoutCompleted) {
+          openSuccessAlart({
+            message:
+              "All workouts are completed for today, Come back tomorrow.",
+          });
+        }
+        setWorkoutList(workout);
+      })
+      .catch((error) => {
+        openRejectAlart({
+          message: "Workouts are not assigned to you yet",
+        });
+      });
     setIsLoading(false);
 
     // eslint-disable-next-line
@@ -113,8 +123,17 @@ const WorkoutTable = () => {
 
   const { vertical, horizontal } = snackBarState;
 
-  const openAlart = (newState) => {
+  const openSuccessAlart = (newState) => {
     setSnackBarState({ ...snackBarState, open: true, ...newState });
+  };
+
+  const openRejectAlart = (newState) => {
+    setSnackBarState({
+      ...snackBarState,
+      severity: "error",
+      open: true,
+      ...newState,
+    });
   };
 
   const handleClose = () => {
@@ -139,17 +158,28 @@ const WorkoutTable = () => {
           {snackBarState.message}
         </Alert>
       </Snackbar>
-
-      <DataGrid
-        disableColumnMenu
-        disableSelectionOnClick
-        rows={workoutList}
-        columns={startWorkoutColumns}
-        pageSize={10}
-        rowsPerPageOptions={[10]}
-        backgroundColor={theme.palette.grey[50]}
-        loading={isLoading}
-      />
+      {snackBarState.severity === "success" ? (
+        <DataGrid
+          disableColumnMenu
+          disableSelectionOnClick
+          rows={workoutList}
+          columns={startWorkoutColumns}
+          pageSize={10}
+          rowsPerPageOptions={[10]}
+          backgroundColor={theme.palette.grey[50]}
+          loading={isLoading}
+        />
+      ) : (
+        <Stack
+          direction="column"
+          sx={{ height: "400px" }}
+          justifyContent="center"
+        >
+          <Typography variant="h6" textAlign="center" pb={1}>
+            Workouts are not assigned to you yet
+          </Typography>
+        </Stack>
+      )}
     </>
   );
 };
