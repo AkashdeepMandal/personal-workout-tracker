@@ -18,7 +18,6 @@ router.post("/api/user/create", async (req, res, next) => {
     }
     const newUser = new User({ ...req.body, role: "trainee" });
     const user = await newUser.save();
-    console.log(req.body?.remember);
     const authToken = [];
     res.status(201).send({ user, authToken });
   } catch (error) {

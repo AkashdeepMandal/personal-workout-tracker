@@ -30,8 +30,6 @@ const Report = () => {
     // eslint-disable-next-line
   }, []);
 
-  console.log(weeklyProgress);
-
   return (
     <Box
       sx={{
