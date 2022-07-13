@@ -169,4 +169,56 @@ router.get(
   }
 );
 
+// monthly Report
+router.get(
+  "/api/trainee/report/monthly",
+  [auth, authTrainee],
+  async (req, res, next) => {
+    try {
+      const monthlyProgress = { labels: [], data: [] };
+
+      const currentYear = moment().format("yyyy");
+
+      for (let month = 1; month <= 12; month++) {
+        // first day of a month
+        const startOfMonth = moment(`${currentYear}-${month}`).startOf("month");
+        // .format("YYYY-MM-DD");
+        // last day of a month
+        const endOfMonth = moment(`${currentYear}-${month}`).endOf("month");
+        // .format("YYYY-MM-DD");
+        // list of months
+        monthlyProgress.labels.push(
+          moment(`${currentYear}-${month}`).format("MMMM").toString()
+        );
+
+        const progress = await Progress.find({
+          trainee: req.user.id,
+          createdAt: {
+            $gte: startOfMonth.toDate(),
+            $lte: endOfMonth.toDate(),
+          },
+        });
+
+        if (progress.length <= 0) {
+          monthlyProgress.data.push(0);
+        } else {
+          const progressHistory = progress.map((progress) => {
+            const totalCalories = progress.workouts.reduce((total, workout) => {
+              return workout.totalCalories + total;
+            }, 0);
+            return totalCalories;
+          });
+          const sum = progressHistory.reduce((a, b) => a + b, 0);
+          const avg = sum / progressHistory.length || 0;
+          monthlyProgress.data.push(avg);
+        }
+      }
+      res.send({ monthlyProgress });
+    } catch (error) {
+      error.status = 400;
+      next(error);
+    }
+  }
+);
+
 module.exports = router;
