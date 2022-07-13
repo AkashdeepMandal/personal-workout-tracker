@@ -22,3 +22,10 @@ export const traineeSaveWorkouts = async (authToken, workouts) => {
     headers: { Authorization: "Bearer " + authToken },
   });
 };
+
+// get last 6 workout progress
+export const traineeProgressHistory = async (authToken) => {
+  return await axios.get(baseURL + "/trainee/workout/history", {
+    headers: { Authorization: "Bearer " + authToken },
+  });
+};

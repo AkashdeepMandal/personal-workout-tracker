@@ -7,6 +7,7 @@ const CountDocumentCard = ({ count, label, iconbgcolor, bgcolor, icon }) => {
     <Card
       sx={{
         minWidth: 200,
+        marginBottom: "24px",
         backgroundColor: bgcolor,
         boxShadow: "0 0  16px #9ca3af",
       }}

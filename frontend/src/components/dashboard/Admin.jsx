@@ -31,6 +31,7 @@ const Admin = () => {
           direction="row"
           justifyContent="space-evenly"
           alignItems="center"
+          sx={{ flexWrap: "wrap" }}
         >
           <CountDocumentCard
             label="Total Users"
