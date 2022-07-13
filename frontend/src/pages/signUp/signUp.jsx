@@ -128,7 +128,7 @@ function SignUp() {
               alignItems="baseline"
               sx={{ mb: { xs: -0.5, sm: 0.5 } }}
             >
-              <Typography variant="h3">Register</Typography>
+              <Typography variant="h4">Register</Typography>
               <Typography
                 component={RouterLink}
                 to="/sign-in"

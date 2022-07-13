@@ -40,25 +40,25 @@ const WorkoutTable = () => {
         );
       },
       allowSearch: false,
-      flex: 1,
+      width: 60,
     },
     {
       field: "name",
       headerName: "Name",
-      flex: 1,
+      width: 100,
     },
     {
       field: "calories",
       headerName: "Calories per minuets",
-      flex: 1,
       hide: true,
       allowSearch: false,
     },
-    { field: "status", headerName: "Status", flex: 1 },
+    { field: "status", headerName: "Status", width: 100 },
     {
       field: "action",
       headerName: "Action",
-      flex: 1,
+      width: 120,
+
       renderCell: (params) => {
         return (
           <Button

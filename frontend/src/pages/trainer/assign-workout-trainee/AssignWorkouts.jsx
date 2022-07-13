@@ -40,7 +40,7 @@ function AssignWorkouts({ id }) {
 
   const viewWorkoutColumns = [
     { field: "id", headerName: "Id", hide: true, allowSearch: false },
-    { field: "category", headerName: "Category", flex: 1 },
+    { field: "category", headerName: "Category", width: 120 },
     {
       field: "logo",
       headerName: "Logo",
@@ -56,19 +56,19 @@ function AssignWorkouts({ id }) {
         );
       },
       allowSearch: false,
-      flex: 1,
+      width: 80,
     },
 
     {
       field: "name",
       headerName: "Name",
-      flex: 1,
+      width: 120,
     },
     { field: "calories", headerName: "Calories per minute", flex: 1 },
     {
       field: "action",
       headerName: "Action",
-      flex: 1,
+      width: 80,
       renderCell: (params) => {
         return (
           <>
@@ -262,15 +262,18 @@ function AssignWorkouts({ id }) {
         </Alert>
       </Snackbar>
 
-      <Box p={2} sx={{ boxShadow: "0 0 12px #ccc", height: "100%" }}>
+      <Box
+        p={2}
+        sx={{ boxShadow: "0 0 12px #ccc", height: { xs: "210vh", md: "100%" } }}
+      >
         <Grid
           container
           spacing={2}
           direction="row"
           py={4}
-          sx={{ height: "100%" }}
+          sx={{ height: { xs: "200vh", md: "100%" } }}
         >
-          <Grid item sm={7}>
+          <Grid item xs={12} md={7} mb={6}>
             <Typography variant="body1" mb={2} sx={{ fontWeight: 600 }}>
               Available Workouts
             </Typography>
@@ -332,7 +335,7 @@ function AssignWorkouts({ id }) {
             </Stack>
           </Grid>
 
-          <Grid item sm={5}>
+          <Grid item xs={12} md={5}>
             <Typography variant="body1" mb={2} sx={{ fontWeight: 600 }}>
               Assined Workouts
             </Typography>

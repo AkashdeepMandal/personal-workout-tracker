@@ -37,7 +37,7 @@ function WorkoutTable({ action }) {
 
   const columns = [
     { field: "id", headerName: "Id", hide: true, allowSearch: false },
-    { field: "category", headerName: "Category", flex: 1 },
+    { field: "category", headerName: "Category", width: 80 },
     {
       field: "logo",
       headerName: "Logo",
@@ -53,19 +53,19 @@ function WorkoutTable({ action }) {
         );
       },
       allowSearch: false,
-      flex: 1,
+      width: 60,
     },
 
     {
       field: "name",
       headerName: "Name",
-      flex: 1,
+      width: 120,
     },
-    { field: "calories", headerName: "Calories per minute", flex: 1 },
+    { field: "calories", headerName: "Calories per minute", width: 100 },
     {
       field: "action",
       headerName: "Action",
-      flex: 1,
+      width: 80,
       renderCell: (params) => {
         if (action === "view") {
           return (
@@ -150,7 +150,7 @@ function WorkoutTable({ action }) {
         setRefresh(true);
         handleClick({
           severity: "success",
-          message: "User Deleted Successfully",
+          message: "Workout Deleted Successfully",
         });
       })
       .catch((error) => {

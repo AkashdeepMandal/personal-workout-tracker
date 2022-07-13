@@ -7,7 +7,7 @@ function Main() {
   return (
     <Stack
       direction="row"
-      sx={{ height: { xs: `calc(100vh - 50px)`, sm: `calc(100vh - 60px)` } }}
+      sx={{ height: { xs: `calc(200vh - 50px)`, sm: `calc(100vh - 60px)` } }}
     >
       <SideBar />
       <Box

@@ -15,8 +15,8 @@ import {
   Typography,
   ListSubheader,
 } from "@mui/material";
-import HomeSharpIcon from "@mui/icons-material/HomeSharp";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 // custom imports
@@ -39,7 +39,7 @@ function SideBar(props) {
     <Box
       component="div"
       sx={{
-        width: { xs: "40%", sm: drawerWidth },
+        width: { sm: "60px", md: drawerWidth },
         flexShrink: { sm: 0 },
         boxShadow: "0 -12px 12px #ccc",
         maxHeight: `calc(100vh - ${container}px)`,
@@ -53,7 +53,11 @@ function SideBar(props) {
         <Typography
           variant="h5"
           px="16px"
-          sx={{ fontWeight: 600, fontSize: { xs: "18px", sm: "20px" } }}
+          sx={{
+            fontWeight: 600,
+            fontSize: { xs: "18px", sm: "20px" },
+            display: { xs: "none", md: "block" },
+          }}
         >
           Welcome
         </Typography>
@@ -64,28 +68,15 @@ function SideBar(props) {
             textTransform: "capitalize",
             fontStyle: "italic",
             fontSize: { xs: "12px", sm: "16px" },
+            display: { xs: "none", md: "block" },
           }}
         >
           {isLoggedIn ? `${user.firstName} ${user.lastName}` : "User"}
         </Typography>
       </Stack>
-      <Divider variant="middle" />
+      <Divider variant="middle" sx={{ display: { xs: "none", md: "block" } }} />
       <SideBarNav
-        sx={{ margin: { xs: "14px 6px 12px 6px", sm: "16px 14px 14px 14px" } }}
-        subheader={
-          <ListSubheader
-            component="div"
-            id="nested-list-subheader"
-            sx={{
-              fontWeight: 600,
-              fontSize: { xs: "12px", sm: "14px" },
-              letterSpacing: "1px",
-              marginBottom: "6px",
-            }}
-          >
-            Dashboard
-          </ListSubheader>
-        }
+        sx={{ margin: { xs: "14px 6px 12px 6px", md: "16px 14px 14px 14px" } }}
       >
         <ListItem disablePadding>
           <ListItemButton
@@ -94,11 +85,15 @@ function SideBar(props) {
             sx={{ py: 0, minHeight: 32 }}
           >
             <ListItemIcon>
-              <HomeSharpIcon />
+              <DashboardIcon />
             </ListItemIcon>
             <ListItemText
-              primary="Home"
-              primaryTypographyProps={{ fontSize: 12, fontWeight: "medium" }}
+              primary="Dashboard"
+              primaryTypographyProps={{
+                fontSize: 12,
+                fontWeight: "medium",
+                display: { xs: "none", md: "block" },
+              }}
             />
           </ListItemButton>
         </ListItem>
@@ -110,16 +105,17 @@ function SideBar(props) {
 
       <Divider variant="middle" />
       <SideBarNav
-        sx={{ margin: { xs: "14px 6px 12px 6px", sm: "16px 14px 14px 14px" } }}
+        sx={{ margin: { xs: "14px 6px 12px 6px", md: "16px 14px 14px 14px" } }}
         subheader={
           <ListSubheader
             component="div"
             id="nested-list-subheader"
             sx={{
               fontWeight: 600,
-              fontSize: { xs: "12px", sm: "14px" },
+              fontSize: { xs: "12px", md: "14px" },
               letterSpacing: "1px",
               marginBottom: "6px",
+              display: { xs: "none", md: "block" },
             }}
           >
             Account
@@ -140,6 +136,7 @@ function SideBar(props) {
               primaryTypographyProps={{
                 fontSize: 12,
                 fontWeight: "medium",
+                display: { xs: "none", md: "block" },
               }}
             />
           </ListItemButton>
@@ -162,6 +159,7 @@ function SideBar(props) {
                 fontSize: 12,
                 fontWeight: "medium",
                 textTransform: "none",
+                display: { xs: "none", md: "block" },
               }}
             />
           </ListItemButton>

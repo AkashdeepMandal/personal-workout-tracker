@@ -163,7 +163,6 @@ router.get(
 
 // get plans of treinee assigned by trainer
 // /GET /api/trainer/plan/user/:trainee_id  auth:trainer._id
-// /GET /api/trainer/plan/user/:id?limit=2&skip=0  auth:trainer._id
 router.get(
   "/api/trainer/assigned/workouts/:id",
   [auth, authTrainer],
@@ -175,16 +174,9 @@ router.get(
     }
 
     try {
-      const plan = await Plan.find(
-        {
-          trainee: req.params.id,
-        }
-        // null,
-        // {
-        //   limit: parseInt(req.query.limit) || 4,
-        //   skip: parseInt(req.query.skip) * 4 || 0,
-        // }
-      )
+      const plan = await Plan.find({
+        trainee: req.params.id,
+      })
         .populate([{ path: "trainee", select: "firstName lastName" }])
         .populate([
           { path: "workouts.workout", select: "name logo category calories" },
@@ -196,7 +188,6 @@ router.get(
       }
       res.status(200).send(plan);
     } catch (error) {
-      error.status = 400;
       next(error);
     }
   }
