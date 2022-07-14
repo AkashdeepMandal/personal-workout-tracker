@@ -156,6 +156,7 @@ router.get(
           return { ...progress, totalCaloriesBurned: totalCalories };
         });
         res.send(progressHistory);
+        return;
       }
       res.send([]);
     } catch (error) {
